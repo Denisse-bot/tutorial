@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+<title style="margin-bottom: 24px;">Eliminar usuario</title>
+
+{% block body %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<body>
+
+<div class="container">
+  <h1 style="margin: 70px 0 0 0px;">Usuario</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    <h2>¿Estas seguro de eliminar el usuario {{usuario.nombre}} {{usuario.apellido}}?</h2>
+
+    <button type="submit" class="btn btn-error float-right">Eliminar</button>
+    <a href="{% url 'listar_usuarios' %}">Cancelar</a>
+  </form>
+</div>
+<!-- <script src="{% static 'js/base.js' %}"></script> -->
+
+{% endblock body %}

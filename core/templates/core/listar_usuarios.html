@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+<title>Listado de Usuarios</title>
+ 
+
+{% block body %}
+
+{% if usuarios %}
+    <table style="margin-top: 60px;" class="table table-hover">
+        
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Rut</th>
+        <th>Fecha Nacimiento</th>
+        <th>Motivo Atencion</th>
+        <th>Email</th>
+        <th>Dirección</th>
+        <th>Acciones</th>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.nombre}}</td>
+                    <td>{{ usuario.apellido }}</td>
+                    <td>{{ usuario.rut }}</td>
+                    <td>{{ usuario.fecha_nacimiento }}</td>
+                    <td>{{ usuario.motivo_atencion}}</td>
+                    <td>{{ usuario.email }} </td>
+                    <td>{{ usuario.direccion }}</td>
+
+
+                    <td>
+                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning">Modificar</a>
+                        <a href="{% url 'eliminar_usuario' usuario.id%}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+{% else %}
+    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
+    <a href="{% url 'crear_usuario' %}" class="btn btn-success">Agregar</a>
+{% endif %}
+
+{% endblock body %}

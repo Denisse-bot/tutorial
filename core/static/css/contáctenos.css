@@ -1,0 +1,72 @@
+.nav1 {
+    padding: 10px;
+    background-color: rgb(35, 43, 43);
+    color:floralwhite;
+    text-align: right;
+    font-size: xx-large;
+    text-decoration: none;
+}
+.nav1 >a:hover{
+    color:red;
+}
+.photo {
+    background-image: url("img/edudown2.jpg");
+    width: 30px;
+    background-position: left;
+    padding-left: 2%;
+}
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+section{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;  
+    font-size: 20px; 
+    padding: 0px 10px;
+}
+/*formulario*/
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+  }
+  input[type=submit] {
+    background-color: blue;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: orangered;
+  }
+  
+  form {
+    border-radius: 5px;
+    background-color: #ccc8c8;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  /*Boton*/
+  button {
+    border: none; 
+    border-radius: 4px;
+    color: white; 
+    padding: 14px 28px; 
+    cursor: pointer; 
+}
+body{
+    background: lightblue;
+}

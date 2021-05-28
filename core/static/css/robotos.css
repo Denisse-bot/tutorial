@@ -1,0 +1,14 @@
+body{
+    background: lightseagreen;
+}
+h2{
+    text-align: center;
+    text-shadow: lightslategray;
+}
+p{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+img{
+    display:block;
+    margin:auto;
+}

@@ -1,0 +1,18 @@
+class Reserva(models.Model):
+    tipo_terapia = (
+    (1, 'Kinesiología'),
+    (2, 'Fonoaudiología'),
+    (3, 'General')
+    )
+
+    especialidad=models.IntegerField(choices=tipo_terapia, default=3)
+    dia_reservado=models.DateTimeField()
+    sucursal=models.CharField(max_length=50)
+    usuario=models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Reserva'
+        verbose_name_plural = 'Reservas'
+
+    def _str_(self):
+        return self.dia_reservado
