@@ -91,6 +91,39 @@
     var validation = Array.prototype.filter.call(forms, function(form) {
       form.addEventListener('submit', function(event) {
         if (form.checkValidity() === false) {
+
+          if(!form.nombre.checkValidity()){
+            form.nombre.style.borderColor = "red";
+            form.nombre.placeholder = "campo invalido o vacio";
+          }
+          if(!form.apellido.checkValidity()){
+            form.apellido.style.borderColor = "red";
+            form.apellido.placeholder = "campo invalido o vacio";
+          }
+          if(!form.rut.checkValidity()){
+            form.rut.style.borderColor = "red";
+            form.rut.placeholder = "campo invalido o vacio";
+          }
+
+          if(!form.fecha_nacimiento.checkValidity()){
+            form.fecha_nacimiento.style.borderColor = "red";
+            form.fecha_nacimiento.placeholder = "campo invalido o vacio";
+          }
+
+          if(!form.email.checkValidity()){
+            form.email.style.borderColor = "red";
+            form.email.placeholder = "campo invalido o vacio";
+          }
+
+          if(!form.direccion.checkValidity()){
+            form.direccion.style.borderColor = "red";
+            form.direccion.placeholder = "campo invalido o vacio";
+          }
+
+          if(!form.nro_direccion.checkValidity()){
+            form.nro_direccion.style.borderColor = "red";
+            form.nro_direccion.placeholder = "campo invalido o vacio";
+          }
           event.preventDefault();
           event.stopPropagation();
         }
