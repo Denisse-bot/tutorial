@@ -1,8 +1,10 @@
 import django
+from django.contrib.auth import login, logout
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
+from django.http.response import HttpResponseRedirect
 from django.views.generic.base import View
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from core import models
 import core
@@ -11,9 +13,37 @@ from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
-from .forms import ReservaForm, UsuarioForm
+from .forms import FormularioLogin, ReservaForm, UsuarioForm
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
+
+class Login(FormView):
+    template_name = 'core/login.html'
+    form_class = FormularioLogin
+    success_url = reverse_lazy('home')
+
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self,request,*args,**kwargs):
+        if request.user.is_authenticated:
+            print('que esta pasando')
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            print('esta todo mal')
+            return super(Login,self).dispatch(request,*args,**kwargs)
+
+    def form_valid(self,form):
+        login(self.request,form.get_user())
+        return super(Login,self).form_valid(form)
+    
+def logoutUsuario(request):
+    logout(request)
+    return HttpResponseRedirect('login')
+
 class home(TemplateView):
     template_name = 'core/home.html'
 
