@@ -8,12 +8,12 @@ from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from core import models
 import core
-from core.models import Atencion, Reserva, Usuario
+from core.models import Atencion, Box, Reserva, Usuario
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
-from .forms import FormularioLogin, ReservaForm, UsuarioForm
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -125,6 +125,36 @@ def eliminarReserva(request,id):
     return render(request, 'core/eliminar_reserva.html',{'reserva':reserva})
 
 
+def crearBox(request):
+    if request.method == 'POST':
+        boxes_form = BoxesForm(request.POST)
+        if boxes_form.is_valid():
+            boxes_form.save()
+            return redirect('listar_boxes')
+    else:
+        boxes_form = BoxesForm()
+    return render(request,'core/crear_box.html',{'boxes_form':boxes_form})
+
+
+def editarBox(request, id):
+    box = Box.objects.get(id=id)
+    if request.method =='GET':
+        boxes_form = BoxesForm(instance=box)
+    else:
+        boxes_form = BoxesForm(request.POST, instance=box)
+        if boxes_form.is_valid():
+            boxes_form.save()
+        return redirect('listar_boxes')
+    return render(request, 'core/crear_box.html', {'boxes_form': boxes_form})
+
+def eliminarBox(request,id):
+    box = Box.objects.get(id=id)
+    if request.method == 'POST':
+        box.save()
+        box.delete()
+        return redirect('listar_boxes')
+    return render(request,'core/eliminar_box.html', {'box':box})
+
 def crearAtencion(request):
     if request.method == 'POST':
         atencion_form = AtencionForm(request.POST)
@@ -170,7 +200,11 @@ class listadoUsuarios(ListView):
     context_object_name = 'usuarios'
     queryset = Usuario.objects.all()
 
-
+class listadoBoxes(ListView):
+    model = Box
+    template_name = 'core/listar_boxes.html'
+    context_object_name = 'boxes'
+    queryset = Box.objects.all()
 
 class listadoAtenciones(ListView):
     model = Atencion

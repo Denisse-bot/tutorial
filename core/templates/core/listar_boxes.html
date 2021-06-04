@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+<title>Listado de Boxes</title>
+ 
+
+{% block body %}
+
+{% if boxes %}
+    <table style="margin-top: 60px;" class="table table-hover">
+        
+        <th>Estado</th>
+        <th>Especialidad</th>
+        <th>Opciones</th>
+
+        <tbody>
+            {% for box in boxes %}
+                <tr>
+                    <td>{% if box.estado == 1 %}Disponible {% elif box.estado == 2 %}En atención {% elif box.estado == 3 %}En mantención{% else %} No disponible, deshabilitada{% endif %}</td>
+                    <td>{% if box.especialidad == 1 %}Fonoaudiologia {% elif box.especialidad == 2 %}Kinesiologia {% else %} General{% endif %}</td>
+                    
+                    <td>
+                        <a href="{% url 'editar_box' box.id %}" class="btn btn-warning">Modificar</a>
+                        <a href="{% url 'eliminar_box' box.id %}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+{% else %}
+    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
+    <a href="{% url 'crear_box' %}" class="btn btn-success">Agregar</a>
+{% endif %}
+
+{% endblock body %}
