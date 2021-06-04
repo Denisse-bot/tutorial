@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import crearReserva, editarReserva,eliminarReserva, home, crearUsuario, editarUsuario, listadoUsuarios, eliminarUsuario, listadoReservas, listadoAtenciones,actualizarAtencion, crearAtencion, editarAtencion, eliminarAtencion
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
@@ -9,7 +10,7 @@ urlpatterns = [
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
 
-    path('crear_reservas/',crearReserva, name='crear_reservas'),
+    path('crear_reservas/',login_required(crearReserva), name='crear_reservas'),
     path('listar_reservas/',listadoReservas.as_view(), name='listar_reservas'),
     path('editar_reserva/<int:id>', editarReserva, name='editar_reserva'),
     path('eliminar_reserva/<int:id>', eliminarReserva, name='eliminar_reserva'),

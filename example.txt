@@ -16,3 +16,38 @@ class Reserva(models.Model):
 
     def _str_(self):
         return self.dia_reservado
+
+
+
+####Modelo de usuario
+
+
+class Usuario(models.Model):
+    comuna_list = (
+        (1, 'Providencia'),
+        (2, 'San Bernardo'),
+        (3, 'La Serena'),
+        (4, 'Temuco')
+    )
+    id = models.AutoField(primary_key= True)
+    nombre=models.CharField(max_length=50)
+    apellido=models.CharField(max_length=50)
+    rut=models.CharField(max_length=15, unique=True, blank=True, null=True)
+    fecha_nacimiento=models.DateField( blank=True, null=True)
+    email=models.EmailField(max_length=50, unique=True, blank=True, null=True)
+    direccion=models.CharField(max_length=50, blank=True, null=True)
+    nro_direccion=models.IntegerField( blank=True, null=True)
+    comuna=models.IntegerField(choices=comuna_list, default=1, blank=True, null=True)
+    usuario_activo = models.BooleanField(default=True)
+    usuario_administrador = models.BooleanField(default=False)
+    fecha_creacion = models.DateField('Fecha de creación', auto_now=True,auto_now_add=False)
+
+
+    class Meta:
+        verbose_name = 'Usuario'
+        verbose_name_plural = 'Usuarios'
+        ordering = ['comuna']
+
+
+    def _str_(self):
+        return self.nombre

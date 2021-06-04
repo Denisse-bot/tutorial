@@ -76,27 +76,27 @@ WSGI_APPLICATION = 'ABAE.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': '127.0.0.1:1521/xe',
-        'USER': 'PBY2103',
-        'PASSWORD': 'PBY2103',
-        'TEST': {
-            'USER': 'default_test',
-            'TBLSPACE': 'default_test_tbls',
-            'TBLSPACE_TMP': 'default_test_tbls_tmp',
-        },
-    },
-    
+        'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.oracle',
+#         'NAME': '127.0.0.1:1521/xe',
+#         'USER': 'PBY2103',
+#         'PASSWORD': 'PBY2103',
+#         'TEST': {
+#             'USER': 'default_test',
+#             'TBLSPACE': 'default_test_tbls',
+#             'TBLSPACE_TMP': 'default_test_tbls_tmp',
+#         },
+#     },
+    
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -116,11 +116,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'core.Usuario'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-cl'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'America/Santiago'
 
