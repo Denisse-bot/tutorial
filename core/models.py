@@ -10,7 +10,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 class UsuarioManager(BaseUserManager):
     def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna=None, password=None):
         if not email:
-            raise ValueError('El usuario debe ingresar un correo electronico')
+            raise ValueError('El usuario debe ingresar un correo electrónico')
 
         usuario = self.model(
             username = username,
@@ -27,7 +27,7 @@ class UsuarioManager(BaseUserManager):
         usuario.save()
         return usuario
 
-    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna=None, password= None):
+    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,password):
         usuario = self.create_user(
             username = username,
             email = email,
@@ -46,7 +46,7 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser):
     comuna_list = (
-        (1, 'Providencia'),
+        (1, 'Providencia'), 
         (2, 'San Bernardo'),
         (3, 'La Serena'),
         (4, 'Temuco')
@@ -106,7 +106,8 @@ class Reserva(models.Model):
         ordering = ['sucursal']
 
     def _str_(self):
-        return self.dia_reservado
+        return f'Reserva {self.dia_reservado}'
+    
 
 class Atencion(models.Model):
     id = models.AutoField(primary_key= True)

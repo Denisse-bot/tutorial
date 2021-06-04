@@ -24,7 +24,7 @@ from django.views.decorators.csrf import csrf_protect
 class Login(FormView):
     template_name = 'core/login.html'
     form_class = FormularioLogin
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('crear_reservas')
 
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)

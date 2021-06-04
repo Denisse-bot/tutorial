@@ -71,12 +71,7 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su Rut',
                 }
             ),
-            'fecha_nacimiento': forms.DateInput(
-                attrs={
-                    'class': 'datepicker',
-                    'placeholder':'Ingrese su fecha de nacimiento',
-                }
-            ),
+            'fecha_nacimiento': forms.SelectDateWidget(),
             'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control',
@@ -95,16 +90,27 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su nro de direccion',
                 }
             ),
-            'comuna': forms.NumberInput(
-                
-            ),
-            'username': forms.TextInput(
+            'comuna': forms.Select(
                 attrs={
-                    'class': 'form-control',
-                    'placeholder':'Ingrese su nombre de usuario',
+                    'class': 'form-control'
                 }
             ),
         }
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Contraseñas no coinciden')
+        return password2
+    
+    def save(self,commit = True):
+        user = super().save(commit = False)
+        user.set_password(self.cleaned_data.get('password1'))
+        if commit:
+            user.save()
+        return user
+
+
 
 class ReservaForm(forms.ModelForm):
     
@@ -117,25 +123,26 @@ class ReservaForm(forms.ModelForm):
             'usuario'
         ]
         widgets = {
-            'especialidad': forms.TextInput(
+            'especialidad': forms.Select(
                 attrs={
-                    'class': 'form-control',
-                    'placeholder':'Ingrese su especialidad',
+                    'class': 'form-control'
                 }
             ),
             'dia_reservado': forms.DateTimeInput(
                 attrs={
                     'class': 'form-control',
+                    'format': 'dd/mm/yyyy hh:mm',
                     'placeholder':'Ingrese su día a reservar',
                 }
             ),
-            'sucursal': forms.NumberInput(
-
-            ),
-            'usuario.nombre, usuario.apellido': forms.TextInput(
+            'sucursal': forms.Select(
                 attrs={
-                    'class': 'form-control',
-                    'placeholder':'Ingrese su usuario',
+                    'class': 'form-control'
+                }
+            ),
+            'usuario': forms.Select(
+                attrs={
+                    'class': 'form-control'
                 }
             )
         }
@@ -149,3 +156,27 @@ class AtencionForm(forms.ModelForm):
             'apellido_especialista',
             'box'
          ]
+        widgets = {
+            'reserva': forms.Select(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+            'nombre_especialista': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese el nombre del especialista',
+                }
+            ),
+            'apellido_especialista': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese el apellido del especialista'
+                }
+            ),
+            'box': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                }
+            )
+        }
