@@ -21,6 +21,10 @@ from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
 
+
+class Test(TemplateView):
+    template_name = 'core/test.html'
+
 class Login(FormView):
     template_name = 'core/login.html'
     form_class = FormularioLogin
