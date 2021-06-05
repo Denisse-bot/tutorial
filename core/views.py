@@ -14,8 +14,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
-from django.template.loader import get_template
-from django.core.mail import EmailMultiAlternatives
+
 
 
 from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
@@ -195,22 +194,7 @@ def eliminarAtencion(request,id):
         return redirect('listar_atenciones')
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
-def send_email(mail):
 
-    context = {'mail': mail}
-
-    template = get_template('correo.html')
-    content = template.render(context)
-
-    email = EmailMultiAlternatives(
-        'Correo de ejemplo',
-        'Robotos',
-        'dennisse.leon@gmail.com'
-        [mail],
-    )
-
-    email.attach_alternative(content, 'text/html')
-    email.send()
 
 
 def index(request):

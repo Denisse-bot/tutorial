@@ -128,13 +128,7 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'dia_reservado': forms.DateTimeInput(
-                attrs={
-                    'class': 'form-control',
-                    'format': 'dd/mm/yyyy hh:mm',
-                    'placeholder':'Ingrese su día a reservar',
-                }
-            ),
+            'dia_reservado': forms.SelectDateWidget(),
             'sucursal': forms.Select(
                 attrs={
                     'class': 'form-control'
