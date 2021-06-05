@@ -12,10 +12,18 @@ from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+
 
 # Create your views here.
 class home(TemplateView):
     template_name = 'core/home.html'
+
+class robotos(TemplateView):
+    template_name = 'core/robotos.html'
+
 
 def crearUsuario(request):
     if request.method == 'POST':
@@ -126,6 +134,31 @@ def eliminarAtencion(request,id):
         return redirect('listar_atenciones')
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
+def send_email(mail):
+
+    context = {'mail': mail}
+
+    template = get_template('correo.html')
+    content = template.render(context)
+
+    email = EmailMultiAlternatives(
+        'Correo de ejemplo',
+        'Robotos',
+        settings.EMAIL_HOST_USER,
+        [mail],
+    )
+
+    email.attach_alternative(content, 'text/html')
+    email.send()
+
+
+def index(request):
+    if request.method == 'POST':
+        mail = request.POST.get('mail')
+
+        send_email(mail)
+
+    return render(request, 'index.html',{})   
 
 class listadoReservas(ListView):
     model = Reserva
