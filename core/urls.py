@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
-    path('test',Test.as_view(),name='test'),
+    path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios.as_view(),name='listar_usuarios'),
@@ -27,3 +27,4 @@ urlpatterns = [
     path('eliminar_box/<int:id>',eliminarAtencion,name='eliminar_box')
 
 ]
+

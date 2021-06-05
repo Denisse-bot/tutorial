@@ -12,10 +12,16 @@
     {% block nav %}
     <ul class="nav nav-pills card-header-pills">
       <li class="nav-item">
+        <a class="nav-link" href="{% url 'crear_usuario'%}">Crear</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="{% url 'listar_usuarios'%}">Listar Usuarios</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'crear_usuario'%}">Crear</a>
+        <a class="nav-link" href="{% url 'crear_box'%}">Crear box</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_boxes'%}">Listar boxes</a>
       </li>
     </ul>
     {% endblock nav%}
