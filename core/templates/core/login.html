@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+<title>Ingresa a nuestro sistema</title>
+ 
+
+{% block body %}
+
+<div class="bd-dark" style="margin-top: 200px;">
+ <h1 style="margin-left: 200px;">Accede a nuestro sistema</h1>
+ <h5 style="margin-left: 200px;margin-bottom: 40px;">Ingresa con tu nombre de usuario y contraseña</h5>
+    <div class="sufee-login d-flex aling-content-center flex-wrap">
+        <div class="container">
+           <div class="login-content">
+               <div class="login-form">
+                   <form method="POST">
+                       {% csrf_token %}
+                        <div class="form-group">
+                            {% if form.error_messages %}
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>Advertencia: </strong>{{ form.get_invalid_login_error }}
+                                    </div>
+                            {% endif %}
+                            <label>Nombre de usuario</label>
+                            {{form.username}}
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            {{form.password}}
+                        </div>
+                        <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Iniciar Sesión</button>
+                   </form>
+               </div>
+           </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock body %}
