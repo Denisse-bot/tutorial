@@ -1,12 +1,14 @@
 import django
+from django.contrib.auth import login, logout
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
+from django.http.response import HttpResponseRedirect
 from django.views.generic.base import View
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from core import models
 import core
-from core.models import Atencion, Reserva, Usuario
+from core.models import Atencion, Box, Reserva, Usuario
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
@@ -14,10 +16,39 @@ from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 
+
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
+
+class Login(FormView):
+    template_name = 'core/login.html'
+    form_class = FormularioLogin
+    success_url = reverse_lazy('crear_reservas')
+
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self,request,*args,**kwargs):
+        if request.user.is_authenticated:
+            print('que esta pasando')
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            print('esta todo mal')
+            return super(Login,self).dispatch(request,*args,**kwargs)
+
+    def form_valid(self,form):
+        login(self.request,form.get_user())
+        return super(Login,self).form_valid(form)
+    
+def logoutUsuario(request):
+    logout(request)
+    return HttpResponseRedirect('login')
+
 class home(TemplateView):
     template_name = 'core/home.html'
 
@@ -103,6 +134,36 @@ def eliminarReserva(request,id):
     return render(request, 'core/eliminar_reserva.html',{'reserva':reserva})
 
 
+def crearBox(request):
+    if request.method == 'POST':
+        boxes_form = BoxesForm(request.POST)
+        if boxes_form.is_valid():
+            boxes_form.save()
+            return redirect('listar_boxes')
+    else:
+        boxes_form = BoxesForm()
+    return render(request,'core/crear_box.html',{'boxes_form':boxes_form})
+
+
+def editarBox(request, id):
+    box = Box.objects.get(id=id)
+    if request.method =='GET':
+        boxes_form = BoxesForm(instance=box)
+    else:
+        boxes_form = BoxesForm(request.POST, instance=box)
+        if boxes_form.is_valid():
+            boxes_form.save()
+        return redirect('listar_boxes')
+    return render(request, 'core/crear_box.html', {'boxes_form': boxes_form})
+
+def eliminarBox(request,id):
+    box = Box.objects.get(id=id)
+    if request.method == 'POST':
+        box.save()
+        box.delete()
+        return redirect('listar_boxes')
+    return render(request,'core/eliminar_box.html', {'box':box})
+
 def crearAtencion(request):
     if request.method == 'POST':
         atencion_form = AtencionForm(request.POST)
@@ -144,7 +205,7 @@ def send_email(mail):
     email = EmailMultiAlternatives(
         'Correo de ejemplo',
         'Robotos',
-        settings.EMAIL_HOST_USER,
+        'dennisse.leon@gmail.com'
         [mail],
     )
 
@@ -173,7 +234,11 @@ class listadoUsuarios(ListView):
     context_object_name = 'usuarios'
     queryset = Usuario.objects.all()
 
-
+class listadoBoxes(ListView):
+    model = Box
+    template_name = 'core/listar_boxes.html'
+    context_object_name = 'boxes'
+    queryset = Box.objects.all()
 
 class listadoAtenciones(ListView):
     model = Atencion

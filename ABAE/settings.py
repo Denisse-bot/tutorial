@@ -75,8 +75,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ABAE.wsgi.application'
 
 
-#Database
-#https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
 
 DATABASES = {
         'default': {
@@ -118,11 +117,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'core.Usuario'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-cl'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'America/Santiago'
 
