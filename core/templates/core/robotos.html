@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/robotos.css">
-    <link rel="stylesheet" href="css/edudown.css">
-    <link rel="icon" type="jpg" href="img/icono.jpg">
-    
-    <title>Robotos Company</title>
-</head>
-<body>
+{% extends 'core/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="css/robotos.css">
+
+<title>Ingresa a nuestro sistema</title>
+ 
+
+{% block body %}
+
+
+<title>Robotos Company</title>
 
     <header>
         <nav class="nav1">
@@ -43,5 +41,5 @@
         <div>
             <img src="img/Robotics-Company.jpg">
         </div>
-</body>
-</html>
+
+{% endblock body %}

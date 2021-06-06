@@ -15,8 +15,6 @@ from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
-
-
 from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
 
 from django.utils.decorators import method_decorator
@@ -194,16 +192,6 @@ def eliminarAtencion(request,id):
         return redirect('listar_atenciones')
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
-
-
-
-def index(request):
-    if request.method == 'POST':
-        mail = request.POST.get('mail')
-
-        send_email(mail)
-
-    return render(request, 'index.html',{})   
 
 class listadoReservas(ListView):
     model = Reserva
