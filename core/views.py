@@ -38,10 +38,8 @@ class Login(FormView):
     @method_decorator(never_cache)
     def dispatch(self,request,*args,**kwargs):
         if request.user.is_authenticated:
-            print('que esta pasando')
             return HttpResponseRedirect(self.get_success_url())
         else:
-            print('esta todo mal')
             return super(Login,self).dispatch(request,*args,**kwargs)
 
     def form_valid(self,form):
