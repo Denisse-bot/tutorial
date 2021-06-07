@@ -48,7 +48,7 @@
 	<!-- preloader end -->
 
 	<!-- ========================= header start ========================= -->
-	<header id="home" class="header">
+	<header id="home" class="header" style="margin-bottom: 100px;">
 
 		<div class="header-wrapper">
 				<div class="header-top theme-bg">
@@ -124,11 +124,14 @@
         {% endblock carrusel %}
 		</div>
 	</header>
+
 	<!-- ========================= header end ========================= -->
+	<div style="height: 90%;width: 90%;margin:0 auto;">
+		{% block body %}
 
-    {% block body %}
+		{% endblock body %}
+	</div>
 
-    {% endblock body %}
 
 	<!-- ========================= footer start ========================= -->
 	<footer class="footer pt-100 img-bg" style="background-image:url('static/img/bg/footer-bg.jpg');">

@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+<title>Listado de Boxes</title>
+ 
+
+{% block body %}
+
+
+<div class="card text-center">
+  <div class="card-header">
+    {% block nav %}
+    <ul class="nav nav-pills card-header-pills">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_usuarios'%}">Listar Usuarios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'crear_box'%}">Crear box</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_boxes'%}">Listar boxes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'crear_reservas'%}">Crear reserva</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_reservas'%}">Listar reservas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'crear_atencion'%}">Crear atención</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_atenciones'%}">Listar atenciones</a>
+      </li>
+    </ul>
+    {% endblock nav%}
+  </div>
+  <div class="card-body">
+    {% block panel %}
+    <!-- <h5 class="card-title">Sistema de Agendamiento de Box atención</h5>
+    <p class="card-text">en este panel puedes encontrar las opciones disponibles.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    {% endblock panel %}
+  </div>
+</div>
+
+
+
+{% endblock body %}
