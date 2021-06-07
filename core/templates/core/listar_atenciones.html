@@ -30,6 +30,7 @@
 
 
                     <td>
+                        <a href="{% url 'send_mail_reserva' atencion.id%}"  class="btn btn-success">Enviar Correo</a>
                         <a href="{% url 'editar_atencion' atencion.id%}" class="btn btn-warning">Modificar</a>
                         <a href="{% url 'eliminar_atencion' atencion.id%}" class="btn btn-danger">Eliminar</a>
                     </td>

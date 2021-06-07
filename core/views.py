@@ -14,6 +14,8 @@ from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
+from .forms import ReservaForm, UsuarioForm
+
 from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
 
 from django.utils.decorators import method_decorator
@@ -52,6 +54,10 @@ def logoutUsuario(request):
 
 class home(TemplateView):
     template_name = 'core/home.html'
+
+class robotos(TemplateView):
+    template_name = 'core/robotos.html'
+
 
 def crearUsuario(request):
     if request.method == 'POST':

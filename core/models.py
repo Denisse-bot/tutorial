@@ -70,7 +70,7 @@ class Usuario(AbstractBaseUser):
 
     #revisar luego si quiero llamarlo usuario o paciente
     def __str__(self):
-        return f'Usuario {self.email}'
+        return self.email
 
     def has_perm(self,perm,obj = None):
         return True

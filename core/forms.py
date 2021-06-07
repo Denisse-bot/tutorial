@@ -128,13 +128,7 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'dia_reservado': forms.DateTimeInput(
-                attrs={
-                    'class': 'form-control',
-                    'format': 'dd/mm/yyyy hh:mm',
-                    'placeholder':'Ingrese su día a reservar',
-                }
-            ),
+            'dia_reservado': forms.SelectDateWidget(),
             'sucursal': forms.Select(
                 attrs={
                     'class': 'form-control'
@@ -152,17 +146,10 @@ class BoxesForm(forms.ModelForm):
     class Meta: 
         model = Box
         fields = [
-            'id',
             'estado',
             'especialidad'
         ]
         widgets = {
-            'id': forms.IntegerField(
-                attrs={
-                    
-                    'readonly':True
-               }
-            ),
             'estado': forms.Select(
                 attrs={
                     'class': 'form-control'

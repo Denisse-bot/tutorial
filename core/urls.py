@@ -1,10 +1,14 @@
 from os import name
 from django.urls import path
 from .views import * 
+from .utils import send_mail_reserva
 from django.contrib.auth.decorators import login_required
+
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
+    path('robotos', robotos.as_view(), name='robotos'),
+    path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
     path('insumo/',insumo, name='insumo'),
 
