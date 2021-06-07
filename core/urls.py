@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
     path('robotos', robotos.as_view(), name='robotos'),
-    path('send_mail_reserva', send_mail_reserva, name= 'send_mail_reserva'),
+    path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios.as_view(),name='listar_usuarios'),
