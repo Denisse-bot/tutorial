@@ -20,9 +20,7 @@ def send_mail_reserva(atencion, id):
     profesional_nombre= atenciones.nombre_especialista,
     profesional_apellido = atenciones.apellido_especialista
     centro = atenciones.reserva.sucursal
-    print(reserva)
-    print(email)
-    print(especialidad)
+
 
 
 

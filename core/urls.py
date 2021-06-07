@@ -1,22 +1,16 @@
 from os import name
 from django.urls import path
 from .views import * 
-<<<<<<< HEAD
 from .utils import send_mail_reserva
-=======
->>>>>>> 211c853336000c98b3ac9377d1033757777eddab
 from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
-<<<<<<< HEAD
     path('robotos', robotos.as_view(), name='robotos'),
     path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
-=======
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
     path('insumo/',insumo, name='insumo'),
->>>>>>> 211c853336000c98b3ac9377d1033757777eddab
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios.as_view(),name='listar_usuarios'),
