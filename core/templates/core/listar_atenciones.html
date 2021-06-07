@@ -1,10 +1,10 @@
-{% extends 'core/base.html' %}
+{% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
 <title>Listado de Atenciones</title>
  
 
-{% block body %}
+{% block panel %}
 
 {% if atenciones %}
     <table style="margin-top: 60px;" class="table table-hover">
@@ -43,4 +43,4 @@
     <a href="{% url 'crear_atencion' %}" class="btn btn-success">Agregar</a>
 {% endif %}
 
-{% endblock body %}
+{% endblock panel %}

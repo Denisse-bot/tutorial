@@ -12,9 +12,6 @@
     {% block nav %}
     <ul class="nav nav-pills card-header-pills">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'crear_usuario'%}">Crear</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="{% url 'listar_usuarios'%}">Listar Usuarios</a>
       </li>
       <li class="nav-item">
@@ -22,6 +19,18 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'listar_boxes'%}">Listar boxes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'crear_reservas'%}">Crear reserva</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_reservas'%}">Listar reservas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'crear_atencion'%}">Crear atención</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_atenciones'%}">Listar atenciones</a>
       </li>
     </ul>
     {% endblock nav%}

@@ -152,10 +152,17 @@ class BoxesForm(forms.ModelForm):
     class Meta: 
         model = Box
         fields = [
+            'id',
             'estado',
             'especialidad'
         ]
         widgets = {
+            'id': forms.IntegerField(
+                attrs={
+                    
+                    'readonly':True
+               }
+            ),
             'estado': forms.Select(
                 attrs={
                     'class': 'form-control'

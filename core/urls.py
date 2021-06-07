@@ -1,10 +1,12 @@
+from os import name
 from django.urls import path
-from .views import *
+from .views import * 
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
+    path('insumo/',insumo, name='insumo'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios.as_view(),name='listar_usuarios'),
