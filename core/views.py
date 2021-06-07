@@ -1,9 +1,10 @@
 import django
 from django.contrib.auth import login, logout
+from django.core.files.base import ContentFile
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseRedirect
-from django.views.generic.base import View
+from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from core import models
@@ -20,6 +21,11 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
+
+
+class VistaEnfermera(TemplateView):
+    template_name = 'core/vista_enfermera.html'
+  
 
 class Login(FormView):
     template_name = 'core/login.html'
@@ -218,4 +224,13 @@ class actualizarAtencion(UpdateView):
     form_class = AtencionForm
     success_url = reverse_lazy('core:listar_atenciones')
 
-
+def insumo(request):
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO")
+        rawData = cursor.fetchall()
+        result = []
+        for r in rawData:
+            result.append(list(r))
+        contexto = {'consultas': result }
+    return render(request, 'core/insumo.html', contexto)         
