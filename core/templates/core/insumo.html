@@ -6,13 +6,27 @@
 
 {% block body %}
 
-
- {% for item in consultas %}
-        {% for i in item %}
-            {{ i }}
-       {% endfor %}
-   {% endfor %}
-
-
+<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables_example">
+           <thead>
+              <tr>
+                   <th>Id insumo</th>
+                    <th>Nombre insumo</th>
+                    <th>Especialidad</th>
+                    <th>Stock</th>
+              </tr>  
+           </thead> 
+        <tbody> 
+            {% for item in consultas %}
+                <tr>
+                    {% for i in item %}
+                        <td>
+                           {{ i }}
+                        </td>   
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>  
+              
+</table>              
 
 {% endblock body %}
