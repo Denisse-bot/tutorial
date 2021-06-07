@@ -1,9 +1,16 @@
+from os import name
 from django.urls import path
-from .views import crearReserva, editarReserva,eliminarReserva, home, crearUsuario, editarUsuario, listadoUsuarios, eliminarUsuario, listadoReservas, listadoAtenciones,actualizarAtencion, crearAtencion, editarAtencion, eliminarAtencion
+from .views import * 
+from .utils import send_mail_reserva
 from django.contrib.auth.decorators import login_required
+
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
+    path('robotos', robotos.as_view(), name='robotos'),
+    path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
+    path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
+    path('insumo/',insumo, name='insumo'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios.as_view(),name='listar_usuarios'),
@@ -19,4 +26,11 @@ urlpatterns = [
     path('editar_atencion/<int:id>', editarAtencion, name='editar_atencion'),
     path('listar_atenciones/',listadoAtenciones.as_view(), name='listar_atenciones'),
     path('eliminar_atencion/<int:id>',eliminarAtencion, name='eliminar_atencion'),
+
+    path('crear_box/',crearBox, name='crear_box'),
+    path('listar_boxes/',listadoBoxes.as_view(), name='listar_boxes'),
+    path('editar_box/<int:id>',editarBox, name='editar_box'),
+    path('eliminar_box/<int:id>',eliminarAtencion,name='eliminar_box')
+
 ]
+

@@ -68,8 +68,9 @@ class Usuario(AbstractBaseUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna']
 
+    #revisar luego si quiero llamarlo usuario o paciente
     def __str__(self):
-        return f'Usuario {self.email}'
+        return self.email
 
     def has_perm(self,perm,obj = None):
         return True
@@ -105,21 +106,58 @@ class Reserva(models.Model):
         verbose_name_plural = 'Reservas'
         ordering = ['sucursal']
 
-    def _str_(self):
-        return f'Reserva {self.dia_reservado}'
+    def __str__(self):
+        dia_reservado=self.dia_reservado
+        usuario=self.usuario
+        reserva=str(dia_reservado)+","+str(usuario)
+        return reserva
+
+
+class Box(models.Model):
+    estado_list=(
+        (1, 'Disponible'),
+        (2, 'En atención'),
+        (3, 'En mantención'),
+        (4, 'No disponible, deshabilitada')
+    )
+    especialidad_list=(
+        (1, 'Fonoaudiologia'),
+        (2, 'Kinesiologia'),
+        (3, 'General')
+    )
+
+    id = models.AutoField(primary_key= True)
+    estado = models.IntegerField(choices=estado_list, default=None)
+    especialidad = models.IntegerField(choices=especialidad_list, default=None)
     
+    class Meta:
+        verbose_name = 'Box'
+        verbose_name_plural = 'Boxes'
+        ordering = ['estado']
+
+    def __str__(self):
+        id=self.id
+        especialidad=self.especialidad
+        if especialidad==1:
+            especialidad='Fonoaudiologia'
+        else:
+            especialidad='Kinesiologia'
+        box=str(id)+","+str(especialidad)
+        return box
+
 
 class Atencion(models.Model):
     id = models.AutoField(primary_key= True)
     reserva = models.OneToOneField(Reserva, on_delete=CASCADE)
     nombre_especialista = models.CharField(max_length=20)
     apellido_especialista = models.CharField(max_length=20)
-    box = models.CharField(max_length=10)
+    box = models.ForeignKey(Box, on_delete=CASCADE)
     
     class Meta:
         verbose_name = 'Atencion'
         verbose_name_plural = 'Atenciones'
         ordering = ['reserva_id']
 
-    def _str_(self):
-        return "{0},{1}".format(self.reserva_id, self.reserva_id)
+    def __str__(self):
+        atencion=self.reserva+","+self.box
+        return atencion

@@ -5,7 +5,7 @@ from django.db.models import fields
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
-from .models import Atencion, Reserva, Usuario
+from .models import Atencion, Reserva, Usuario, Box
 
 class FormularioLogin(AuthenticationForm):
     def __init__(self,*args,**kwargs):
@@ -128,13 +128,7 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'dia_reservado': forms.DateTimeInput(
-                attrs={
-                    'class': 'form-control',
-                    'format': 'dd/mm/yyyy hh:mm',
-                    'placeholder':'Ingrese su día a reservar',
-                }
-            ),
+            'dia_reservado': forms.SelectDateWidget(),
             'sucursal': forms.Select(
                 attrs={
                     'class': 'form-control'
@@ -143,6 +137,27 @@ class ReservaForm(forms.ModelForm):
             'usuario': forms.Select(
                 attrs={
                     'class': 'form-control'
+                }
+            )
+        }
+
+class BoxesForm(forms.ModelForm):
+    
+    class Meta: 
+        model = Box
+        fields = [
+            'estado',
+            'especialidad'
+        ]
+        widgets = {
+            'estado': forms.Select(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+            'especialidad': forms.Select(
+                attrs={
+                    'class': 'form-control'                    
                 }
             )
         }
@@ -174,7 +189,7 @@ class AtencionForm(forms.ModelForm):
                     'placeholder': 'Ingrese el apellido del especialista'
                 }
             ),
-            'box': forms.TextInput(
+            'box': forms.Select(
                 attrs={
                     'class': 'form-control'
                 }

@@ -2,7 +2,7 @@
 {% load static %}
 
 
-<title style="margin-bottom: 24px;">Crear Reserva</title>
+<title style="margin-bottom: 24px;">Registro Boxes</title>
 
 
 {% block panel %}
@@ -13,16 +13,30 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Registro</h1>
-  <h2>Crea tu reserva en nuestra plataforma para garantizar tu atención</h2>
-
+  <h1 style="margin: 70px 0 0 0px;">Registro de Box</h1>
+  <h2>Crea tu registro de box de atención</h2>
   <form action="" class="needs-validation" method="POST" novalidate>
     {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
-        {{ reserva_form.as_p }}
+        {{ boxes_form.as_p }}
     {% endif%}
+
+
+
+
+<!-- Reahacer el metodo para conseguir el registro de atencion -->
+
+
+
+
+
+
+
+
+
+
     <!-- <div class="form-group">
       <label for="uname">Correo Electrónico:</label>
       <input type="text" class="form-control" id="uname" placeholder="correo@mail.com" name="uname" required>

@@ -1,25 +1,33 @@
 import django
 from django.contrib.auth import login, logout
+from django.core.files.base import ContentFile
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponseRedirect
-from django.views.generic.base import View
+from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from core import models
 import core
-from core.models import Atencion, Reserva, Usuario
+from core.models import Atencion, Box, Reserva, Usuario
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
-from .forms import FormularioLogin, ReservaForm, UsuarioForm
+from .forms import ReservaForm, UsuarioForm
+
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
+
+
+class VistaEnfermera(TemplateView):
+    template_name = 'core/vista_enfermera.html'
+  
 
 class Login(FormView):
     template_name = 'core/login.html'
@@ -46,6 +54,10 @@ def logoutUsuario(request):
 
 class home(TemplateView):
     template_name = 'core/home.html'
+
+class robotos(TemplateView):
+    template_name = 'core/robotos.html'
+
 
 def crearUsuario(request):
     if request.method == 'POST':
@@ -125,6 +137,36 @@ def eliminarReserva(request,id):
     return render(request, 'core/eliminar_reserva.html',{'reserva':reserva})
 
 
+def crearBox(request):
+    if request.method == 'POST':
+        boxes_form = BoxesForm(request.POST)
+        if boxes_form.is_valid():
+            boxes_form.save()
+            return redirect('listar_boxes')
+    else:
+        boxes_form = BoxesForm()
+    return render(request,'core/crear_box.html',{'boxes_form':boxes_form})
+
+
+def editarBox(request, id):
+    box = Box.objects.get(id=id)
+    if request.method =='GET':
+        boxes_form = BoxesForm(instance=box)
+    else:
+        boxes_form = BoxesForm(request.POST, instance=box)
+        if boxes_form.is_valid():
+            boxes_form.save()
+        return redirect('listar_boxes')
+    return render(request, 'core/crear_box.html', {'boxes_form': boxes_form})
+
+def eliminarBox(request,id):
+    box = Box.objects.get(id=id)
+    if request.method == 'POST':
+        box.save()
+        box.delete()
+        return redirect('listar_boxes')
+    return render(request,'core/eliminar_box.html', {'box':box})
+
 def crearAtencion(request):
     if request.method == 'POST':
         atencion_form = AtencionForm(request.POST)
@@ -170,7 +212,11 @@ class listadoUsuarios(ListView):
     context_object_name = 'usuarios'
     queryset = Usuario.objects.all()
 
-
+class listadoBoxes(ListView):
+    model = Box
+    template_name = 'core/listar_boxes.html'
+    context_object_name = 'boxes'
+    queryset = Box.objects.all()
 
 class listadoAtenciones(ListView):
     model = Atencion
@@ -184,4 +230,13 @@ class actualizarAtencion(UpdateView):
     form_class = AtencionForm
     success_url = reverse_lazy('core:listar_atenciones')
 
-
+def insumo(request):
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO")
+        rawData = cursor.fetchall()
+        result = []
+        for r in rawData:
+            result.append(list(r))
+        contexto = {'consultas': result }
+    return render(request, 'core/insumo.html', contexto)         

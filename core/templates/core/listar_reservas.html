@@ -1,27 +1,27 @@
-{% extends 'core/base.html' %}
+{% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
 <title>Listado de Reservas</title>
  
 
-{% block body %}
+{% block panel %}
 
 {% if reservas %}
     <table style="margin-top: 60px;" class="table table-hover">
         
         <th>Especialidad</th>
-        <th>dia_reservado</th>
-        <th>sucursal</th>
-        <th>nombre paciente</th>
-        <th>apellido paciente</th>
-        <th>rut paciente</th>
+        <th>Dia reservado</th>
+        <th>Sucursal</th>
+        <th>Nombre paciente</th>
+        <th>Apellido paciente</th>
+        <th>Rut paciente</th>
         <th>Fecha Nacimiento</th>
         <tbody>
             {% for reserva in reservas %}
                 <tr>
-                    <td>{{ reserva.especialidad }}</td>
+                    <td>{% if reserva.especialidad == 1 %}Kinesiología {% elif reserva.especialidad == 2 %}Fonoaudiologia {% else %} General{% endif %}</td>
                     <td>{{ reserva.dia_reservado }}</td>
-                    <td>{{ reserva.sucursal }}</td>
+                    <td>{% if reserva.sucursal == 1 %}Providencia {% elif reserva.sucursal == 2 %}San Bernardo {% elif reserva.sucursal == 3 %}La Serena {% else %} Temuco{% endif %}</td>
                     <td>{{ reserva.usuario.nombre }}</td>
                     <td>{{ reserva.usuario.apellido  }}</td>
                     <td>{{ reserva.usuario.rut  }}</td>
@@ -44,4 +44,4 @@
     <a href="{% url 'crear_reservas' %}" class="btn btn-success">Agregar</a>
 {% endif %}
 
-{% endblock body %}
+{% endblock panel %}

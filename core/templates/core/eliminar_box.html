@@ -1,8 +1,8 @@
-{% extends 'core/vista_enfermera.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 
 
-<title style="margin-bottom: 24px;">Eliminar usuario</title>
+<title style="margin-bottom: 24px;">Eliminar Box</title>
 
 {% block body %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -12,14 +12,14 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Usuario</h1>
+  <h1 style="margin: 70px 0 0 0px;">Boxes</h1>
 
   <form method="POST">
     {% csrf_token %}
-    <h2>¿Estas seguro de eliminar el usuario {{usuario.nombre}} {{usuario.apellido}}?</h2>
+    <h2>¿Estas seguro de eliminar la box {{box.id}}?</h2>
 
     <button type="submit" class="btn btn-error float-right">Eliminar</button>
-    <a href="{% url 'listar_usuarios' %}">Cancelar</a>
+    <a href="{% url 'listar_boxes' %}">Cancelar</a>
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
