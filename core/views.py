@@ -233,7 +233,8 @@ class actualizarAtencion(UpdateView):
 def insumo(request):
     from django.db import connection
     with connection.cursor() as cursor:
-        cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO")
+        #cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO") vista original
+        cursor.execute("SELECT ID,NOMBRE,ESPECIALIDAD,STOCK FROM INSUMO")
         rawData = cursor.fetchall()
         result = []
         for r in rawData:
