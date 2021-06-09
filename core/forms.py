@@ -73,11 +73,7 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su Rut: 12.345.678-9',
                 }            
             ),
-            'fecha_nacimiento':DateTimeWidget(
-                attrs={
-                    'id':"yourdatetimeid"
-                    } 
-            ),
+            'fecha_nacimiento':forms.DateInput(format='%d/%m/%Y'),
             'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control',
