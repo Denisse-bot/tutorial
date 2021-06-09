@@ -70,8 +70,8 @@ class UsuarioForm(forms.ModelForm):
             'rut': forms.TextInput(
                 attrs={
                     'class': 'form-control',
-                    'placeholder':'Ingrese su Rut',
-                }
+                    'placeholder':'Ingrese su Rut: 12.345.678-9',
+                }            
             ),
             'fecha_nacimiento':DateTimeWidget(
                 attrs={

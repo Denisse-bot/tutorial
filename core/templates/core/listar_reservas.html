@@ -13,7 +13,6 @@
         <th>Dia reservado</th>
         <th>Sucursal</th>
         <th>Nombre paciente</th>
-        <th>Apellido paciente</th>
         <th>Rut paciente</th>
         <th>Fecha Nacimiento</th>
         <tbody>
@@ -22,8 +21,7 @@
                     <td>{% if reserva.especialidad == 1 %}Kinesiología {% elif reserva.especialidad == 2 %}Fonoaudiologia {% else %} General{% endif %}</td>
                     <td>{{ reserva.dia_reservado }}</td>
                     <td>{% if reserva.sucursal == 1 %}Providencia {% elif reserva.sucursal == 2 %}San Bernardo {% elif reserva.sucursal == 3 %}La Serena {% else %} Temuco{% endif %}</td>
-                    <td>{{ reserva.usuario.nombre }}</td>
-                    <td>{{ reserva.usuario.apellido  }}</td>
+                    <td>{{ reserva.usuario.nombre }} {{ reserva.usuario.apellido  }}</td>
                     <td>{{ reserva.usuario.rut  }}</td>
                     <td>{{ reserva.usuario.fecha_nacimiento  }}</td>
 

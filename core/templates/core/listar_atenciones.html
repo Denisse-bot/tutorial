@@ -22,8 +22,8 @@
                 <tr>
                     <td>{{ atencion.id}}</td>
                     <td>{{ atencion.reserva.dia_reservado }}</td>
-                    <td>{{ atencion.reserva.sucursal }}</td>
-                    <td>{{ atencion.reserva.especialidad }}</td>
+                    <td>{% if atencion.reserva.sucursal == 1 %}Providencia{% elif atencion.reserva.sucursal == 2 %}San Bernardo{% elif atencion.reserva.sucursal == 3 %}La Serena{% else%}Temuco{% endif %}</td>
+                    <td>{% if atencion.reserva.especialidad == 1 %}Kinesiología{% elif atencion.reserva.especialidad == 2 %}Fonoaudiología{% else %}General{% endif %}</td>
                     <td>{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}</td>
                     <td>{{ atencion.nombre_especialista }} {{ atencion.apellido_especialista}}</td>
                     <td>{{ atencion.box }}</td>

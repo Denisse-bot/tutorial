@@ -25,9 +25,9 @@
   </div>
   <div class="card-body">
     {% block panel %}
-    <!-- <h5 class="card-title">Sistema de Agendamiento de Box atención</h5>
+    <h5 class="card-title">Bienvenido {{ usuario }} al Sistema de Agendamiento de Box atención</h5>
     <p class="card-text">en este panel puedes encontrar las opciones disponibles.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    <a href="{% url 'crear_reservas'%}" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Reserva</a>
     {% endblock panel %}
   </div>
 </div>
