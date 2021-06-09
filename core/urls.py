@@ -2,7 +2,6 @@ from os import name
 from django.urls import path
 from .views import * 
 from .utils import send_mail_reserva
-from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [
@@ -10,6 +9,7 @@ urlpatterns = [
     path('robotos', robotos.as_view(), name='robotos'),
     path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
+    path('vista_usuario/', VistaUsuario.as_view(),name='vista_usuario'),
     path('insumo/',insumo, name='insumo'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
@@ -17,7 +17,7 @@ urlpatterns = [
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
 
-    path('crear_reservas/',login_required(crearReserva), name='crear_reservas'),
+    path('crear_reservas/',crearReserva, name='crear_reservas'),
     path('listar_reservas/',listadoReservas.as_view(), name='listar_reservas'),
     path('editar_reserva/<int:id>', editarReserva, name='editar_reserva'),
     path('eliminar_reserva/<int:id>', eliminarReserva, name='eliminar_reserva'),

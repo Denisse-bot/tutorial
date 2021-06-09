@@ -17,22 +17,25 @@ from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
 from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from .mixins import SuperUsuarioMixin
 
 # Create your views here.
 
 
-class VistaEnfermera(TemplateView):
+class VistaEnfermera(SuperUsuarioMixin,TemplateView):
     template_name = 'core/vista_enfermera.html'
   
+class VistaUsuario(TemplateView):
+    template_name = 'core/vista_usuario.html'
 
 class Login(FormView):
     template_name = 'core/login.html'
     form_class = FormularioLogin
-    success_url = reverse_lazy('crear_reservas')
+    success_url = reverse_lazy('vista_enfermera')
 
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
@@ -62,7 +65,7 @@ def crearUsuario(request):
         usuario_form = UsuarioForm(request.POST)
         if usuario_form.is_valid():
             usuario_form.save()
-            return redirect('listar_usuarios')
+            return redirect('crear_reservas')
     else:
         usuario_form = UsuarioForm()
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form})
@@ -111,6 +114,7 @@ def crearReserva(request):
     else:
         reserva_form = ReservaForm()
     return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form})
+
 
 def editarReserva(request,id):
     reserva = Reserva.objects.get(id = id)
