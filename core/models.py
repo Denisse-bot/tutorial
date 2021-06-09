@@ -67,6 +67,7 @@ class Usuario(AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna']
+    
 
     #revisar luego si quiero llamarlo usuario o paciente
     def __str__(self):
@@ -159,5 +160,5 @@ class Atencion(models.Model):
         ordering = ['reserva_id']
 
     def __str__(self):
-        atencion=self.reserva+","+self.box
+        atencion=str(self.id)
         return atencion

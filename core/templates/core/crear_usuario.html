@@ -1,18 +1,22 @@
-{% extends 'core/vista_enfermera.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 
 
 <title style="margin-bottom: 24px;">Registro usuarios</title>
 
 
-{% block panel %}
+{% block body %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+  <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+  {{ usuario_form.media }}
 <body>
-
-<div class="container">
+<!-- asi se alinean los formularios justificados -->
+<div class="container" style="text-align:justify!important;" >
   <form action="" class="needs-validation" method="POST" novalidate>
     {% csrf_token %}
     {% if error %}
@@ -99,4 +103,4 @@
 </script>
 
 
-{% endblock panel %}
+{% endblock body %}

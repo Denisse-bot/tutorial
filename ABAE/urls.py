@@ -18,7 +18,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.urls.conf import include
-from core.views import Login, logoutUsuario, VistaEnfermera
+from core.views import Login, VistaUsuario, logoutUsuario, VistaEnfermera
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +27,7 @@ urlpatterns = [
     path('accounts/login/',Login.as_view(),name='login'),
     path('accounts/',login_required(logoutUsuario),name='logout'),
     path('vista_enfermera/',VistaEnfermera.as_view(),name='vista_enfermera'),
+    path('vista_usuario/',VistaUsuario.as_view(),name='vista_usuario'),
+
 
 ]

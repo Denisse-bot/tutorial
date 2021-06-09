@@ -1,4 +1,4 @@
-{% extends 'core/vista_enfermera.html' %}
+{% extends 'core/vista_usuario.html' %}
 {% load static %}
 
 
@@ -13,10 +13,10 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Registro</h1>
+  <h1 style="margin: 70px 0 0 0px;">Reserva</h1>
   <h2>Crea tu reserva en nuestra plataforma para garantizar tu atención</h2>
 
-  <form action="" class="needs-validation" method="POST" novalidate>
+  <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
     {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
