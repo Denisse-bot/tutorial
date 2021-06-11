@@ -92,7 +92,26 @@ def editarUsuario(request,id):
     except ObjectDoesNotExist as e:
         error = e
 
-    return render(request, 'core/crear_usuario.html',{'usuario_form':usuario_form,'error':error})
+    return render(request, 'core/modificar_usuario.html',{'usuario_form':usuario_form,'error':error})
+
+
+def editar_self_usuario(request):
+    id = None
+    id = request.user.id
+    usuario = Usuario.objects.get(id=id)
+    print(usuario)
+
+    if request.method == 'GET':
+        usuario_form = UsuarioForm(instance=usuario)
+        print(usuario_form)
+    else:
+        usuario_form = UsuarioForm(request.POST, instance=usuario)
+        if usuario_form.is_valid():
+            usuario_form.save()
+            print(usuario_form)
+        return redirect('listar_usuarios')
+
+    return render(request,'core/modificar_usuario.html',{'usuario_form':usuario_form})
 
 
 def eliminarUsuario(request,id):
@@ -108,6 +127,21 @@ def eliminarUsuario(request,id):
 def crearReserva(request):
     if request.method == 'POST':
         reserva_form = ReservaForm(request.POST)
+        if reserva_form.is_valid():
+            reserva_form.save()
+            return redirect('listar_reservas')
+    else:
+        reserva_form = ReservaForm()
+    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form})
+
+def crearReservaSelf(request):
+    if request.method == 'POST':
+        id = None
+        id = request.user.id
+        usuario = Usuario.objects.filter(id=id)
+        print(usuario)
+        reserva_form = ReservaForm(request.POST,usuario=usuario)
+
         if reserva_form.is_valid():
             reserva_form.save()
             return redirect('listar_reservas')

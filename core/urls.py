@@ -15,9 +15,11 @@ urlpatterns = [
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios.as_view(),name='listar_usuarios'),
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
+    path('editar_self_usuario',editar_self_usuario,name='editar_self_usuario'),    
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
 
     path('crear_reservas/',crearReserva, name='crear_reservas'),
+    path('crear_reserva_self',crearReservaSelf, name='crear_reserva_self'),
     path('listar_reservas/',listadoReservas.as_view(), name='listar_reservas'),
     path('editar_reserva/<int:id>', editarReserva, name='editar_reserva'),
     path('eliminar_reserva/<int:id>', eliminarReserva, name='eliminar_reserva'),
