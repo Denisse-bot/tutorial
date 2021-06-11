@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.contrib.admin import models
-from .models import Atencion, Usuario, Reserva
+from .models import Atencion, Usuario, Reserva, Box
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -23,6 +23,16 @@ class ReservaAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ['especialidad','dia_reservado','sucursal','usuario_id']
     resource_class = ReservaResource
 
+class BoxResource(resources.ModelResource):
+    class Meta:
+        model = Box
+
+class BoxAdmin(ImportExportModelAdmin,admin.ModelAdmin):
+    search_fields = ['id','estado','especialidad']
+    list_display = ['id','estado','especialidad']
+    resource_class = BoxResource
+
+
 class AtencionResource(resources.ModelResource):
     class Meta:
         model = Atencion
@@ -34,4 +44,5 @@ class AtencionAdmin(ImportExportModelAdmin,admin.ModelAdmin):
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Reserva,ReservaAdmin)
+admin.site.register(Box,BoxAdmin)
 admin.site.register(Atencion, AtencionAdmin)
