@@ -22,60 +22,81 @@
     {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
-        {{ usuario_form.as_p }}
-    {% endif%}
-    <!-- <div class="form-group">
-      <label for="uname">Correo Electrónico:</label>
-      <input type="text" class="form-control" id="uname" placeholder="correo@mail.com" name="uname" required>
+
+    <div class="form-group">
+      <label for="username">Nombre de Usuario:</label>
+      <input type="text" class="form-control" id="username" placeholder="Nombre de usuario" name="username" required>
       <div class="valid-feedback">Ok.</div>
-      <div class="invalid-feedback">Ingresa un correo válido.</div>
+      <div class="invalid-feedback">Ingresa un nombre de usuario válido.</div>
     </div>
     <div class="form-group">
-      <label for="pwd">Contraseña:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="contraseña123" name="pswd" required>
+      <label for="nombre">Nombre:</label>
+      <input type="text" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required>
       <div class="valid-feedback">Ok.</div>
-      <div class="invalid-feedback">Ingresa una contraseña válida.</div>
+      <div class="invalid-feedback">Ingresa un nombre válido.</div>
     </div>
     <div class="form-group" style="max-width: 20%;">
-        <label for="age">Edad:</label>
-        <input type="number" class="form-control" id="age" placeholder="24" name="age" required>
+        <label for="apellido">Apellido:</label>
+        <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apellido" required>
         <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa una edad válida.</div>
+        <div class="invalid-feedback">Ingresa un apellido válido.</div>
     </div>
     <div class="form-group">
-        <label for="direction">Dirección:</label>
-        <input type="text" class="form-control" id="direction" placeholder="Av siempreviva" name="direction" required>
+        <label for="rut">Rut:</label>
+        <input type="text" class="form-control" id="rut" placeholder="ingrese su rut" name="rut" required>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa un rut válido.</div>
+    </div>
+    <div class="form-group" style="max-width: 20%;">
+        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+        <input type="date" class="form-control" id="fecha_nacimiento" placeholder="01/02/2021" name="fecha_nacimiento" required>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa una fecha de nacimiento válida.</div>
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" placeholder="usuario@mail.com" name="email" required>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa un email válido.</div>
+    </div>
+    <div class="form-group">
+        <label for="direccion">Dirección:</label>
+        <input type="text" class="form-control" id="direccion" placeholder=" calle sin nombre" name="direccion" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa una dirección válida.</div>
     </div>
-    <div class="form-group" style="max-width: 20%;">
-        <label for="comunne">Número:</label>
-        <input type="text" class="form-control" id="number-direction" placeholder="#1234 ó 123A" name="number-comunne" required>
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa un número de casa válido.</div>
+    <div class="form-group">
+      <label for="nro_direccion">Nro. Dirección:</label>
+      <input type="number" class="form-control" id="nro_direccion" placeholder=" #123" name="nro_direccion" required>
+      <div class="valid-feedback">Ok.</div>
+      <div class="invalid-feedback">Ingresa un numero de dirección válido.</div>
     </div>
     <div class="form-group">
-        <label for="comunne">Comuna:</label>
-        <input type="text" class="form-control" id="direction" placeholder="Viña del Mar" name="comunne" required>
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa una comuna válida.</div>
+      <label for="comuna">Comuna:</label>
+      <select class="form-control" id="comuna">
+        <option value="1">Providencia</option>
+        <option value="2">San Bernardo</option>
+        <option value="3" >La Serena</option>
+        <option value="4">Temuco</option>
+      </select>
+      <div class="valid-feedback">Ok.</div>
+      <div class="invalid-feedback">Ingresa una comuna válida.</div>
     </div>
     <div class="form-group">
-        <label for="comunne">Número:</label>
-        <input type="text" class="form-control" id="number-direction" placeholder="#1234" name="number-comunne" required>
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa un número de casa válido.</div>
+      <label for="password1">Contraseña:</label>
+      <input type="password" class="form-control" id="password1" placeholder="ingrese su contraseña" name="password1" required>
+      <div class="valid-feedback">Ok.</div>
+      <div class="invalid-feedback">Ingresa una contraseña válida.</div>
     </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" name="remember" required> Acepto Términos & Condiciones, así como el registro de mis datos personales para fines clínicos.
-          <div class="valid-feedback">Ok.</div>
-          <div class="invalid-feedback">Acepta los términos para continuar</div>
-        </label>
-      </div> -->
+    <div class="form-group">
+      <label for="password2">Reingrese su Contraseña:</label>
+      <input type="password" class="form-control" id="password2" placeholder="Reingrese su contraseña" name="password2" required>
+      <div class="valid-feedback">Ok.</div>
+      <div class="invalid-feedback">Ingresa una contraseña válida.</div>
+    </div>
     <button type="submit" class="btn btn-success float-right">Registrar</button>
     <button type="reset" class="btn btn-primary float-left">Limpiar</button>
-
+    {% endif%}
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
