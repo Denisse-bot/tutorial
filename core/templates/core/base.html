@@ -102,18 +102,31 @@
 											<li class="nav-item">
 												<a class="page-scroll" href="#blog">Centros</a>
 											</li>
+											{% if user.is_authenticated == False %}
 											<li class="nav-item">
 												<a href="{% url 'crear_usuario' %}">Registrate</a>
 											</li>
 											<li class="nav-item">
 												<a href="{% url 'login' %}">Ingresa</a>
 											</li>
-											<li class="nav-item">
-												<a href="{% url 'logout' %}">Salir</a>
+											{% else %}
+											<li class="nav-item" style="display: none;">
+												<a href="{% url 'crear_usuario' %}">Registrate</a>
 											</li>
+											<li class="nav-item" style="display: none;">
+												<a href="{% url 'login' %}">Ingresa</a>
+											</li>
+											{% endif %}
 										</ul>
 									</div> <!-- navbar collapse -->
 								</nav> <!-- navbar -->
+
+								<!-- TODO revisar esta linea y filtrar solo cuando el usuario esta conectado -->
+								{% if user.is_authenticated == True %}
+								<h6 style="align-items:flex-end;text-align:right;">Bienvenid@ {{ user.get_username }} / <a style="color: blue;" href="{% url 'logout' %}">Cerrar Sessión</a></h6>
+								{% else %}
+								<h6 style="align-items:flex-end;text-align:right; display: none;">Bienvenido {{ user.get_username }} / <a style="color: blue;" href="{% url 'logout' %}">Cerrar Sessión</a></h6>
+								{% endif %}
 							</div>
 						</div> <!-- row -->
 					</div> <!-- container -->

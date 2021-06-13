@@ -73,7 +73,12 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su Rut: 12.345.678-9',
                 }            
             ),
-            'fecha_nacimiento':forms.DateInput(format='%d/%m/%Y'),
+            'fecha_nacimiento':forms.DateInput(format='%d/%m/%Y'
+            ,attrs={
+                'class': 'form-class',
+                'placeholder': '01/12/1990'
+            }
+            ),
             'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control',

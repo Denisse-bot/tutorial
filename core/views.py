@@ -1,14 +1,17 @@
 import django
 from django.contrib.auth import login, logout
+from django.core import paginator
 from django.core.files.base import ContentFile
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import request
 from django.http.response import HttpResponseRedirect
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from core import models
 import core
+from django.db.models import Q
 from core.models import Atencion, Box, Reserva, Usuario
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
@@ -22,6 +25,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from .mixins import SuperUsuarioMixin
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -70,12 +74,24 @@ def crearUsuario(request):
         usuario_form = UsuarioForm()
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form})
 
-def listarUsuario(request):
-    #acá se filtran los usuarios activos o habilitados.
-    usuarios = Usuario.objects.filter(usuario_activo=True)
+def listadoUsuarios(request):
+    queryset = request.GET.get("search")
+    usuarios = Usuario.objects.all()
+    if queryset:
+        usuarios = Usuario.objects.filter(
+            Q(email__icontains = queryset) |Q(nombre__icontains = queryset)|Q(apellido__icontains = queryset)|Q(rut__icontains = queryset)|Q(comuna__icontains = queryset)
+        ).distinct()
+    paginator=Paginator(usuarios,3)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
 
-    # usuarios = Usuario.objects.all // así se listan todos
-    return render(request, 'core/listar_usuarios.html',{'usuarios':usuarios})
+
+# def listarUsuario(request):
+#     #acá se filtran los usuarios activos o habilitados.
+#     usuarios = Usuario.objects.filter(usuario_activo=True)
+#     # usuarios = Usuario.objects.all // así se listan todos
+#     return render(request, 'core/listar_usuarios.html',{'usuarios':usuarios})
 
 def editarUsuario(request,id):
     usuario_form = None
@@ -92,7 +108,26 @@ def editarUsuario(request,id):
     except ObjectDoesNotExist as e:
         error = e
 
-    return render(request, 'core/crear_usuario.html',{'usuario_form':usuario_form,'error':error})
+    return render(request, 'core/modificar_usuario.html',{'usuario_form':usuario_form,'error':error})
+
+
+def editar_self_usuario(request):
+    id = None
+    id = request.user.id
+    usuario = Usuario.objects.get(id=id)
+    print(usuario)
+
+    if request.method == 'GET':
+        usuario_form = UsuarioForm(instance=usuario)
+        print(usuario_form)
+    else:
+        usuario_form = UsuarioForm(request.POST, instance=usuario)
+        if usuario_form.is_valid():
+            usuario_form.save()
+            print(usuario_form)
+        return redirect('listar_usuarios')
+
+    return render(request,'core/modificar_usuario.html',{'usuario_form':usuario_form})
 
 
 def eliminarUsuario(request,id):
@@ -200,31 +235,82 @@ def eliminarAtencion(request,id):
         return redirect('listar_atenciones')
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
+def listadoReservasSelf(request):
+    id = request.user.id
+    queryset = request.GET.get("search")
+    reservas = Reserva.objects.filter(usuario=id)
+    if queryset:
+        reservas = Reserva.objects.filter(
+            Q(dia_reservado__icontains = queryset)
+        ).distinct()
+    paginator=Paginator(reservas,2)
+    page=request.GET.get('page')
+    reservas = paginator.get_page(page)
+    return render(request,'core/listar_reservas.html',{'reservas':reservas})
 
-class listadoReservas(ListView):
-    model = Reserva
-    template_name = 'core/listar_reservas.html'
-    context_object_name = 'reservas'
-    queryset = Reserva.objects.all()
+
+def listadoReservas(request):
+    queryset = request.GET.get("search")
+    reservas = Reserva.objects.all()
+    if queryset:
+        reservas = Reserva.objects.filter(
+            Q(dia_reservado__icontains = queryset) |Q(usuario__icontains = queryset)
+        ).distinct()
+    paginator=Paginator(reservas,2)
+    page=request.GET.get('page')
+    reservas = paginator.get_page(page)
+    return render(request,'core/listar_reservas.html',{'reservas':reservas})
+
+# class listadoReservas(ListView):
+#     model = Reserva
+#     template_name = 'core/listar_reservas.html'
+#     context_object_name = 'reservas'
+#     queryset = Reserva.objects.all()
 
 
-class listadoUsuarios(ListView):
-    model = Usuario
-    template_name = 'core/listar_usuarios.html'
-    context_object_name = 'usuarios'
-    queryset = Usuario.objects.all()
+# class listadoUsuarios(ListView):
+#     model = Usuario
+#     template_name = 'core/listar_usuarios.html'
+#     context_object_name = 'usuarios'
+#     queryset = Usuario.objects.all()
 
-class listadoBoxes(ListView):
-    model = Box
-    template_name = 'core/listar_boxes.html'
-    context_object_name = 'boxes'
-    queryset = Box.objects.all()
 
-class listadoAtenciones(ListView):
-    model = Atencion
-    template_name = 'core/listar_atenciones.html'
-    context_object_name = 'atenciones' #es el nombre por el que se llamará el conjunto de objetos en el template(html)
-    queryset = Atencion.objects.all()
+def listadoBoxes(request):
+    queryset = request.GET.get("search")
+    boxes = Box.objects.all()
+    if queryset:
+        boxes = Box.objects.filter(
+            Q(estado__icontains = queryset) |Q(especialidad__icontains = queryset)
+        ).distinct()
+
+    paginator=Paginator(boxes,2)
+    page=request.GET.get('page')
+    boxes = paginator.get_page(page)
+    return render(request,'core/listar_boxes.html',{'boxes':boxes})
+# class listadoBoxes(ListView):
+#     model = Box
+#     template_name = 'core/listar_boxes.html'
+#     context_object_name = 'boxes'
+#     queryset = Box.objects.all()
+
+def listadoAtenciones(request):
+    queryset = request.GET.get("search")
+    atenciones = Atencion.objects.all()
+    if queryset:
+        atenciones = Atencion.objects.filter(
+            Q(nombre_especialista__icontains = queryset) |Q(apellido_especialista__icontains = queryset) |Q(box__exact = queryset)
+        ).distinct()
+
+    paginator=Paginator(atenciones,2)
+    page=request.GET.get('page')
+    atenciones = paginator.get_page(page)
+    return render(request,'core/listar_atenciones.html',{'atenciones':atenciones})
+
+# class listadoAtenciones(ListView):
+#     model = Atencion
+#     template_name = 'core/listar_atenciones.html'
+#     context_object_name = 'atenciones' #es el nombre por el que se llamará el conjunto de objetos en el template(html)
+#     queryset = Atencion.objects.all()
 
 class actualizarAtencion(UpdateView):
     model = Atencion

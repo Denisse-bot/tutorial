@@ -83,6 +83,19 @@ class Usuario(AbstractBaseUser):
     def is_staff(self):
         return self.usuario_administrador
 
+# class Funcionario(Usuario):
+#     tipo_especialidad = (
+#     (1, 'Kinesiología'),
+#     (2, 'Fonoaudiología'),
+#     (3, 'Enfermero/Funcionario')
+#     )
+#     especialidad = models.IntegerField(choices=tipo_especialidad, default=1, blank=True, null=True)
+
+# class Paciente(Usuario):
+#     patologia = models.TextField(max_length=500)
+
+
+
 class Reserva(models.Model):
     id = models.AutoField(primary_key= True)
     tipo_terapia = (

@@ -7,7 +7,20 @@
 {% block panel %}
 
 {% if atenciones %}
-    <table style="margin-top: 60px;" class="table table-hover">
+    <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
+        <form class="form-inline" style="display:flex;" method="GET">
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input class="form-control mr-sm-2" type="text" id="search" placeholder="Buscar Reserva..." name="search" aria-label="search" value="{{ request.GET.search }}">
+                    <span class="input-group-list">
+                        <i class="icon icon-search"></i>
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Buscar</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </nav>
+    <table style="margin-top: 16px;" class="table table-hover">
         
         <th>N° Atención</th>
         <th>Día reserva</th>
@@ -39,6 +52,26 @@
         </tbody>
 
     </table>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-left">
+                {% if atenciones.has_previous %}
+                    <div class="clearfix">
+                        <a href="?page={{ atenciones.previous_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-left">Anterior</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-right">
+                {% if atenciones.has_next %}
+                    <div class="clearfix">
+                        <a href="?page={{ atenciones.next_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-right">Siguiente</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
     <a href="{% url 'crear_atencion' %}" class="btn btn-success">Agregar</a>

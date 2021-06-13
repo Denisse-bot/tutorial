@@ -6,15 +6,15 @@ $(function() {
     let bodyState = false
     let formState = false
 
-    function checkInputs(){
-        if (nameState && emailState && venueState && phoneState && bodyState) {
-            formState = true
-            $("#submit").addClass("active")
-        } else {
-            formState = false
-            $("#submit").removeClass("active")
-        }
-    }
+    // function checkInputs(){
+    //     if (nameState && emailState && venueState && phoneState && bodyState) {
+    //         formState = true
+    //         $("#submit").addClass("active")
+    //     } else {
+    //         formState = false
+    //         $("#submit").removeClass("active")
+    //     }
+    // }
 
     function validateEmail(email){
         var reg = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -33,20 +33,19 @@ $(function() {
             }
         })
 
-        $("#name").keyup(function(){
+        $("#nombre").keyup(function(){
             if ($(this).val().length > 2) {
                 nameState = true
-                $("#name-field").addClass("ok")
-                $("#name-field").removeClass("error")
+                $("#nombre").addClass("ok")
+                $("#nombre").removeClass("error")
             } else if ($(this).val() == "") {
                 nameState = false
-                $("#name-field").addClass("error")
-                $("#name-field").removeClass("ok")
+                $("#nombre").addClass("error")
+                $("#nombre").removeClass("ok")
             } else {
-                $("#name-field").removeClass("ok")
+                $("#nombre").removeClass("ok")
             }
 
-            checkInputs()
         })
 
         $("#email").keyup(function(){
@@ -64,7 +63,6 @@ $(function() {
                 $("#email-field").removeClass("ok")
             }
 
-            checkInputs()
         })
 
         $("#phone").keyup(function(){
@@ -82,24 +80,23 @@ $(function() {
                 $("#phone-field").removeClass("ok")
             }
 
-            checkInputs()
         })
 
-        $("#body").keyup(function(){
-            if ($(this).val().length > 5) {
-                bodyState = true
-                $("#body-field").addClass("ok")
-                $("#body-field").removeClass("error")
-            } else if ($(this).val() == "") {
-                bodyState = false
-                $("#body-field").addClass("error")
-                $("#body-field").removeClass("ok")
-            } else {
-                $("#body-field").removeClass("ok")
-            }
+        // $("#body").keyup(function(){
+        //     if ($(this).val().length > 5) {
+        //         bodyState = true
+        //         $("#body-field").addClass("ok")
+        //         $("#body-field").removeClass("error")
+        //     } else if ($(this).val() == "") {
+        //         bodyState = false
+        //         $("#body-field").addClass("error")
+        //         $("#body-field").removeClass("ok")
+        //     } else {
+        //         $("#body-field").removeClass("ok")
+        //     }
 
-            checkInputs()
-        })
+        //     checkInputs()
+        // })
     }
 
     
