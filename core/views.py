@@ -1,9 +1,10 @@
-import django
+import django, json
+from django.core.serializers import serialize
 from django.contrib.auth import login, logout
 from django.core.files.base import ContentFile
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
@@ -67,12 +68,12 @@ def crearUsuario(request):
         usuario_form = UsuarioForm()
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form})
 
-def listarUsuario(request):
-    #acá se filtran los usuarios activos o habilitados.
-    usuarios = Usuario.objects.filter(usuario_activo=True)
+# def listarUsuario(request):
+#     #acá se filtran los usuarios activos o habilitados.
+#     usuarios = Usuario.objects.filter(usuario_activo=True)
 
-    # usuarios = Usuario.objects.all // así se listan todos
-    return render(request, 'core/listar_usuarios.html',{'usuarios':usuarios})
+#     # usuarios = Usuario.objects.all // así se listan todos
+#     return render(request, 'core/listar_usuarios.html',{'usuarios':usuarios})
 
 def editarUsuario(request,id):
     usuario_form = None
@@ -207,8 +208,17 @@ class listadoReservas(ListView):
 class listadoUsuarios(ListView):
     model = Usuario
     template_name = 'core/listar_usuarios.html'
-    context_object_name = 'usuarios'
-    queryset = Usuario.objects.all()
+    
+def get_queryset(self):
+    return self.model.objects.filter(Usuario_active=True)
+
+def get(self,request,*args,**kwargs):
+    if request.is_ajax():
+        return HttpResponse(serialize('json', self.get_queryset()), 'application/json')  
+    else:
+        return render(request, self.template_name)    
+
+
 
 class listadoBoxes(ListView):
     model = Box
