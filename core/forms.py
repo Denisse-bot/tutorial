@@ -46,7 +46,8 @@ class UsuarioForm(forms.ModelForm):
         'email',
         'direccion',
         'nro_direccion',
-        'comuna'
+        'comuna',
+        'usuario_administrador'
         ]
         widgets = {
             'username': forms.TextInput(
@@ -101,6 +102,8 @@ class UsuarioForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control'
                 }
+            ),
+            'usuario_administrador': forms.Select(
             ),
         }
     def clean_password2(self):

@@ -65,13 +65,33 @@ class robotos(TemplateView):
 
 def crearUsuario(request):
     if request.method == 'POST':
-        usuario_form = UsuarioForm(request.POST)
-        if usuario_form.is_valid():
-            usuario_form.save()
-            return redirect('login')
+        if not request.POST._mutable:
+                request.POST._mutable = True
+                # forma de acceder y modificar el diccionario para el formulario 
+                request.POST['usuario_administrador'] = False
+                usuario_form = UsuarioForm(request.POST)
+                if usuario_form.is_valid():
+                    usuario_form.save()
+                    return redirect('login')
     else:
         usuario_form = UsuarioForm()
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form})
+
+def crearFuncionario(request):
+    if request.method == 'POST':
+            if not request.POST._mutable:
+                request.POST._mutable = True
+                # forma de acceder y modificar el diccionario para el formulario 
+                request.POST['usuario_administrador'] = True
+                print(request.POST)
+                usuario_form = UsuarioForm(request.POST)
+                if usuario_form.is_valid():
+                    usuario_form.save()
+                    return redirect('login')
+    else:
+        usuario_form = UsuarioForm()
+    return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form})
+
 
 def listadoUsuarios(request):
     usuarios = Usuario.objects.all()
