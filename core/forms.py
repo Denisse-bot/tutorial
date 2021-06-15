@@ -138,7 +138,7 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'dia_reservado':forms.DateInput(format='%d/%m/%Y'
+            'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y'
             ,attrs={
                 'class': 'form-class',
                 'placeholder': '01/12/1990'
@@ -150,11 +150,8 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'usuario': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
-            )
+            'usuario': forms.HiddenInput(
+            ),
         }
 
 class BoxesForm(forms.ModelForm):

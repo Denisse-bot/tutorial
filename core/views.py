@@ -166,10 +166,8 @@ def crearReserva(request):
             request.POST._mutable = True
             # forma de acceder y modificar el diccionario para el formulario 
             request.POST['usuario'] = request.user
-            print(request.POST)
             reserva_form = ReservaForm(request.POST)
             if reserva_form.is_valid():
-                print(reserva_form)
                 reserva_form.save()
                 
                 return redirect('listar_reservas_self')
@@ -187,7 +185,7 @@ def editarReserva(request,id):
         if reserva_form.is_valid():
             reserva_form.save()
         return redirect('listar_reservas')
-    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form})
+    return render(request,'core/modificar_reserva.html',{'reserva_form':reserva_form})
 
 
 def eliminarReserva(request,id):
