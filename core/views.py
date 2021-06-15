@@ -1,6 +1,6 @@
 import django
 from django.contrib.auth import login, logout
-from django.core import paginator
+from django.core.paginator import Paginator
 from django.core.files.base import ContentFile
 from django.db.models.fields import AutoField
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,7 +25,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from .mixins import SuperUsuarioMixin
-from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -69,14 +68,14 @@ def crearUsuario(request):
         usuario_form = UsuarioForm(request.POST)
         if usuario_form.is_valid():
             usuario_form.save()
-            return redirect('crear_reservas')
+            return redirect('login')
     else:
         usuario_form = UsuarioForm()
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form})
 
 def listadoUsuarios(request):
-    queryset = request.GET.get("search")
     usuarios = Usuario.objects.all()
+    queryset = request.GET.get("search")
     if queryset:
         usuarios = Usuario.objects.filter(
             Q(email__icontains = queryset) |Q(nombre__icontains = queryset)|Q(apellido__icontains = queryset)|Q(rut__icontains = queryset)|Q(comuna__icontains = queryset)
@@ -141,14 +140,22 @@ def eliminarUsuario(request,id):
     return render(request, 'core/eliminar_usuario.html',{'usuario':usuario})
 
 def crearReserva(request):
+    usuario = request.user
     if request.method == 'POST':
-        reserva_form = ReservaForm(request.POST)
-        if reserva_form.is_valid():
-            reserva_form.save()
-            return redirect('listar_reservas')
+        if not request.POST._mutable:
+            request.POST._mutable = True
+            # forma de acceder y modificar el diccionario para el formulario 
+            request.POST['usuario'] = request.user
+            print(request.POST)
+            reserva_form = ReservaForm(request.POST)
+            if reserva_form.is_valid():
+                print(reserva_form)
+                reserva_form.save()
+                
+                return redirect('listar_reservas_self')
     else:
         reserva_form = ReservaForm()
-    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form})
+    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form, 'usuario':usuario})
 
 
 def editarReserva(request,id):
@@ -238,6 +245,7 @@ def eliminarAtencion(request,id):
 def listadoReservasSelf(request):
     id = request.user.id
     queryset = request.GET.get("search")
+    print(id)
     reservas = Reserva.objects.filter(usuario=id)
     if queryset:
         reservas = Reserva.objects.filter(
@@ -246,7 +254,7 @@ def listadoReservasSelf(request):
     paginator=Paginator(reservas,2)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
-    return render(request,'core/listar_reservas.html',{'reservas':reservas})
+    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
 
 
 def listadoReservas(request):

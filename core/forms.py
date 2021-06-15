@@ -135,7 +135,13 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'dia_reservado': forms.SelectDateWidget(),
+            'dia_reservado':forms.DateInput(format='%d/%m/%Y'
+            ,attrs={
+                'class': 'form-class',
+                'placeholder': '01/12/1990'
+            }
+            ),
+
             'sucursal': forms.Select(
                 attrs={
                     'class': 'form-control'
