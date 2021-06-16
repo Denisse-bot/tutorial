@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 
 class UsuarioManager(BaseUserManager):
-    def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna=None, password=None):
+    def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,usuario_administrador,comuna=None,password=None):
         if not email:
             raise ValueError('El usuario debe ingresar un correo electrónico')
 
@@ -21,13 +21,14 @@ class UsuarioManager(BaseUserManager):
             fecha_nacimiento = fecha_nacimiento,
             direccion = direccion,
             nro_direccion = nro_direccion,
-            comuna = comuna
+            comuna = comuna,
+            usuario_administrador = usuario_administrador,
         )
         usuario.set_password(password)
         usuario.save()
         return usuario
 
-    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,password):
+    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,password,usuario_administrador=True):
         usuario = self.create_user(
             username = username,
             email = email,
@@ -38,9 +39,9 @@ class UsuarioManager(BaseUserManager):
             direccion = direccion,
             nro_direccion = nro_direccion,
             comuna = comuna,
-            password = password
+            password = password,
+            usuario_administrador = True
         )
-        usuario.usuario_administrador = True
         usuario.save()
         return usuario
 
@@ -66,7 +67,7 @@ class Usuario(AbstractBaseUser):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna']
+    REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna','usuario_administrador']
     
 
     #revisar luego si quiero llamarlo usuario o paciente

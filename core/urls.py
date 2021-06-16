@@ -13,6 +13,7 @@ urlpatterns = [
     path('insumo/',insumo, name='insumo'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
+    path('crear_funcionario/',crearFuncionario,name='crear_funcionario'),
     path('listar_usuarios/',listadoUsuarios,name='listar_usuarios'),
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
     path('editar_self_usuario',editar_self_usuario,name='editar_self_usuario'),    

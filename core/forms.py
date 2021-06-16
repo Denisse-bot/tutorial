@@ -46,7 +46,8 @@ class UsuarioForm(forms.ModelForm):
         'email',
         'direccion',
         'nro_direccion',
-        'comuna'
+        'comuna',
+        'usuario_administrador'
         ]
         widgets = {
             'username': forms.TextInput(
@@ -102,6 +103,8 @@ class UsuarioForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
+            'usuario_administrador': forms.Select(
+            ),
         }
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -135,7 +138,7 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'dia_reservado':forms.DateInput(format='%d/%m/%Y'
+            'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y'
             ,attrs={
                 'class': 'form-class',
                 'placeholder': '01/12/1990'
@@ -147,11 +150,8 @@ class ReservaForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'usuario': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
-            )
+            'usuario': forms.HiddenInput(
+            ),
         }
 
 class BoxesForm(forms.ModelForm):
