@@ -4,9 +4,9 @@ from django.db import models
 from django.db.models import fields
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from django.forms import widgets
+from django.forms import widgets, ModelForm
 from .models import Atencion, Reserva, Usuario, Box
-from datetimewidget.widgets import DateTimeWidget
+import re
 
 
 class FormularioLogin(AuthenticationForm):
@@ -34,6 +34,35 @@ class UsuarioForm(forms.ModelForm):
             'required':'required',
         }
     ))
+
+   
+
+
+
+    def clean_email(self):
+
+        EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
+
+        email = self.cleaned_data.get('email')
+        print(email)
+
+        if email and not re.match(EMAIL_REGEX, email):
+            raise forms.ValidationError('Formato de correo inválido')
+
+        return email    
+
+    
+
+    def clean_username(self):
+         
+        username = self.cleaned_data.get('username')
+        print(username)
+          
+        if len(username) < 4:
+            raise forms.ValidationError('Ingrese nombre de usuario que contenga más de 4 caracteres')
+
+        return username 
 
     class Meta:
         model = Usuario
@@ -208,3 +237,10 @@ class AtencionForm(forms.ModelForm):
                 }
             )
         }
+
+
+
+
+
+        
+

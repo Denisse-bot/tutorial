@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+<title>Listado de atenciones</title>
+ 
+
+{% block body %}
+
+
+<div class="card text-center">
+  <div class="card-header">
+    {% block nav %}
+    <ul class="nav nav-pills card-header-pills">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'listar_reservas'%}">Listar reservas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'insumo'%}">Stock Insumos</a>
+      </li>
+    </ul>
+    {% endblock nav%}
+  </div>
+  <div class="card-body">
+    {% block panel %}
+    <h5 class="card-title">Bienvenid@ {{ user.get_username }} a la gestión del sistema de agendamiento de box atención</h5>
+    <p class="card-text">en este panel puedes encontrar las opciones disponibles.</p>
+    <a href="{% url 'crear_atencion'%}" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Atención</a>
+    {% endblock panel %}
+  </div>
+</div>
+
+
+
+{% endblock body %}

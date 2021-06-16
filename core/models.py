@@ -52,9 +52,9 @@ class Usuario(AbstractBaseUser):
         (4, 'Temuco')
     )
     username=models.CharField('Nombre de usuario', max_length=100, unique=True)
-    email=models.EmailField('Correo Electronico',max_length=50, unique=True, blank=True, null=True)
-    nombre=models.CharField('Nombre',max_length=50)
-    apellido=models.CharField('Apellido',max_length=50)
+    email=models.EmailField('Correo Electronico', max_length=50, unique=True, blank=True, null=True)
+    nombre=models.CharField('Nombre', max_length=50)
+    apellido=models.CharField('Apellido', max_length=50)
     rut=models.CharField('Rut',max_length=15, unique=True, blank=True, null=True)
     fecha_nacimiento=models.DateField('Fecha Nacimiento', blank=True, null=True)
     direccion=models.CharField('Dirección',max_length=50, blank=True, null=True)
@@ -175,3 +175,4 @@ class Atencion(models.Model):
     def __str__(self):
         atencion=str(self.id)
         return atencion
+
