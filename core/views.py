@@ -94,7 +94,7 @@ def crearFuncionario(request):
 
 
 def listadoUsuarios(request):
-    usuarios = Usuario.objects.all()
+    usuarios = Usuario.objects.get_queryset().order_by('id')
     queryset = request.GET.get("search")
     if queryset:
         usuarios = Usuario.objects.filter(

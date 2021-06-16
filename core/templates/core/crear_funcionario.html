@@ -1,11 +1,11 @@
-{% extends 'core/base.html' %}
+{% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
 
-<title style="margin-top: 24px;">Registro usuarios</title>
+<title style="margin-top: 24px;">Registro Funcionario</title>
 
 
-{% block body %}
+{% block panel %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -17,7 +17,7 @@
 <body>
 <!-- asi se alinean los formularios justificados -->
 <div class="container" style="text-align:justify!important;" >
-  <h2 style="margin-bottom: 24px;">Registra tus datos para reservar tu atención</h2>
+  <h2 style="margin-bottom: 24px;">Registrate para ingresar tus atenciones en nuestro sistema</h2>
   <form action="" class="needs-validation" method="POST" novalidate>
     {% csrf_token %}
     {% if error %}
@@ -126,4 +126,4 @@
 </script>
 
 
-{% endblock body %}
+{% endblock panel %}
