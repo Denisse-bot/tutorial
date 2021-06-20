@@ -11,14 +11,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
-  <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
   {{ usuario_form.media }}
 <body>
 <!-- asi se alinean los formularios justificados -->
 <div class="container" style="text-align:justify!important;" >
   <h2 style="margin-bottom: 24px;">Registra tus datos para reservar tu atención</h2>
   <form action="" class="needs-validation" method="POST" novalidate>
+    {% if form.non_field_errors or form.errors %}
+    <div class="error-list-block">
+        <p>
+            Please correct the errors below - Ensure all required fields
+            are completed.
+        </p>
+        <ul>
+            {% for error in form.non_field_errors|add:form.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
@@ -72,13 +84,13 @@
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un numero de dirección válido.</div>
     </div>
+
     <div class="form-group">
-      <label for="comuna">Comuna:</label>
-      <select class="form-control" id="comuna">
-        <option value="1">Providencia</option>
-        <option value="2">San Bernardo</option>
-        <option value="3" >La Serena</option>
-        <option value="4">Temuco</option>
+      <label for="comuna">Seleccione la comuna donde quiere realizar sus atenciones:</label>
+      <select value=option class="form-control" id="comuna" name="comuna" >
+        {% for sucursal in sucursales %}
+        <option value='{{ sucursal.id }}' placeholder="selecione su centro mas cercano">{{ sucursal }}</option>
+        {% endfor %}
       </select>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa una comuna válida.</div>

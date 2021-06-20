@@ -12,14 +12,14 @@ from django.views.generic.list import ListView
 from core import models
 import core
 from django.db.models import Q
-from core.models import Atencion, Box, Reserva, Usuario
+from core.models import Atencion, Box, Reserva, Sucursal, Usuario
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
-from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -62,20 +62,116 @@ class home(TemplateView):
 class robotos(TemplateView):
     template_name = 'core/robotos.html'
 
+def crearSucursal(request):
+    if request.method == 'POST':
+        sucursal_form = SucursalesForm(request.POST)
+        print(sucursal_form)
+        if sucursal_form.is_valid():
+            sucursal_form.save()
+            return redirect('listar_sucursales')
+    else:
+        sucursal_form = SucursalesForm()
+        print('tupoto')
+    return render(request,'core/crear_sucursal.html',{'sucursal_form':sucursal_form})
+
+def listadoSucursales(request):
+    queryset = request.GET.get("search")
+    sucursales = Sucursal.objects.all()
+    if queryset:
+        sucursales = Sucursal.objects.filter(
+            Q(nombre__icontains = queryset[0]) |Q(direccion__icontains = queryset)
+        ).distinct()
+
+    paginator=Paginator(sucursales,3)
+    page=request.GET.get('page')
+    sucursales = paginator.get_page(page)
+    return render(request,'core/listar_sucursales.html',{'sucursales':sucursales})
+
+def editarSucursal(request, id):
+    sucursal = Sucursal.objects.get(id=id)
+    print(sucursal)
+    if request.method =='GET':
+        sucursales_form = SucursalesForm(instance=sucursal)
+        print(sucursales_form)
+    else:
+        sucursales_form = SucursalesForm(request.POST, instance=sucursal)
+        if sucursales_form.is_valid():
+            print(sucursales_form)
+            sucursales_form.save()
+        return redirect('listar_sucursales')
+    return render(request, 'core/modificar_sucursal.html', {'sucursales_form': sucursales_form})
+
+def eliminarSucursal(request,id):
+    sucursal = Sucursal.objects.get(id=id)
+    if request.method == 'POST':
+        sucursal.save()
+        sucursal.delete()
+        return redirect('listar_sucursales')
+    return render(request,'core/eliminar_sucursal.html', {'sucursal':sucursal})
+
+def crearBox(request):
+    if request.method == 'POST':
+        boxes_form = BoxesForm(request.POST)
+        if boxes_form.is_valid():
+            boxes_form.save()
+            return redirect('listar_boxes')
+    else:
+        boxes_form = BoxesForm()
+    return render(request,'core/crear_box.html',{'boxes_form':boxes_form})
+
+def listadoBoxes(request):
+    queryset = request.GET.get("search")
+    boxes = Box.objects.all()
+    if queryset:
+        boxes = Box.objects.filter(
+            Q(estado__icontains = queryset) |Q(especialidad__icontains = queryset)
+        ).distinct()
+
+    paginator=Paginator(boxes,2)
+    page=request.GET.get('page')
+    boxes = paginator.get_page(page)
+    return render(request,'core/listar_boxes.html',{'boxes':boxes})
+
+def editarBox(request, id):
+    box = Box.objects.get(id=id)
+    if request.method =='GET':
+        boxes_form = BoxesForm(instance=box)
+    else:
+        boxes_form = BoxesForm(request.POST, instance=box)
+        if boxes_form.is_valid():
+            boxes_form.save()
+        return redirect('listar_boxes')
+    return render(request, 'core/crear_box.html', {'boxes_form': boxes_form})
+
+def eliminarBox(request,id):
+    box = Box.objects.get(id=id)
+    if request.method == 'POST':
+        box.save()
+        box.delete()
+        return redirect('listar_boxes')
+    return render(request,'core/eliminar_box.html', {'box':box})
 
 def crearUsuario(request):
+    sucursales = Sucursal.objects.all()
     if request.method == 'POST':
         if not request.POST._mutable:
                 request.POST._mutable = True
                 # forma de acceder y modificar el diccionario para el formulario 
                 request.POST['usuario_administrador'] = False
+                sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
                 usuario_form = UsuarioForm(request.POST)
+                print('este es el usuario')
+                print(usuario_form.errors.as_json(),'error')
                 if usuario_form.is_valid():
+                    print('formulario valido')
+                    usuario_form.cleaned_data['comuna']=sucursal
+                    print(usuario_form)
                     usuario_form.save()
                     return redirect('login')
     else:
         usuario_form = UsuarioForm()
-    return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form})
+        print('tupoto')
+    return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales})
 
 def crearFuncionario(request):
     if request.method == 'POST':
@@ -92,7 +188,6 @@ def crearFuncionario(request):
         usuario_form = UsuarioForm()
     return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form})
 
-
 def listadoUsuarios(request):
     usuarios = Usuario.objects.get_queryset().order_by('id')
     queryset = request.GET.get("search")
@@ -104,13 +199,6 @@ def listadoUsuarios(request):
     page=request.GET.get('page')
     usuarios = paginator.get_page(page)
     return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
-
-
-# def listarUsuario(request):
-#     #acá se filtran los usuarios activos o habilitados.
-#     usuarios = Usuario.objects.filter(usuario_activo=True)
-#     # usuarios = Usuario.objects.all // así se listan todos
-#     return render(request, 'core/listar_usuarios.html',{'usuarios':usuarios})
 
 def editarUsuario(request,id):
     usuario_form = None
@@ -129,7 +217,6 @@ def editarUsuario(request,id):
 
     return render(request, 'core/modificar_usuario.html',{'usuario_form':usuario_form,'error':error})
 
-
 def editar_self_usuario(request):
     id = None
     id = request.user.id
@@ -147,7 +234,6 @@ def editar_self_usuario(request):
         return redirect('listar_usuarios')
 
     return render(request,'core/modificar_usuario.html',{'usuario_form':usuario_form})
-
 
 def eliminarUsuario(request,id):
     usuario = Usuario.objects.get(id = id)
@@ -199,35 +285,6 @@ def eliminarReserva(request,id):
     return render(request, 'core/eliminar_reserva.html',{'reserva':reserva})
 
 
-def crearBox(request):
-    if request.method == 'POST':
-        boxes_form = BoxesForm(request.POST)
-        if boxes_form.is_valid():
-            boxes_form.save()
-            return redirect('listar_boxes')
-    else:
-        boxes_form = BoxesForm()
-    return render(request,'core/crear_box.html',{'boxes_form':boxes_form})
-
-
-def editarBox(request, id):
-    box = Box.objects.get(id=id)
-    if request.method =='GET':
-        boxes_form = BoxesForm(instance=box)
-    else:
-        boxes_form = BoxesForm(request.POST, instance=box)
-        if boxes_form.is_valid():
-            boxes_form.save()
-        return redirect('listar_boxes')
-    return render(request, 'core/crear_box.html', {'boxes_form': boxes_form})
-
-def eliminarBox(request,id):
-    box = Box.objects.get(id=id)
-    if request.method == 'POST':
-        box.save()
-        box.delete()
-        return redirect('listar_boxes')
-    return render(request,'core/eliminar_box.html', {'box':box})
 
 def crearAtencion(request):
     if request.method == 'POST':
@@ -301,18 +358,7 @@ def listadoReservas(request):
 #     queryset = Usuario.objects.all()
 
 
-def listadoBoxes(request):
-    queryset = request.GET.get("search")
-    boxes = Box.objects.all()
-    if queryset:
-        boxes = Box.objects.filter(
-            Q(estado__icontains = queryset) |Q(especialidad__icontains = queryset)
-        ).distinct()
 
-    paginator=Paginator(boxes,2)
-    page=request.GET.get('page')
-    boxes = paginator.get_page(page)
-    return render(request,'core/listar_boxes.html',{'boxes':boxes})
 # class listadoBoxes(ListView):
 #     model = Box
 #     template_name = 'core/listar_boxes.html'
