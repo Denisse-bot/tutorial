@@ -19,8 +19,8 @@ class ReservaResource(resources.ModelResource):
         model = Reserva
 
 class ReservaAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    search_fields = ['especialidad','dia_reservado','sucursal','usuario_id']
-    list_display = ['especialidad','dia_reservado','sucursal','usuario_id']
+    search_fields = ['especialidad','dia_reservado','usuario_id']
+    list_display = ['especialidad','dia_reservado','usuario_id']
     resource_class = ReservaResource
 
 class BoxResource(resources.ModelResource):

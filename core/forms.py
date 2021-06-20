@@ -5,7 +5,7 @@ from django.db.models import fields
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
-from .models import Atencion, Reserva, Usuario, Box
+from .models import Atencion, Reserva, Sucursal, Usuario, Box
 from datetimewidget.widgets import DateTimeWidget
 
 
@@ -16,6 +16,28 @@ class FormularioLogin(AuthenticationForm):
         self.fields['username'].widget.attrs['placeholder'] = 'Nombre de Usuario'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'Contrasena'
+
+class SucursalesForm(forms.ModelForm):
+    class Meta:
+        model = Sucursal
+        fields = [
+            'nombre',
+            'direccion'
+        ]
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese el nombre de la sucursal'
+                }
+            ),
+            'direccion': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese la direccion del centro de atención del especialista'
+                }
+            ),
+        }
 
 class UsuarioForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña',widget=forms.PasswordInput(
@@ -34,7 +56,6 @@ class UsuarioForm(forms.ModelForm):
             'required':'required',
         }
     ))
-
     class Meta:
         model = Usuario
         fields = [
@@ -98,11 +119,6 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su nro de direccion',
                 }
             ),
-            'comuna': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
-            ),
             'usuario_administrador': forms.Select(
             ),
         }
@@ -121,7 +137,6 @@ class UsuarioForm(forms.ModelForm):
         return user
 
 
-
 class ReservaForm(forms.ModelForm):
     
     class Meta: 
@@ -129,7 +144,6 @@ class ReservaForm(forms.ModelForm):
         fields = [
             'especialidad',
             'dia_reservado',
-            'sucursal',
             'usuario'
         ]
         widgets = {
@@ -142,14 +156,9 @@ class ReservaForm(forms.ModelForm):
             ,attrs={
                 'class': 'form-class',
                 'placeholder': '01/12/1990'
-            }
-            ),
-
-            'sucursal': forms.Select(
-                attrs={
-                    'class': 'form-control'
                 }
             ),
+
             'usuario': forms.HiddenInput(
             ),
         }

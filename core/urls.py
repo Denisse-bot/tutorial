@@ -19,6 +19,13 @@ urlpatterns = [
     path('editar_self_usuario',editar_self_usuario,name='editar_self_usuario'),    
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
 
+    path('crear_sucursal/', crearSucursal, name='crear_sucursal'),
+    path('listar_sucursales/', listadoSucursales, name='listar_sucursales'),
+    path('editar_sucursal/<int:id>', editarSucursal, name='editar_sucursal'),
+    path('eliminar_sucursal/<int:id>', eliminarSucursal, name='eliminar_sucursal'),
+
+    
+
     path('crear_reservas/',crearReserva, name='crear_reservas'),
     #path('crear_reservas_self/',crearReservaSelf, name='crear_reservas_self'),
     path('listar_reservas/',listadoReservas, name='listar_reservas'),

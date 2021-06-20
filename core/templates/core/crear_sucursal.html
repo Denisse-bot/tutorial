@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+<title style="margin-top: 24px;">Registro Sucursales</title>
+
+
+{% block body %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<body>
+<!-- asi se alinean los formularios justificados -->
+<div class="container" style="text-align:justify!important;" >
+  <h2 style="margin-bottom: 24px;">Registra las sucursales</h2>
+  <form action="" class="needs-validation" method="POST" novalidate>
+    {% csrf_token %}
+    {% if error %}
+        <h4>{{ error }}</h4>
+    {% else %}
+
+    <div class="form-group">
+      <label for="nombre">Nombre de Sucursal:</label>
+      <input type="text" class="form-control" id="nombre" placeholder="Nombre de sucursal" name="nombre" required>
+      <div class="valid-feedback">Ok.</div>
+      <div class="invalid-feedback">Ingresa un nombre de sucursal válido.</div>
+    </div>
+    <div class="form-group">
+      <label for="direccion">Direccion:</label>
+      <input type="text" class="form-control" id="direccion" placeholder="Ingrese la dirección del centro" name="direccion" required>
+      <div class="valid-feedback">Ok.</div>
+      <div class="invalid-feedback">Ingresa una dirección válida.</div>
+    </div>
+    <button type="submit" class="btn btn-success float-right">Registrar</button>
+    <button type="reset" class="btn btn-primary float-left">Limpiar</button>
+    {% endif%}
+  </form>
+</div>
+<!-- <script src="{% static 'js/base.js' %}"></script> -->
+
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
+
+{% endblock body %}
