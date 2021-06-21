@@ -174,19 +174,21 @@ def crearUsuario(request):
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales})
 
 def crearFuncionario(request):
+    sucursales = Sucursal.objects.all()
     if request.method == 'POST':
             if not request.POST._mutable:
                 request.POST._mutable = True
                 # forma de acceder y modificar el diccionario para el formulario 
                 request.POST['usuario_administrador'] = True
-                print(request.POST)
+                sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
                 usuario_form = UsuarioForm(request.POST)
                 if usuario_form.is_valid():
+                    usuario_form.cleaned_data['comuna']=sucursal
                     usuario_form.save()
                     return redirect('login')
     else:
         usuario_form = UsuarioForm()
-    return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form})
+    return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form, 'sucursales':sucursales})
 
 def listadoUsuarios(request):
     usuarios = Usuario.objects.get_queryset().order_by('id')
