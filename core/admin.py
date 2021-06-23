@@ -11,7 +11,7 @@ class UsuarioResource(resources.ModelResource):
 
 class UsuarioAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['rut','email']
-    list_display = ['id','nombre','apellido','rut','email','usuario_administrador']
+    list_display = ['id','nombre','apellido','rut','email','usuario_administrador','especialidad']
     resources_class = UsuarioResource
 
 class ReservaResource(resources.ModelResource):
@@ -19,8 +19,8 @@ class ReservaResource(resources.ModelResource):
         model = Reserva
 
 class ReservaAdmin(ImportExportModelAdmin,admin.ModelAdmin):
-    search_fields = ['especialidad','dia_reservado','usuario_id']
-    list_display = ['especialidad','dia_reservado','usuario_id']
+    search_fields = ['dia_reservado','usuario_id']
+    list_display = ['dia_reservado','usuario_id']
     resource_class = ReservaResource
 
 class BoxResource(resources.ModelResource):

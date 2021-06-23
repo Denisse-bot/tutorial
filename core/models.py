@@ -7,6 +7,19 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 # Create your models here.
 
+class Especialidad(models.Model):
+    id = models.AutoField(primary_key= True)
+    nombre = models.CharField('Especialidad',max_length=40, unique=True, null=True)
+    
+
+    class Meta:
+        verbose_name = 'Especialidad'
+        verbose_name_plural = 'Especialidad'
+        ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre
+
 class Sucursal(models.Model):
     id = models.AutoField(primary_key= True)
     nombre = models.CharField('Sucursal',max_length=40, unique=True, null=True)
@@ -20,9 +33,8 @@ class Sucursal(models.Model):
     def __str__(self):
         return self.nombre
 
-
 class UsuarioManager(BaseUserManager):
-    def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,usuario_administrador,comuna,password=None):
+    def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,usuario_administrador,comuna,especialidad,password=None):
         if not email:
             raise ValueError('El usuario debe ingresar un correo electrónico')
 
@@ -36,13 +48,14 @@ class UsuarioManager(BaseUserManager):
             direccion = direccion,
             nro_direccion = nro_direccion,
             comuna = comuna,
+            especialidad = especialidad,
             usuario_administrador = usuario_administrador,
         )
         usuario.set_password(password)
         usuario.save()
         return usuario
 
-    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,password):
+    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,especialidad,password):
         usuario = self.create_user(
             username = username,
             email = email,
@@ -53,6 +66,7 @@ class UsuarioManager(BaseUserManager):
             direccion = direccion,
             nro_direccion = nro_direccion,
             comuna = comuna,
+            especialidad=especialidad,
             password = password,
             usuario_administrador = True
         )
@@ -60,6 +74,7 @@ class UsuarioManager(BaseUserManager):
         return usuario
 
 class Usuario(AbstractBaseUser):
+
     username=models.CharField('Nombre de usuario', max_length=100, unique=True)
     email=models.EmailField('Correo Electronico',max_length=50, unique=True, blank=True, null=True)
     nombre=models.CharField('Nombre',max_length=50)
@@ -69,13 +84,14 @@ class Usuario(AbstractBaseUser):
     direccion=models.CharField('Dirección',max_length=50, blank=True, null=True)
     nro_direccion=models.IntegerField('Nro Direccion', blank=True, null=True)
     comuna=models.ForeignKey(Sucursal, on_delete=CASCADE)
+    especialidad=models.ForeignKey(Especialidad,on_delete=CASCADE)
     usuario_activo = models.BooleanField(default=True)
     usuario_administrador = models.BooleanField(default=False)
     fecha_creacion = models.DateField('Fecha de creación', auto_now=True,auto_now_add=False)
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna','usuario_administrador']
+    REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna','especialidad','usuario_administrador']
     
 
     #revisar luego si quiero llamarlo usuario o paciente
@@ -107,12 +123,6 @@ class Usuario(AbstractBaseUser):
 
 class Reserva(models.Model):
     id = models.AutoField(primary_key= True)
-    tipo_terapia = (
-    (1, 'Kinesiología'),
-    (2, 'Fonoaudiología'),
-    (3, 'General')
-    )
-    especialidad=models.IntegerField(choices=tipo_terapia, default=3)
     dia_reservado=models.DateTimeField()
     usuario=models.ForeignKey('core.Usuario', on_delete=CASCADE)
 
@@ -135,15 +145,10 @@ class Box(models.Model):
         (3, 'En mantención'),
         (4, 'No disponible, deshabilitada')
     )
-    especialidad_list=(
-        (1, 'Fonoaudiologia'),
-        (2, 'Kinesiologia'),
-        (3, 'General')
-    )
 
     id = models.AutoField(primary_key= True)
     estado = models.IntegerField(choices=estado_list, default=None)
-    especialidad = models.IntegerField(choices=especialidad_list, default=None)
+    especialidad = models.ForeignKey(Especialidad, on_delete=CASCADE)
     
     class Meta:
         verbose_name = 'Box'
@@ -151,14 +156,8 @@ class Box(models.Model):
         ordering = ['estado']
 
     def __str__(self):
-        id=self.id
-        especialidad=self.especialidad
-        if especialidad==1:
-            especialidad='Fonoaudiologia'
-        else:
-            especialidad='Kinesiologia'
-        box=str(id)+","+str(especialidad)
-        return box
+        especialidad=str(self.especialidad)
+        return especialidad
 
 
 class Atencion(models.Model):

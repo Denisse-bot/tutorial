@@ -5,7 +5,7 @@ from django.db.models import fields
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
-from .models import Atencion, Reserva, Sucursal, Usuario, Box
+from .models import Atencion, Especialidad, Reserva, Sucursal, Usuario, Box
 from datetimewidget.widgets import DateTimeWidget
 
 
@@ -68,6 +68,7 @@ class UsuarioForm(forms.ModelForm):
         'direccion',
         'nro_direccion',
         'comuna',
+        'especialidad',
         'usuario_administrador'
         ]
         widgets = {
@@ -137,21 +138,31 @@ class UsuarioForm(forms.ModelForm):
         return user
 
 
+class EspecialidadForm(forms.ModelForm):
+    class Meta:
+        model = Especialidad
+        fields =[
+            'nombre'
+        ]
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-class',
+                    'placeholder': 'Ingrese el nombre de la especialidad'
+                }
+            )
+        }
+
+
 class ReservaForm(forms.ModelForm):
     
     class Meta: 
         model = Reserva
         fields = [
-            'especialidad',
             'dia_reservado',
             'usuario'
         ]
         widgets = {
-            'especialidad': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
-            ),
             'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y'
             ,attrs={
                 'class': 'form-class',

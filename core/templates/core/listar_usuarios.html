@@ -28,7 +28,7 @@
         <!-- <th>Motivo Atencion</th> -->
         <th>Email</th>
         <th>Dirección</th>
-        <th>Tipo de Usuario</th>
+        <th>Especialidad</th>
         <th>Centro Atención</th>
         <th>Acciones</th>
         <tbody>
@@ -40,7 +40,7 @@
                     <!-- <td>{{ usuario.motivo_atencion}}</td> -->
                     <td>{{ usuario.email }} </td>
                     <td>{{ usuario.direccion }}</td>
-                    <td>{% if usuario.usuario_administrador == True %}Funcionario{% else %}Paciente{% endif %}</td>
+                    <td>{{ usuario.especialidad }}</td>
                     <td>{{ usuario.comuna }}</td>
                     <td>
                         <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning">Modificar</a>

@@ -24,7 +24,10 @@ urlpatterns = [
     path('editar_sucursal/<int:id>', editarSucursal, name='editar_sucursal'),
     path('eliminar_sucursal/<int:id>', eliminarSucursal, name='eliminar_sucursal'),
 
-    
+    path('crear_especialidad/', crearEspecialidad, name='crear_especialidad'),
+    path('listar_especialidad/', listadoEspecialidades, name='listar_especialidad'),
+    path('editar_especialidad/<int:id>', editarEspecialidad, name='editar_especialidad'),
+    path('eliminar_especialidad/<int:id>',eliminarEspecialidad, name='eliminar_especialidad'),
 
     path('crear_reservas/',crearReserva, name='crear_reservas'),
     #path('crear_reservas_self/',crearReservaSelf, name='crear_reservas_self'),
