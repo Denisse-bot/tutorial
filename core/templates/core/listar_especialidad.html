@@ -1,12 +1,12 @@
 {% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
-<title>Listado de Boxes</title>
+<title>Listado de Especialidades</title>
  
 
 {% block panel %}
 
-{% if boxes %}
+{% if especialidades %}
     <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
@@ -22,21 +22,19 @@
     </nav>
     <table style="margin-top: 16px;" class="table table-hover">
         
-        <th>Nro Box</th>
-        <th>Estado</th>
+        <th>Nro</th>
         <th>Especialidad</th>
-        <th>Opciones</th>
+        <th>Acciones</th>
 
         <tbody>
-            {% for box in boxes %}
+            {% for especialidad in especialidades %}
                 <tr>
-                    <td>{{ box.id }}</td>
-                    <td>{% if box.estado == 1 %}Disponible {% elif box.estado == 2 %}En atención {% elif box.estado == 3 %}En mantención{% else %} No disponible, deshabilitada{% endif %}</td>
-                    <td>{{ box.especialidad }}</td>
-                    
+                    <td>{{ especialidad.id }}</td>
+                    <td>{{ especialidad.nombre }}</td> 
+                                       
                     <td>
-                        <a href="{% url 'editar_box' box.id %}" class="btn btn-warning">Modificar</a>
-                        <a href="{% url 'eliminar_box' box.id %}" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'editar_especialidad' especialidad.id %}" class="btn btn-warning">Modificar</a>
+                        <a href="{% url 'eliminar_especialidad' especialidad.id %}" class="btn btn-danger">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -46,18 +44,18 @@
     <div class="row pagination">
         <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
             <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-left">
-                {% if boxes.has_previous %}
+                {% if especialidades.has_previous %}
                     <div class="clearfix">
-                        <a href="?page={{ boxes.previous_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-left">Anterior</a>
+                        <a href="?page={{ especialidades.previous_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-left">Anterior</a>
                     </div>
                 {% endif %}
             </div>
         </div>
         <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
             <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-right">
-                {% if boxes.has_next %}
+                {% if especialidades.has_next %}
                     <div class="clearfix">
-                        <a href="?page={{ boxes.next_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-right">Siguiente</a>
+                        <a href="?page={{ especialidades.next_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-right">Siguiente</a>
                     </div>
                 {% endif %}
             </div>
@@ -65,7 +63,7 @@
     </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="{% url 'crear_box' %}" class="btn btn-success">Agregar</a>
+    <a href="{% url 'crear_especialidad' %}" class="btn btn-success">Agregar</a>
 {% endif %}
 
 {% endblock panel %}

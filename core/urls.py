@@ -16,10 +16,21 @@ urlpatterns = [
     path('grafico/',grafico.as_view(), name='grafico'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
+    path('crear_funcionario/',crearFuncionario,name='crear_funcionario'),
     path('listar_usuarios/',listadoUsuarios,name='listar_usuarios'),
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
     path('editar_self_usuario',editar_self_usuario,name='editar_self_usuario'),    
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
+
+    path('crear_sucursal/', crearSucursal, name='crear_sucursal'),
+    path('listar_sucursales/', listadoSucursales, name='listar_sucursales'),
+    path('editar_sucursal/<int:id>', editarSucursal, name='editar_sucursal'),
+    path('eliminar_sucursal/<int:id>', eliminarSucursal, name='eliminar_sucursal'),
+
+    path('crear_especialidad/', crearEspecialidad, name='crear_especialidad'),
+    path('listar_especialidad/', listadoEspecialidades, name='listar_especialidad'),
+    path('editar_especialidad/<int:id>', editarEspecialidad, name='editar_especialidad'),
+    path('eliminar_especialidad/<int:id>',eliminarEspecialidad, name='eliminar_especialidad'),
 
     path('crear_reservas/',crearReserva, name='crear_reservas'),
     #path('crear_reservas_self/',crearReservaSelf, name='crear_reservas_self'),

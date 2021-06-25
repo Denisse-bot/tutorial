@@ -1,36 +1,24 @@
-{% extends 'core/base.html' %}
+{% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
 
-<title style="margin-top: 24px;">Registro usuarios</title>
+<title style="margin-top: 24px;">Registro Funcionario</title>
 
 
-{% block body %}
+{% block panel %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+  <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
   {{ usuario_form.media }}
 <body>
 <!-- asi se alinean los formularios justificados -->
 <div class="container" style="text-align:justify!important;" >
-  <h2 style="margin-bottom: 24px;">Registra tus datos para reservar tu atención</h2>
+  <h2 style="margin-bottom: 24px;">Registrate para ingresar tus atenciones en nuestro sistema</h2>
   <form action="" class="needs-validation" method="POST" novalidate>
-    {% if form.non_field_errors or form.errors %}
-    <div class="error-list-block">
-        <p>
-            Please correct the errors below - Ensure all required fields
-            are completed.
-        </p>
-        <ul>
-            {% for error in form.non_field_errors|add:form.errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-
     {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
@@ -38,43 +26,43 @@
 
     <div class="form-group">
       <label for="username">Nombre de Usuario:</label>
-      <input type="text" class="form-control" minlength="3" maxlength="100" id="username" placeholder="Nombre de usuario" name="username" pattern="[a-z]{1,20}" autofocus required >
+      <input type="text" class="form-control" id="username" placeholder="Nombre de usuario" name="username" required>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un nombre de usuario válido.</div>
     </div>
     <div class="form-group">
-      <label for="nombre">Nombre:</label>
-      <input type="text" class="form-control" minlength="3" maxlength="50" id="nombre" placeholder="Nombre" name="nombre" pattern="[a-z]{1,20}" autofocus required>
+      <label for="nombre">Nombre Funcionario:</label>
+      <input type="text" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un nombre válido.</div>
     </div>
     <div class="form-group" >
-        <label for="apellido">Apellido:</label>
-        <input type="text" class="form-control" minlength="3" maxlength="50" id="apellido" placeholder="Ingrese su apellido" name="apellido" pattern="[a-z]{1,20}" autofocus required>
+        <label for="apellido">Apellido Funcionario:</label>
+        <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apellido" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un apellido válido.</div>
     </div>
     <div class="form-group">
-        <label for="rut">Rut:</label>
-        <input type="text" class="form-control" minlength="9" maxlength="10" id="rut" placeholder="ingrese su rut" name="rut" pattern="\d{3,8}-[\d|kK]{1}" required>
+        <label for="rut">Rut Funcionario:</label>
+        <input type="text" class="form-control" id="rut" placeholder="ingrese su rut" name="rut" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un rut válido.</div>
     </div>
     <div class="form-group" >
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input type="date" class="form-control" id="fecha_nacimiento" max="23-06-2021" placeholder="01/02/2021" name="fecha_nacimiento" required>
+        <input type="date" class="form-control" id="fecha_nacimiento" placeholder="01/02/2021" name="fecha_nacimiento" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa una fecha de nacimiento válida.</div>
     </div>
     <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" placeholder="usuario@mail.com" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+        <input type="email" class="form-control" id="email" placeholder="usuario@mail.com" name="email" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un email válido.</div>
     </div>
     <div class="form-group">
         <label for="direccion">Dirección:</label>
-        <input type="text" class="form-control" minlength="3" maxlength="50" id="direccion" placeholder=" calle sin nombre" name="direccion" pattern="[a-zA-Z ]{2,254}" autofocus required>
+        <input type="text" class="form-control" id="direccion" placeholder=" calle sin nombre" name="direccion" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa una dirección válida.</div>
     </div>
@@ -84,7 +72,6 @@
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un numero de dirección válido.</div>
     </div>
-
     <div class="form-group">
       <label for="comuna">Seleccione la comuna donde quiere realizar sus atenciones:</label>
       <select value=option class="form-control" id="comuna" name="comuna" >
@@ -121,10 +108,9 @@
     <button type="reset" class="btn btn-primary float-left">Limpiar</button>
     {% endif%}
   </form>
+
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
-
-<script src="{% static 'js/validaciones.js' %}"></script>
 
 
 <script>
@@ -149,5 +135,4 @@
 </script>
 
 
-{% endblock body %}
-
+{% endblock panel %}

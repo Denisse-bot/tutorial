@@ -11,42 +11,48 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
-
 <div class="container">
   <h1 style="margin: 70px 0 0 0px;">Reserva</h1>
-  <h2>Crea tu reserva en nuestra plataforma para garantizar tu atención</h2>
+  <h2 style="margin-top: 8;">Crea tu reserva en nuestra plataforma para garantizar tu atención</h2>
+  <h5 style="margin-top: 16px;">Recuerda que la reserva se hará a la patología {{ user.especialidad }} que registraste en tu creación de ficha de paciente, y el centro de atención será {{ user.comuna }}</h5>
 
   <form action="" class="needs-validation" method="POST"> {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
-      <div class="form-group">
-        <label for="especialidad">Especialidad:</label>
-        <select class="form-control" id="especialidad" name="especialidad">
-          <option value="1">Kinesiología</option>
-          <option value="2">Fonoaudiología</option>
-          <option value="3" >General</option>
-        </select>       
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Selecciona una especialidad válida.</div>
-      </div>
+
       <div class="form-group">
         <label for="dia_reservado">Dia Reservado:</label>
-        <input type="date" class="form-control" id="dia_reservado" placeholder="seleccione su dia de atención a reservar" name="dia_reservado" required>
+        <input type="datetime-local" class="form-control" id="dia_reservado" placeholder="seleccione su dia de atención a reservar" name="dia_reservado" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un dia de reserva válido.</div>
       </div>
-      <div class="form-group">
-          <label for="sucursal">Sucursal:</label>
-          <select class="form-control" name="sucursal" id="sucursal">
-            <option value="1">Providencia</option>
-            <option value="2">San Bernardo</option>
-            <option value="3" >La Serena</option>
-            <option value="4">Temuco</option>
-          </select>        
-          <div class="valid-feedback">Ok.</div>
-          <div class="invalid-feedback">Ingresa una sucursal válida.</div>
+      <!-- <div class="form-group datetimepicker">
+        <label for="hora_reservada">Hora Reservada:</label>
+        <input type="datetime" class="form-control" id="hora_reservado" placeholder="seleccione su hora de atención a reservar" name="hora_reservada" required>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa un dia de reserva válido.</div>
+      </div> -->
+      <!-- <div class="form-group">
+        <label for="sucursal">Esta es la sucursal donde quiere realizaras tus atenciones:</label>
+        <select value=option class="form-control" id="sucursal" name="sucursal" >
+          {% for sucursal in sucursales %}
+          <option value='{{ sucursal }}' placeholder="selecione su centro mas cercano">{{ sucursal }}</option>
+          {% endfor %}
+        </select>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa una sucursal válida.</div>
       </div>
+      <div class="form-group">
+        <label for="especialidad">Esta es la especialidad que reservas:</label>
+        <select value=option class="form-control" id="especialidad" name="especialidad" >
+          {% for especialidad in especialidades %}
+          <option value='{{ especialidad }}' placeholder="selecione su centro mas cercano">{{ especialidad }}</option>
+          {% endfor %}
+        </select>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa una especialidad válida.</div>
+      </div> -->
 
       {% if user.is_authenticated == True %}
       <div class="form-group" style="display: none;">

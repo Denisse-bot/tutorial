@@ -28,6 +28,8 @@
         <!-- <th>Motivo Atencion</th> -->
         <th>Email</th>
         <th>Dirección</th>
+        <th>Especialidad</th>
+        <th>Centro Atención</th>
         <th>Acciones</th>
         <tbody>
             {% for usuario in usuarios %}
@@ -38,8 +40,8 @@
                     <!-- <td>{{ usuario.motivo_atencion}}</td> -->
                     <td>{{ usuario.email }} </td>
                     <td>{{ usuario.direccion }}</td>
-
-
+                    <td>{{ usuario.especialidad }}</td>
+                    <td>{{ usuario.comuna }}</td>
                     <td>
                         <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning">Modificar</a>
                         <a href="{% url 'eliminar_usuario' usuario.id%}" class="btn btn-danger">Eliminar</a>

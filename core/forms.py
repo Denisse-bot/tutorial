@@ -5,8 +5,8 @@ from django.db.models import fields
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
-from .models import Atencion, Reserva, Usuario, Box
-
+from .models import Atencion, Especialidad, Reserva, Sucursal, Usuario, Box
+from datetimewidget.widgets import DateTimeWidget
 
 
 class FormularioLogin(AuthenticationForm):
@@ -16,6 +16,28 @@ class FormularioLogin(AuthenticationForm):
         self.fields['username'].widget.attrs['placeholder'] = 'Nombre de Usuario'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'Contrasena'
+
+class SucursalesForm(forms.ModelForm):
+    class Meta:
+        model = Sucursal
+        fields = [
+            'nombre',
+            'direccion'
+        ]
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese el nombre de la sucursal'
+                }
+            ),
+            'direccion': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese la direccion del centro de atención del especialista'
+                }
+            ),
+        }
 
 class UsuarioForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña',widget=forms.PasswordInput(
@@ -34,7 +56,6 @@ class UsuarioForm(forms.ModelForm):
             'required':'required',
         }
     ))
-
     class Meta:
         model = Usuario
         fields = [
@@ -46,7 +67,9 @@ class UsuarioForm(forms.ModelForm):
         'email',
         'direccion',
         'nro_direccion',
-        'comuna'
+        'comuna',
+        'especialidad',
+        'usuario_administrador'
         ]
         widgets = {
             'username': forms.TextInput(
@@ -97,10 +120,7 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su nro de direccion',
                 }
             ),
-            'comuna': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
+            'usuario_administrador': forms.Select(
             ),
         }
     def clean_password2(self):
@@ -118,40 +138,40 @@ class UsuarioForm(forms.ModelForm):
         return user
 
 
+class EspecialidadForm(forms.ModelForm):
+    class Meta:
+        model = Especialidad
+        fields =[
+            'nombre'
+        ]
+        widgets = {
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-class',
+                    'placeholder': 'Ingrese el nombre de la especialidad'
+                }
+            )
+        }
+
 
 class ReservaForm(forms.ModelForm):
     
     class Meta: 
         model = Reserva
         fields = [
-            'especialidad',
             'dia_reservado',
-            'sucursal',
             'usuario'
         ]
         widgets = {
-            'especialidad': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
-            ),
-            'dia_reservado':forms.DateInput(format='%d/%m/%Y'
+            'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y %H:%M'
             ,attrs={
                 'class': 'form-class',
                 'placeholder': '01/12/1990'
-            }
+                }
             ),
 
-            'sucursal': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
+            'usuario': forms.HiddenInput(
             ),
-            'usuario': forms.Select(
-                attrs={
-                    'class': 'form-control'
-                }
-            )
         }
 
 class BoxesForm(forms.ModelForm):
