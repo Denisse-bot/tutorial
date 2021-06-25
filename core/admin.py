@@ -46,3 +46,4 @@ admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Reserva,ReservaAdmin)
 admin.site.register(Box,BoxAdmin)
 admin.site.register(Atencion, AtencionAdmin)
+

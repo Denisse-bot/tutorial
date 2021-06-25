@@ -10,7 +10,10 @@ urlpatterns = [
     path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
     path('vista_usuario/', VistaUsuario.as_view(),name='vista_usuario'),
+    path('vista_funcionario/', VistaFuncionario.as_view(),name='vista_funcionario'),
+    path('vista_administrador/', VistaAdministrador.as_view(),name='vista_administrador'),
     path('insumo/',insumo, name='insumo'),
+    path('grafico/',grafico.as_view(), name='grafico'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('listar_usuarios/',listadoUsuarios,name='listar_usuarios'),

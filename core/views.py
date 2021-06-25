@@ -35,6 +35,12 @@ class VistaEnfermera(SuperUsuarioMixin,TemplateView):
 class VistaUsuario(TemplateView):
     template_name = 'core/vista_usuario.html'
 
+class VistaFuncionario(TemplateView):
+    template_name = 'core/vista_funcionario.html'
+
+class VistaAdministrador(TemplateView):
+    template_name = 'core/vista_administrador.html'
+
 class Login(FormView):
     template_name = 'core/login.html'
     form_class = FormularioLogin
@@ -61,6 +67,9 @@ class home(TemplateView):
 
 class robotos(TemplateView):
     template_name = 'core/robotos.html'
+
+class grafico(TemplateView):
+    template_name = 'core/grafico.html'   
 
 
 def crearUsuario(request):

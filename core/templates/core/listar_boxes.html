@@ -31,7 +31,7 @@
             {% for box in boxes %}
                 <tr>
                     <td>{{ box.id }}</td>
-                    <td>{% if box.estado == 1 %}Disponible {% elif box.estado == 2 %}En atención {% elif box.estado == 3 %}En mantención{% else %} No disponible, deshabilitada{% endif %}</td>
+                    <td>{% if box.estado == 1 %}Disponible{% elif box.estado == 2 %}En atención {% elif box.estado == 3 %}En mantención{% else %} No disponible, deshabilitada{% endif %}</td>
                     <td>{% if box.especialidad == 1 %}Fonoaudiologia {% elif box.especialidad == 2 %}Kinesiologia {% else %} General{% endif %}</td>
                     
                     <td>
