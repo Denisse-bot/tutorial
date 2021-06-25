@@ -29,18 +29,15 @@
         <th>Rut paciente</th>
         <th>Fecha Nacimiento</th>
         <th>Opciones</th>
-
         <tbody>
             {% for reserva in reservas %}
                 <tr>
-                    <td>{% if reserva.especialidad == 1 %}Kinesiología {% elif reserva.especialidad == 2 %}Fonoaudiologia {% else %} General{% endif %}</td>
+                    <td>{{ reserva.usuario.especialidad }}</td>
                     <td>{{ reserva.dia_reservado }}</td>
-                    <td>{% if reserva.sucursal == 1 %}Providencia {% elif reserva.sucursal == 2 %}San Bernardo {% elif reserva.sucursal == 3 %}La Serena {% else %} Temuco{% endif %}</td>
+                    <td>{{ reserva.usuario.comuna }}</td>
                     <td>{{ reserva.usuario.nombre }} {{ reserva.usuario.apellido  }}</td>
                     <td>{{ reserva.usuario.rut  }}</td>
-                    <td>{{ reserva.usuario.fecha_nacimiento  }}</td>
-
-
+                    <td>{{ reserva.usuario.fecha_nacimiento }}</td>
                     <td>
                         <a href="{% url 'editar_reserva' reserva.id %}" class="btn btn-warning">Modificar</a>
                         <a href="{% url 'eliminar_reserva' reserva.id %}" class="btn btn-danger">Eliminar</a>

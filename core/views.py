@@ -12,14 +12,14 @@ from django.views.generic.list import ListView
 from core import models
 import core
 from django.db.models import Q
-from core.models import Atencion, Box, Reserva, Sucursal, Usuario
+from core.models import Atencion, Box, Especialidad, Reserva, Sucursal, Usuario
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
-from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm, EspecialidadForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -61,6 +61,53 @@ class home(TemplateView):
 
 class robotos(TemplateView):
     template_name = 'core/robotos.html'
+
+def crearEspecialidad(request):
+    if request.method == 'POST':
+        especialidad_form = EspecialidadForm(request.POST)
+        print(especialidad_form)
+        if especialidad_form.is_valid():
+            especialidad_form.save()
+            return redirect('listar_especialidad')
+    else:
+        especialidad_form = EspecialidadForm()
+        print('tupoto')
+    return render(request,'core/crear_especialidad.html',{'especialidad_form':especialidad_form})
+
+def listadoEspecialidades(request):
+    queryset = request.GET.get("search")
+    especialidades = Especialidad.objects.all()
+    if queryset:
+        especialidades = Especialidad.objects.filter(
+            Q(nombre__icontains = queryset[0]) |Q(direccion__icontains = queryset)
+        ).distinct()
+
+    paginator=Paginator(especialidades,3)
+    page=request.GET.get('page')
+    especialidades = paginator.get_page(page)
+    return render(request,'core/listar_especialidad.html',{'especialidades':especialidades})
+
+def editarEspecialidad(request, id):
+    especialidad = Especialidad.objects.get(id=id)
+    print(especialidad)
+    if request.method =='GET':
+        especialidad_form = EspecialidadForm(instance=especialidad)
+        print(especialidad_form)
+    else:
+        especialidad_form = EspecialidadForm(request.POST, instance=especialidad)
+        if especialidad_form.is_valid():
+            print(especialidad_form)
+            especialidad_form.save()
+        return redirect('listar_especialidad')
+    return render(request, 'core/modificar_especialidad.html', {'especialidad_form': especialidad_form})
+
+def eliminarEspecialidad(request,id):
+    especialidad = Especialidad.objects.get(id=id)
+    if request.method == 'POST':
+        especialidad.save()
+        especialidad.delete()
+        return redirect('listar_especialidad')
+    return render(request,'core/eliminar_especialidad.html', {'especialidad':especialidad})
 
 def crearSucursal(request):
     if request.method == 'POST':
@@ -153,42 +200,51 @@ def eliminarBox(request,id):
 
 def crearUsuario(request):
     sucursales = Sucursal.objects.all()
+    especialidades = Especialidad.objects.all()
     if request.method == 'POST':
         if not request.POST._mutable:
                 request.POST._mutable = True
                 # forma de acceder y modificar el diccionario para el formulario 
                 request.POST['usuario_administrador'] = False
                 sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
+                especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
                 usuario_form = UsuarioForm(request.POST)
                 print('este es el usuario')
                 print(usuario_form.errors.as_json(),'error')
                 if usuario_form.is_valid():
                     print('formulario valido')
                     usuario_form.cleaned_data['comuna']=sucursal
+                    usuario_form.cleaned_data['especialidad']=especialidad
                     print(usuario_form)
                     usuario_form.save()
                     return redirect('login')
     else:
         usuario_form = UsuarioForm()
         print('tupoto')
-    return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales})
+    return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales,'especialidades':especialidades})
 
 def crearFuncionario(request):
     sucursales = Sucursal.objects.all()
+    especialidades = Especialidad.objects.all()
     if request.method == 'POST':
             if not request.POST._mutable:
                 request.POST._mutable = True
                 # forma de acceder y modificar el diccionario para el formulario 
                 request.POST['usuario_administrador'] = True
+                print(request.POST)
                 sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
+                especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
+                print(especialidad)
                 usuario_form = UsuarioForm(request.POST)
+                print(usuario_form)
                 if usuario_form.is_valid():
                     usuario_form.cleaned_data['comuna']=sucursal
+                    usuario_form.cleaned_data['especialidad']=especialidad
                     usuario_form.save()
                     return redirect('login')
     else:
         usuario_form = UsuarioForm()
-    return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form, 'sucursales':sucursales})
+    return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form, 'sucursales':sucursales,'especialidades':especialidades})
 
 def listadoUsuarios(request):
     usuarios = Usuario.objects.get_queryset().order_by('id')
@@ -249,9 +305,19 @@ def eliminarUsuario(request,id):
 
 def crearReserva(request):
     usuario = request.user
+    print(usuario)
+    logeado = Usuario.objects.get(email=usuario)
+    sucursal = logeado.comuna
+    print(sucursal)
+
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
+            reserva_form = ReservaForm(request.POST)
+            print(reserva_form.errors.as_json(),'error')
+            if reserva_form.is_valid():
+                print('formulario valido')
+                reserva_form.cleaned_data['comuna']=sucursal
             # forma de acceder y modificar el diccionario para el formulario 
             request.POST['usuario'] = request.user
             reserva_form = ReservaForm(request.POST)
@@ -261,7 +327,7 @@ def crearReserva(request):
                 return redirect('listar_reservas_self')
     else:
         reserva_form = ReservaForm()
-    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form, 'usuario':usuario})
+    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form, 'usuario':usuario,'sucursal':sucursal})
 
 
 def editarReserva(request,id):
@@ -402,4 +468,12 @@ def insumo(request):
         for r in rawData:
             result.append(list(r))
         contexto = {'consultas': result }
-    return render(request, 'core/insumo.html', contexto)         
+    return render(request, 'core/insumo.html', contexto)
+
+
+# #revisar como hacer triggers y updates
+# def actualizarStock(request, id, cant):
+#     from django.db import connection
+#     with connection.cursor() as cursor:
+#         #cursor.execute("UPDATE ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO") vista original
+#         cursor.execute("UPDATE")
