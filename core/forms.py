@@ -163,7 +163,7 @@ class ReservaForm(forms.ModelForm):
             'usuario'
         ]
         widgets = {
-            'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y'
+            'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y %H:%M'
             ,attrs={
                 'class': 'form-class',
                 'placeholder': '01/12/1990'

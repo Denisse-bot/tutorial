@@ -200,25 +200,28 @@ def eliminarBox(request,id):
 
 def crearUsuario(request):
     sucursales = Sucursal.objects.all()
+    especialidades = Especialidad.objects.all()
     if request.method == 'POST':
         if not request.POST._mutable:
                 request.POST._mutable = True
                 # forma de acceder y modificar el diccionario para el formulario 
                 request.POST['usuario_administrador'] = False
                 sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
+                especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
                 usuario_form = UsuarioForm(request.POST)
                 print('este es el usuario')
                 print(usuario_form.errors.as_json(),'error')
                 if usuario_form.is_valid():
                     print('formulario valido')
                     usuario_form.cleaned_data['comuna']=sucursal
+                    usuario_form.cleaned_data['especialidad']=especialidad
                     print(usuario_form)
                     usuario_form.save()
                     return redirect('login')
     else:
         usuario_form = UsuarioForm()
         print('tupoto')
-    return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales})
+    return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales,'especialidades':especialidades})
 
 def crearFuncionario(request):
     sucursales = Sucursal.objects.all()
@@ -302,9 +305,19 @@ def eliminarUsuario(request,id):
 
 def crearReserva(request):
     usuario = request.user
+    print(usuario)
+    logeado = Usuario.objects.get(email=usuario)
+    sucursal = logeado.comuna
+    print(sucursal)
+
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
+            reserva_form = ReservaForm(request.POST)
+            print(reserva_form.errors.as_json(),'error')
+            if reserva_form.is_valid():
+                print('formulario valido')
+                reserva_form.cleaned_data['comuna']=sucursal
             # forma de acceder y modificar el diccionario para el formulario 
             request.POST['usuario'] = request.user
             reserva_form = ReservaForm(request.POST)
@@ -314,7 +327,7 @@ def crearReserva(request):
                 return redirect('listar_reservas_self')
     else:
         reserva_form = ReservaForm()
-    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form, 'usuario':usuario})
+    return render(request,'core/crear_reserva.html',{'reserva_form':reserva_form, 'usuario':usuario,'sucursal':sucursal})
 
 
 def editarReserva(request,id):
@@ -455,4 +468,12 @@ def insumo(request):
         for r in rawData:
             result.append(list(r))
         contexto = {'consultas': result }
-    return render(request, 'core/insumo.html', contexto)         
+    return render(request, 'core/insumo.html', contexto)
+
+
+# #revisar como hacer triggers y updates
+# def actualizarStock(request, id, cant):
+#     from django.db import connection
+#     with connection.cursor() as cursor:
+#         #cursor.execute("UPDATE ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO") vista original
+#         cursor.execute("UPDATE")
