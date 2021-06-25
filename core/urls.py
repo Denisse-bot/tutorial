@@ -13,7 +13,6 @@ urlpatterns = [
     path('vista_funcionario/', VistaFuncionario.as_view(),name='vista_funcionario'),
     path('vista_administrador/', VistaAdministrador.as_view(),name='vista_administrador'),
     path('insumo/',insumo, name='insumo'),
-    path('grafico/',grafico.as_view(), name='grafico'),
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('crear_funcionario/',crearFuncionario,name='crear_funcionario'),

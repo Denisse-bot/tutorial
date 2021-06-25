@@ -6,7 +6,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
 from .models import Atencion, Especialidad, Reserva, Sucursal, Usuario, Box
-from datetimewidget.widgets import DateTimeWidget
 
 
 class FormularioLogin(AuthenticationForm):
