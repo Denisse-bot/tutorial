@@ -39,7 +39,7 @@ class AtencionResource(resources.ModelResource):
 
 class AtencionAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     search_fields = ['id','reserva_id','box']
-    list_display = ['id','reserva_id','nombre_especialista','apellido_especialista','box']
+    list_display = ['id','reserva_id','especialista','box']
     resource_class = AtencionResource
 
 admin.site.register(Usuario, UsuarioAdmin)

@@ -157,14 +157,20 @@ def eliminarSucursal(request,id):
     return render(request,'core/eliminar_sucursal.html', {'sucursal':sucursal})
 
 def crearBox(request):
+    sucursales = Sucursal.objects.all()
     if request.method == 'POST':
-        boxes_form = BoxesForm(request.POST)
-        if boxes_form.is_valid():
-            boxes_form.save()
-            return redirect('listar_boxes')
+        if not request.POST._mutable:
+            request.POST._mutable = True
+            sucursal = Sucursal.objects.filter(id=request.POST['sucursal'])
+            boxes_form = BoxesForm(request.POST)
+            if boxes_form.is_valid():
+                boxes_form.cleaned_data['sucursal']=sucursal
+                boxes_form.save()
+                return redirect('listar_boxes')
+            
     else:
         boxes_form = BoxesForm()
-    return render(request,'core/crear_box.html',{'boxes_form':boxes_form})
+    return render(request,'core/crear_box.html',{'boxes_form':boxes_form,'sucursales':sucursales})
 
 def listadoBoxes(request):
     queryset = request.GET.get("search")
@@ -203,24 +209,23 @@ def crearUsuario(request):
     especialidades = Especialidad.objects.all()
     if request.method == 'POST':
         if not request.POST._mutable:
-                request.POST._mutable = True
-                # forma de acceder y modificar el diccionario para el formulario 
-                request.POST['usuario_administrador'] = False
-                sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
-                especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
-                usuario_form = UsuarioForm(request.POST)
-                print('este es el usuario')
-                print(usuario_form.errors.as_json(),'error')
-                if usuario_form.is_valid():
-                    print('formulario valido')
-                    usuario_form.cleaned_data['comuna']=sucursal
-                    usuario_form.cleaned_data['especialidad']=especialidad
-                    print(usuario_form)
-                    usuario_form.save()
-                    return redirect('login')
+            request.POST._mutable = True
+            # forma de acceder y modificar el diccionario para el formulario 
+            request.POST['usuario_administrador'] = False
+            sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
+            especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
+            usuario_form = UsuarioForm(request.POST)
+            print('este es el usuario')
+            print(usuario_form.errors.as_json(),'error')
+            if usuario_form.is_valid():
+                print('formulario valido')
+                usuario_form.cleaned_data['comuna']=sucursal
+                usuario_form.cleaned_data['especialidad']=especialidad
+                print(usuario_form)
+                usuario_form.save()
+                return redirect('login')
     else:
         usuario_form = UsuarioForm()
-        print('tupoto')
     return render(request,'core/crear_usuario.html',{'usuario_form':usuario_form, 'sucursales':sucursales,'especialidades':especialidades})
 
 def crearFuncionario(request):
@@ -355,14 +360,20 @@ def eliminarReserva(request,id):
 
 
 def crearAtencion(request):
+    especialistas = Especialidad.objects.all()
+    reservas = Reserva.objects.all()
     if request.method == 'POST':
-        atencion_form = AtencionForm(request.POST)
-        if atencion_form.is_valid():
-            atencion_form.save()
-            return redirect('listar_atenciones')
+        if not request.POST._mutable:
+            request.POST._mutable = True
+            especialista = Especialidad.objects.filter(id=request.POST['especialista'])
+            atencion_form = AtencionForm(request.POST)
+            if atencion_form.is_valid():
+                atencion_form.cleaned_data['especialista']=especialista
+                atencion_form.save()
+                return redirect('listar_atenciones')
     else:
         atencion_form = AtencionForm()
-    return render(request,'core/crear_atencion.html',{'atencion_form':atencion_form})
+    return render(request,'core/crear_atencion.html',{'atencion_form':atencion_form,'especialidades':especialidades, 'reservas':reservas})
 
 def editarAtencion(request,id):
     atencion = Atencion.objects.get(id = id)

@@ -25,6 +25,7 @@
         <th>Nro Box</th>
         <th>Estado</th>
         <th>Especialidad</th>
+        <th>Centro Atención</th>
         <th>Opciones</th>
 
         <tbody>
@@ -33,6 +34,7 @@
                     <td>{{ box.id }}</td>
                     <td>{% if box.estado == 1 %}Disponible {% elif box.estado == 2 %}En atención {% elif box.estado == 3 %}En mantención{% else %} No disponible, deshabilitada{% endif %}</td>
                     <td>{{ box.especialidad }}</td>
+                    <td>{{ box.sucursal }}</td>
                     
                     <td>
                         <a href="{% url 'editar_box' box.id %}" class="btn btn-warning">Modificar</a>

@@ -15,80 +15,44 @@
 <div class="container">
   <h1 style="margin: 70px 0 0 0px;">Registro de Atención</h1>
   <h2>Crea tu registro de atención</h2>
-  <form action="" class="needs-validation" method="POST" novalidate>
-    {% csrf_token %}
+  <form action="" class="needs-validation" method="POST"> {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
-        {{ atencion_form.as_p }}
-    {% endif%}
-
-
-
-
-<!-- Reahacer el metodo para conseguir el registro de atencion -->
-
-
-
-
-
-
-
-
-
-
-    <!-- <div class="form-group">
-      <label for="uname">Correo Electrónico:</label>
-      <input type="text" class="form-control" id="uname" placeholder="correo@mail.com" name="uname" required>
-      <div class="valid-feedback">Ok.</div>
-      <div class="invalid-feedback">Ingresa un correo válido.</div>
-    </div>
-    <div class="form-group">
-      <label for="pwd">Contraseña:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="contraseña123" name="pswd" required>
-      <div class="valid-feedback">Ok.</div>
-      <div class="invalid-feedback">Ingresa una contraseña válida.</div>
-    </div>
-    <div class="form-group" style="max-width: 20%;">
-        <label for="age">Edad:</label>
-        <input type="number" class="form-control" id="age" placeholder="24" name="age" required>
+      <div class="form-group">
+        <label for="reserva">Seleccione la reserva a confirmar:</label>
+        <select value=option class="form-control" id="reserva" name="reserva" >
+          {% for reserva in reservas %}
+          <option value='{{ reserva.id }}' placeholder="selecione la reserva">{{ reserva }}</option>
+          {% endfor %}
+        </select>
         <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa una edad válida.</div>
-    </div>
-    <div class="form-group">
-        <label for="direction">Dirección:</label>
-        <input type="text" class="form-control" id="direction" placeholder="Av siempreviva" name="direction" required>
+        <div class="invalid-feedback">Ingresa una reserva válida.</div>
+      </div>
+      <div class="form-group">
+        <label for="especialista">Seleccione el especialista para realizar la atención:</label>
+        <select value=option class="form-control" id="especialidad" name="especialidad" >
+          {% for especialista in especialistas %}
+          <option value='{{ especialista.id }}' placeholder="selecione su centro mas cercano">{{ especialista }}</option>
+          {% endfor %}
+        </select>
         <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa una dirección válida.</div>
-    </div>
-    <div class="form-group" style="max-width: 20%;">
-        <label for="comunne">Número:</label>
-        <input type="text" class="form-control" id="number-direction" placeholder="#1234 ó 123A" name="number-comunne" required>
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa un número de casa válido.</div>
-    </div>
-    <div class="form-group">
-        <label for="comunne">Comuna:</label>
-        <input type="text" class="form-control" id="direction" placeholder="Viña del Mar" name="comunne" required>
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa una comuna válida.</div>
-    </div>
-    <div class="form-group">
-        <label for="comunne">Número:</label>
-        <input type="text" class="form-control" id="number-direction" placeholder="#1234" name="number-comunne" required>
-        <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa un número de casa válido.</div>
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" name="remember" required> Acepto Términos & Condiciones, así como el registro de mis datos personales para fines clínicos.
+        <div class="invalid-feedback">Ingresa en especialista válido.</div>
+      </div>
+
+
+
+      {% if user.is_authenticated == True %}
+      <div class="form-group" style="display: none;">
+          <label for="especialista">Usuario:</label>
+          <input type="text" class="form-control" id="especialista"  placeholder="{{ especialista }}" disabled value="" name="especialista" >
           <div class="valid-feedback">Ok.</div>
-          <div class="invalid-feedback">Acepta los términos para continuar</div>
-        </label>
-      </div> -->
-    <button type="submit" class="btn btn-success float-right">Registrar</button>
-    <button type="reset" class="btn btn-primary float-left">Limpiar</button>
-
+          <div class="invalid-feedback">Ingrese un funcionario válido.</div>
+      </div>
+      {% endif %}
+      <button type="submit" class="btn btn-success float-right">Registrar</button>
+      <button type="reset" class="btn btn-primary float-left">Limpiar</button>
+    {% endif%}
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
