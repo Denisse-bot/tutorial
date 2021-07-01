@@ -163,8 +163,8 @@ class Box(models.Model):
 
     def __str__(self):
         especialidad=str(self.especialidad)
-        tamaño_box=str(self.tamaño_box)
-        return especialidad + tamaño_box
+        tamaño=str(self.tamaño)
+        return especialidad + tamaño
 
 
 class Atencion(models.Model):

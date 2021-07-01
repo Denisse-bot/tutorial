@@ -31,25 +31,24 @@
       </div>
       <div class="form-group">
         <label for="especialista">Seleccione el especialista para realizar la atención:</label>
-        <select value=option class="form-control" id="especialidad" name="especialidad" >
+        <select value=option class="form-control" id="especialista" name="especialista" >
           {% for especialista in especialistas %}
-          <option value='{{ especialista.id }}' placeholder="selecione su centro mas cercano">{{ especialista }}</option>
+          <option value='{{ especialista.id }}' placeholder="selecione el especialista">{{ especialista }}</option>
           {% endfor %}
         </select>
         <div class="valid-feedback">Ok.</div>
-        <div class="invalid-feedback">Ingresa en especialista válido.</div>
+        <div class="invalid-feedback">Ingresa un especialista válido.</div>
       </div>
-
-
-
-      {% if user.is_authenticated == True %}
-      <div class="form-group" style="display: none;">
-          <label for="especialista">Usuario:</label>
-          <input type="text" class="form-control" id="especialista"  placeholder="{{ especialista }}" disabled value="" name="especialista" >
-          <div class="valid-feedback">Ok.</div>
-          <div class="invalid-feedback">Ingrese un funcionario válido.</div>
+      <div class="form-group">
+        <label for="box">Seleccione el box para realizar la atención:</label>
+        <select value=option class="form-control" id="box" name="box" >
+          {% for box in boxes %}
+          <option value='{{ box.id }}' placeholder="selecione su centro mas cercano">{{ box }}</option>
+          {% endfor %}
+        </select>
+        <div class="valid-feedback">Ok.</div>
+        <div class="invalid-feedback">Ingresa un box válido.</div>
       </div>
-      {% endif %}
       <button type="submit" class="btn btn-success float-right">Registrar</button>
       <button type="reset" class="btn btn-primary float-left">Limpiar</button>
     {% endif%}

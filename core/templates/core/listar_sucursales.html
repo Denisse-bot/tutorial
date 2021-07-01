@@ -1,13 +1,13 @@
-{% extends 'core/base.html' %}
+{% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
 <title>Listado de Sucursales</title>
  
 
-{% block body %}
+{% block panel %}
 
 {% if sucursales %}
-    <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
+    <nav class="navbar navbar-light float-left" style="display: flow-root;width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
@@ -20,6 +20,7 @@
             </div>
         </form>
     </nav>
+    <a href="{% url 'crear_sucursal' %}" class="btn btn-success float-right">Crear Sucursal</a>
     <table style="margin-top: 16px;" class="table table-hover">
         
         <th>Nro Sucursal</th>
@@ -67,4 +68,4 @@
     <a href="{% url 'crear_sucursal' %}" class="btn btn-success">Agregar</a>
 {% endif %}
 
-{% endblock body %}
+{% endblock panel %}

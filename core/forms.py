@@ -220,7 +220,7 @@ class AtencionForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'especialista': forms.TextInput(
+            'especialista': forms.Select(
                 attrs={
                     'class': 'form-control',
                     'placeholder':'Seleccione el nombre del especialista',

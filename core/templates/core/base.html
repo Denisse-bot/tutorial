@@ -123,9 +123,10 @@
 
 								<!-- TODO revisar esta linea y filtrar solo cuando el usuario esta conectado -->
 								{% if user.is_authenticated == True %}
-								<h6 style="align-items:flex-end;text-align:right;">Bienvenid@ {{ user.get_username }} / <a style="color: blue;" href="{% url 'logout' %}">Cerrar Sessión</a></h6>
+								<div style="display: flex;align-items: center;justify-content: flex-end;">
+									<h6 style="align-items:flex-end;">Bienvenid@  <h6 style="color:darkblue;">{{ user.get_username }}</h6>  al Centro de Atención <h6 style="color:darkblue;">{{ user.comuna }}</h6> / <a style="color: blue;" href="{% url 'logout' %}">Cerrar Sessión</a></h6>
+								</div>
 								{% else %}
-								<h6 style="align-items:flex-end;text-align:right; display: none;">Bienvenido {{ user.get_username }} / <a style="color: blue;" href="{% url 'logout' %}">Cerrar Sessión</a></h6>
 								{% endif %}
 							</div>
 						</div> <!-- row -->

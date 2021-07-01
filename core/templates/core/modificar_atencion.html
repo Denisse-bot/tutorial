@@ -1,0 +1,56 @@
+{% extends 'core/vista_usuario.html' %}
+{% load static %}
+
+
+<title style="margin-bottom: 24px;">Registro Atenciones</title>
+
+
+{% block panel %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<body>
+
+<div class="container">
+  <h1 style="margin: 70px 0 0 0px;">Modifica la Atención</h1>
+  <h2>Puedes modificar la atención</h2>
+  <form action="" class="needs-validation" method="POST" novalidate>
+    {% csrf_token %}
+    {% if error %}
+        <h4>{{ error }}</h4>
+    {% else %}
+        {{ atencion_form.as_p }}
+    {% endif%}
+
+    <button type="submit" class="btn btn-success float-right">Registrar</button>
+    <button class="btn btn-warning float-left">Volver</button>
+    <button type="reset" class="btn btn-primary float" style="display: block;margin:0 auto;">Limpiar</button>
+  </form>
+</div>
+<!-- <script src="{% static 'js/base.js' %}"></script> -->
+
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
+
+{% endblock panel %}

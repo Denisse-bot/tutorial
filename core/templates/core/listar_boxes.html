@@ -7,7 +7,7 @@
 {% block panel %}
 
 {% if boxes %}
-    <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
+    <nav class="navbar navbar-light float-left" style="width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
@@ -20,6 +20,7 @@
             </div>
         </form>
     </nav>
+    <a href="{% url 'crear_box' %}" class="btn btn-success float-right">  Crear Box  </a>
     <table style="margin-top: 16px;" class="table table-hover">
         
         <th>Nro Box</th>
@@ -43,7 +44,6 @@
                 </tr>
             {% endfor %}
         </tbody>
-
     </table>
     <div class="row pagination">
         <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">

@@ -173,8 +173,9 @@ def crearBox(request):
     return render(request,'core/crear_box.html',{'boxes_form':boxes_form,'sucursales':sucursales})
 
 def listadoBoxes(request):
+    sucursal = request.user.comuna
     queryset = request.GET.get("search")
-    boxes = Box.objects.all()
+    boxes = Box.objects.filter(sucursal=sucursal)
     if queryset:
         boxes = Box.objects.filter(
             Q(estado__icontains = queryset) |Q(especialidad__icontains = queryset)
@@ -251,8 +252,25 @@ def crearFuncionario(request):
         usuario_form = UsuarioForm()
     return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form, 'sucursales':sucursales,'especialidades':especialidades})
 
-def listadoUsuarios(request):
-    usuarios = Usuario.objects.get_queryset().order_by('id')
+def listadoFuncionarios(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=True)
+    queryset = request.GET.get("search")
+    if queryset:
+        usuarios = Usuario.objects.filter(
+            Q(email__icontains = queryset) |Q(nombre__icontains = queryset)|Q(apellido__icontains = queryset)|Q(rut__icontains = queryset)|Q(comuna__icontains = queryset)
+        ).distinct()
+    #Revisar que pasó con la query que desapareció, corregir!.
+
+    paginator=Paginator(usuarios,3)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+
+def listadoPacientes(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False)
+    #Revisar que pasó con la query que desapareció, corregir!.
     queryset = request.GET.get("search")
     if queryset:
         usuarios = Usuario.objects.filter(
@@ -310,6 +328,7 @@ def eliminarUsuario(request,id):
 
 def crearReserva(request):
     usuario = request.user
+    especialidad = request.user.especialidad
     print(usuario)
     logeado = Usuario.objects.get(email=usuario)
     sucursal = logeado.comuna
@@ -359,9 +378,14 @@ def eliminarReserva(request,id):
 
 
 
-def crearAtencion(request):
-    especialistas = Especialidad.objects.all()
+def crearAtencion(request,id,especialidad, sucursal):
+    especialidad = Especialidad.objects.filter(nombre=especialidad)
+    print(especialidad)
+    sucursal = Sucursal.objects.get(nombre=sucursal)
+    especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True))
+    print(especialistas)
     reservas = Reserva.objects.all()
+    boxes = Box.objects.filter(Q(especialidad__in=especialidad))
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
@@ -373,7 +397,7 @@ def crearAtencion(request):
                 return redirect('listar_atenciones')
     else:
         atencion_form = AtencionForm()
-    return render(request,'core/crear_atencion.html',{'atencion_form':atencion_form,'especialidades':especialidades, 'reservas':reservas})
+    return render(request,'core/crear_atencion.html',{'atencion_form':atencion_form,'especialistas':especialistas, 'reservas':reservas,'boxes':boxes})
 
 def editarAtencion(request,id):
     atencion = Atencion.objects.get(id = id)
@@ -384,7 +408,7 @@ def editarAtencion(request,id):
         if atencion_form.is_valid():
             atencion_form.save()
         return redirect('listar_atenciones')
-    return render(request,'core/crear_atencion.html',{'atencion_form':atencion_form})
+    return render(request,'core/modificar_atencion.html',{'atencion_form':atencion_form})
 
 def eliminarAtencion(request,id):
     atencion = Atencion.objects.get(id = id)
@@ -412,8 +436,11 @@ def listadoReservasSelf(request):
 
 
 def listadoReservas(request):
-    queryset = request.GET.get("search")
+    comuna = request.user.comuna
     reservas = Reserva.objects.all()
+    #reservas = Reserva.objects.filter(sucursal=comuna)
+    queryset = request.GET.get("search")
+
     if queryset:
         reservas = Reserva.objects.filter(
             Q(dia_reservado__icontains = queryset) |Q(usuario__icontains = queryset)
