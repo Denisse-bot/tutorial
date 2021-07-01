@@ -20,6 +20,7 @@
             </div>
         </form>
     </nav>
+    <a href="{% url 'listar_reservas' %}" class="btn btn-success float-right">Crear Atención</a>
     <table style="margin-top: 16px;" class="table table-hover">
         
         <th>N° Atención</th>
@@ -38,7 +39,7 @@
                     <td>{% if atencion.reserva.sucursal == 1 %}Providencia{% elif atencion.reserva.sucursal == 2 %}San Bernardo{% elif atencion.reserva.sucursal == 3 %}La Serena{% else%}Temuco{% endif %}</td>
                     <td>{% if atencion.reserva.especialidad == 1 %}Kinesiología{% elif atencion.reserva.especialidad == 2 %}Fonoaudiología{% else %}General{% endif %}</td>
                     <td>{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}</td>
-                    <td>{{ atencion.nombre_especialista }} {{ atencion.apellido_especialista}}</td>
+                    <td>{{ atencion.especialista.nombre }} {{ atencion.especialista.apellido }}</td>
                     <td>{{ atencion.box }}</td>
 
 
@@ -74,7 +75,7 @@
     </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="{% url 'crear_atencion' %}" class="btn btn-success">Agregar</a>
+    <a href="#" class="btn btn-success">Agregar</a>
 {% endif %}
 
 {% endblock panel %}

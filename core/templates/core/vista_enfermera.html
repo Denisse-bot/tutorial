@@ -12,19 +12,16 @@
     {% block nav %}
     <ul class="nav nav-pills card-header-pills">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'listar_usuarios'%}">Listar Usuarios</a>
+        <a class="nav-link" href="{% url 'listar_pacientes'%}">Listar Pacientes</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'crear_box'%}">Crear box</a>
+        <a class="nav-link" href="{% url 'listar_funcionarios'%}">Listar Funcionarios</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'listar_boxes'%}">Listar boxes</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'listar_reservas'%}">Listar reservas</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'crear_atencion'%}">Crear atención</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'listar_atenciones'%}">Listar atenciones</a>
@@ -36,10 +33,10 @@
         <a class="nav-link" href="{% url 'crear_funcionario'%}">Registrar Funcionario</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'listar_sucursales'%}">Listado de Sucursales</a>
+        <a class="nav-link" href="{% url 'listar_sucursales'%}">Listar Sucursales</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'listar_especialidad'%}">Listado de Especialidades</a>
+        <a class="nav-link" href="{% url 'listar_especialidad'%}">Listar Especialidades</a>
       </li>
     </ul>
     
@@ -49,7 +46,7 @@
     {% block panel %}
     <h5 class="card-title">Bienvenid@ {{ user.get_username }} a la gestión del sistema de agendamiento de box atención</h5>
     <p class="card-text">en este panel puedes encontrar las opciones disponibles.</p>
-    <a href="{% url 'crear_atencion'%}" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Atención</a>
+    <a href="#" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Atención</a>
     {% endblock panel %}
   </div>
 </div>

@@ -17,8 +17,8 @@ def send_mail_reserva(atencion, id):
     apellido = atenciones.reserva.usuario.apellido
     box = atenciones.box.id
     especialidad = atenciones.reserva.especialidad
-    profesional_nombre= atenciones.nombre_especialista,
-    profesional_apellido = atenciones.apellido_especialista
+    profesional_nombre= atenciones.especialista.nombre,
+    profesional_apellido = atenciones.especialista.apellido,
     centro = atenciones.reserva.sucursal
 
 

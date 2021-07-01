@@ -6,7 +6,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
 from .models import Atencion, Especialidad, Reserva, Sucursal, Usuario, Box
-from datetimewidget.widgets import DateTimeWidget
 
 
 class FormularioLogin(AuthenticationForm):
@@ -120,7 +119,7 @@ class UsuarioForm(forms.ModelForm):
                     'placeholder':'Ingrese su nro de direccion',
                 }
             ),
-            'usuario_administrador': forms.Select(
+            'usuario_administrador': forms.HiddenInput(
             ),
         }
     def clean_password2(self):
@@ -180,7 +179,9 @@ class BoxesForm(forms.ModelForm):
         model = Box
         fields = [
             'estado',
-            'especialidad'
+            'especialidad',
+            'tamaño',
+            'sucursal',
         ]
         widgets = {
             'estado': forms.Select(
@@ -192,6 +193,16 @@ class BoxesForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control'                    
                 }
+            ),
+            'tamaño': forms.Select(
+                attrs={
+                    'class': 'form-control'                    
+                }
+            ),
+            'sucursal': forms.Select(
+                attrs={
+                    'class': 'form-control'                    
+                }
             )
         }
 
@@ -200,8 +211,7 @@ class AtencionForm(forms.ModelForm):
         model = Atencion
         fields = [
             'reserva',
-            'nombre_especialista',
-            'apellido_especialista',
+            'especialista',
             'box'
          ]
         widgets = {
@@ -210,16 +220,10 @@ class AtencionForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'nombre_especialista': forms.TextInput(
+            'especialista': forms.Select(
                 attrs={
                     'class': 'form-control',
-                    'placeholder':'Ingrese el nombre del especialista',
-                }
-            ),
-            'apellido_especialista': forms.TextInput(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Ingrese el apellido del especialista'
+                    'placeholder':'Seleccione el nombre del especialista',
                 }
             ),
             'box': forms.Select(

@@ -14,7 +14,8 @@ urlpatterns = [
 
     path('crear_usuario/',crearUsuario,name='crear_usuario'),
     path('crear_funcionario/',crearFuncionario,name='crear_funcionario'),
-    path('listar_usuarios/',listadoUsuarios,name='listar_usuarios'),
+    path('listar_funcionarios/',listadoFuncionarios,name='listar_funcionarios'),
+    path('listar_pacientes/',listadoPacientes,name='listar_pacientes'),
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
     path('editar_self_usuario',editar_self_usuario,name='editar_self_usuario'),    
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
@@ -36,7 +37,7 @@ urlpatterns = [
     path('editar_reserva/<int:id>', editarReserva, name='editar_reserva'),
     path('eliminar_reserva/<int:id>', eliminarReserva, name='eliminar_reserva'),
 
-    path('crear_atencion/',crearAtencion,name='crear_atencion'),
+    path('crear_atencion/<int:id>/<str:especialidad>/<str:sucursal>',crearAtencion,name='crear_atencion'),
     path('editar_atencion/<int:id>', editarAtencion, name='editar_atencion'),
     path('listar_atenciones/',listadoAtenciones, name='listar_atenciones'),
     path('eliminar_atencion/<int:id>',eliminarAtencion, name='eliminar_atencion'),

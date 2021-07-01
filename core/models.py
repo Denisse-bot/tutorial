@@ -145,11 +145,17 @@ class Box(models.Model):
         (3, 'En mantención'),
         (4, 'No disponible, deshabilitada')
     )
+    tamaño_list=(
+        (1, 'Grande'),
+        (2, 'Mediano'),
+        (3, 'Pequeño')
+    )
 
     id = models.AutoField(primary_key= True)
     estado = models.IntegerField(choices=estado_list, default=None)
+    tamaño = models.IntegerField(choices=tamaño_list,default=None)
     especialidad = models.ForeignKey(Especialidad, on_delete=CASCADE)
-    
+    sucursal=models.ForeignKey(Sucursal, on_delete=CASCADE)
     class Meta:
         verbose_name = 'Box'
         verbose_name_plural = 'Boxes'
@@ -157,14 +163,14 @@ class Box(models.Model):
 
     def __str__(self):
         especialidad=str(self.especialidad)
-        return especialidad
+        tamaño=str(self.tamaño)
+        return especialidad + tamaño
 
 
 class Atencion(models.Model):
     id = models.AutoField(primary_key= True)
     reserva = models.OneToOneField(Reserva, on_delete=CASCADE)
-    nombre_especialista = models.CharField(max_length=20)
-    apellido_especialista = models.CharField(max_length=20)
+    especialista = models.ForeignKey(Usuario, on_delete=CASCADE)
     box = models.ForeignKey(Box, on_delete=CASCADE)
     
     class Meta:
