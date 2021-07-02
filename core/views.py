@@ -357,7 +357,7 @@ def editarReserva(request,id):
         reserva_form = ReservaForm(request.POST, instance=reserva)
         if reserva_form.is_valid():
             reserva_form.save()
-        return redirect('listar_reservas')
+        return redirect('listar_reservas_self')
     return render(request,'core/modificar_reserva.html',{'reserva_form':reserva_form})
 
 
@@ -424,7 +424,7 @@ def listadoReservasSelf(request):
         reservas = Reserva.objects.filter(
             Q(dia_reservado__icontains = queryset)
         ).distinct()
-    paginator=Paginator(reservas,2)
+    paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
     return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
