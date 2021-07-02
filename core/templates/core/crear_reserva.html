@@ -55,9 +55,9 @@
       </div> -->
 
       {% if user.is_authenticated == True %}
-      <div class="form-group" style="display: none;">
+      <div class="form-group" style="display: block;">
           <label for="usuario">Usuario:</label>
-          <input type="text" class="form-control" id="usuario"  placeholder="{{ user }}" disabled value="" name="" >
+          <input type="text" class="form-control" id="usuario"  placeholder="{{ usuario }}" disabled value="" name="usuario" >
           <div class="valid-feedback">Ok.</div>
           <div class="invalid-feedback">Ingrese un usuario válido.</div>
       </div>

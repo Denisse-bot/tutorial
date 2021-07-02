@@ -12,7 +12,7 @@ from django.views.generic.list import ListView
 from core import models
 import core
 from django.db.models import Q
-from core.models import Atencion, Box, Especialidad, Reserva, Sucursal, Usuario
+from core.models import Atencion, Box, Especialidad, Reserva, Sucursal, Usuario, UsuarioManager
 from core.forms import AtencionForm, UsuarioForm
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, UpdateView, CreateView
@@ -328,26 +328,21 @@ def eliminarUsuario(request,id):
 
 def crearReserva(request):
     usuario = request.user
-    especialidad = request.user.especialidad
-    print(usuario)
     logeado = Usuario.objects.get(email=usuario)
     sucursal = logeado.comuna
-    print(sucursal)
-
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
             reserva_form = ReservaForm(request.POST)
             print(reserva_form.errors.as_json(),'error')
-            if reserva_form.is_valid():
-                print('formulario valido')
-                reserva_form.cleaned_data['comuna']=sucursal
-            # forma de acceder y modificar el diccionario para el formulario 
-            request.POST['usuario'] = request.user
+            dia_reservado = request.POST['dia_reservado']
+            request.POST['usuario']=usuario
             reserva_form = ReservaForm(request.POST)
             if reserva_form.is_valid():
-                reserva_form.save()
-                
+            # forma de acceder y modificar el diccionario para el formulario 
+                reserva_form.cleaned_data['usuario']=usuario
+                reserva_form.cleaned_data['dia_reservado']=dia_reservado
+                reserva_form.save()   
                 return redirect('listar_reservas_self')
     else:
         reserva_form = ReservaForm()
