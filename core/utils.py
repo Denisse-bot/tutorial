@@ -16,15 +16,15 @@ def send_mail_reserva(atencion, id):
     nombre = atenciones.reserva.usuario.nombre
     apellido = atenciones.reserva.usuario.apellido
     box = atenciones.box.id
-    especialidad = atenciones.reserva.especialidad
+    especialidad = atenciones.reserva.usuario.especialidad
     profesional_nombre= atenciones.especialista.nombre,
     profesional_apellido = atenciones.especialista.apellido,
-    centro = atenciones.reserva.sucursal
+    centro = atenciones.reserva.usuario.comuna
 
 
 
 
-    subject, from_mail, to = 'Confirmación Reserva Atención Médica','support@Abae.cl' ,email
+    subject, from_mail, to = 'Confirmación Reserva Atención Médica','denisse.lyon@gmail.cl' ,email
     text_context = '%s Hemos confirmado tu reserva de atención médica.' % nombre
     msg_html = render_to_string('core/correo.html', {
         'nombre': nombre,

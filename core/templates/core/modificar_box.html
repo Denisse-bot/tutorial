@@ -1,8 +1,8 @@
-{% extends 'core/vista_usuario.html' %}
+{% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
 
-<title>Modificar Mis Datos</title>
+<title style="margin-bottom: 24px;">Modificar Box</title>
 
 
 {% block panel %}
@@ -13,20 +13,18 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 16px 0 0 0px;">Mis Datos</h1>
-  <h2>Actualiza tus datos en nuestra plataforma para garantizar tu atención</h2>
-
-  <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
+  <h1 style="margin: 70px 0 0 0px;">Modifica tu Box</h1>
+  <h2>Puedes modificar tu Box de Atención</h2>
+  <form action="" class="needs-validation" method="POST" novalidate>
     {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
-        {{ usuario_form.as_p }}
+        {{ boxes_form.as_p }}
     {% endif%}
-    
-    <button type="submit" class="btn btn-success float-right">Registrar</button>
-    <!-- <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a> -->
 
+    <button type="submit" class="btn btn-success float-right">Registrar</button>
+    <button type="reset" class="btn btn-primary float-left">Limpiar</button>
 
   </form>
 </div>
