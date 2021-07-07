@@ -91,8 +91,8 @@ WSGI_APPLICATION = 'ABAE.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': '127.0.0.1:1521/xe',
-        'USER': 'PBY2103',
+        'NAME': '152.67.55.191:1521/xe',
+        'USER': 'C##PBY2103',
         'PASSWORD': 'PBY2103',
         'TEST': {
             'USER': 'default_test',
