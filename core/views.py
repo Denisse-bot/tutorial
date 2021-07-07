@@ -25,6 +25,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from .mixins import SuperUsuarioMixin
+from django.utils.timezone import datetime 
 
 # Create your views here.
 
@@ -34,6 +35,9 @@ class VistaEnfermera(SuperUsuarioMixin,TemplateView):
   
 class VistaUsuario(TemplateView):
     template_name = 'core/vista_usuario.html'
+
+# class VistaFuncionario(TemplateView):
+#     template_name = 'core/vista_funcionario.html'
 
 class Login(FormView):
     template_name = 'core/login.html'
@@ -181,7 +185,7 @@ def listadoBoxes(request):
             Q(estado__icontains = queryset) |Q(especialidad__icontains = queryset)
         ).distinct()
 
-    paginator=Paginator(boxes,2)
+    paginator=Paginator(boxes,5)
     page=request.GET.get('page')
     boxes = paginator.get_page(page)
     return render(request,'core/listar_boxes.html',{'boxes':boxes})
@@ -195,7 +199,7 @@ def editarBox(request, id):
         if boxes_form.is_valid():
             boxes_form.save()
         return redirect('listar_boxes')
-    return render(request, 'core/crear_box.html', {'boxes_form': boxes_form})
+    return render(request, 'core/modificar_box.html', {'boxes_form': boxes_form})
 
 def eliminarBox(request,id):
     box = Box.objects.get(id=id)
@@ -282,6 +286,8 @@ def listadoPacientes(request):
     return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
 
 def editarUsuario(request,id):
+    usuario = request.user.usuario_administrador
+    print(usuario)
     usuario_form = None
     error = None
     try:
@@ -292,7 +298,7 @@ def editarUsuario(request,id):
             usuario_form = UsuarioForm(request.POST, instance=usuario)
             if usuario_form.is_valid():
                 usuario_form.save()
-            return redirect('listar_usuarios')
+            return redirect('listar_pacientes')
     except ObjectDoesNotExist as e:
         error = e
 
@@ -312,7 +318,7 @@ def editar_self_usuario(request):
         if usuario_form.is_valid():
             usuario_form.save()
             print(usuario_form)
-        return redirect('listar_usuarios')
+        return redirect('listar_pacientes')
 
     return render(request,'core/modificar_usuario.html',{'usuario_form':usuario_form})
 
@@ -379,7 +385,7 @@ def crearAtencion(request,id,especialidad, sucursal):
     sucursal = Sucursal.objects.get(nombre=sucursal)
     especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True))
     print(especialistas)
-    reservas = Reserva.objects.all()
+    reservas = Reserva.objects.filter(id=id)
     boxes = Box.objects.filter(Q(especialidad__in=especialidad))
     if request.method == 'POST':
         if not request.POST._mutable:
@@ -416,10 +422,16 @@ def eliminarAtencion(request,id):
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
 def listadoReservasSelf(request):
+    
+    today = datetime.today()
     id = request.user.id
     queryset = request.GET.get("search")
     print(id)
     reservas = Reserva.objects.filter(usuario=id)
+    #TODO hacer el for para esta cosa
+    fecha_nacimiento = reservas.fecha_nacimiento
+    edad = (today-fecha_nacimiento)/365
+
     if queryset:
         reservas = Reserva.objects.filter(
             Q(dia_reservado__icontains = queryset)
@@ -427,7 +439,7 @@ def listadoReservasSelf(request):
     paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
-    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
+    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas,'edad':edad})
 
 
 def listadoReservas(request):
@@ -440,7 +452,7 @@ def listadoReservas(request):
         reservas = Reserva.objects.filter(
             Q(dia_reservado__icontains = queryset) |Q(usuario__icontains = queryset)
         ).distinct()
-    paginator=Paginator(reservas,2)
+    paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
     return render(request,'core/listar_reservas.html',{'reservas':reservas})

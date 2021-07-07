@@ -29,11 +29,11 @@
         <th>Centro Atención</th>
         <th>Opciones</th>
 
-        <tbody>
+        <tbody style="vertical-align:middle">
             {% for box in boxes %}
                 <tr>
                     <td>{{ box.id }}</td>
-                    <td>{% if box.estado == 1 %}Disponible {% elif box.estado == 2 %}En atención {% elif box.estado == 3 %}En mantención{% else %} No disponible, deshabilitada{% endif %}</td>
+                    {% if box.estado == 1 %}<td style="background-color: darkgreen;">Disponible</td>{% elif box.estado == 2 %} <td style="background-color: darkred;">En atención</td> {% elif box.estado == 3 %} <td style="background-color: darkorange;">En mantención</td> {% else %}<td style="background-color: darkgrey;">No disponible, deshabilitada</td>{% endif %}
                     <td>{{ box.especialidad }}</td>
                     <td>{{ box.sucursal }}</td>
                     
