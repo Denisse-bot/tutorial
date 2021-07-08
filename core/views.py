@@ -378,15 +378,22 @@ def eliminarReserva(request,id):
     return render(request, 'core/eliminar_reserva.html',{'reserva':reserva})
 
 
-
 def crearAtencion(request,id,especialidad, sucursal):
+    fecha_hora = Reserva.objects.get(id=id)
+    filter_temp = Atencion.objects.filter(reserva__dia_reservado=fecha_hora.dia_reservado)
+    lista_ocupados = filter_temp.values_list('especialista__id')
+    print(lista_ocupados)
+    lista_box = filter_temp.values_list('box__id')
+
+    print(fecha_hora.dia_reservado)
     especialidad = Especialidad.objects.filter(nombre=especialidad)
     print(especialidad)
     sucursal = Sucursal.objects.get(nombre=sucursal)
-    especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True))
+    especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True)).exclude(id__in=lista_ocupados)
     print(especialistas)
+    print(sucursal)
     reservas = Reserva.objects.filter(id=id)
-    boxes = Box.objects.filter(Q(especialidad__in=especialidad))
+    boxes = Box.objects.filter(Q(especialidad__in=especialidad)&Q(estado__in='1')&Q(sucursal__nombre=sucursal)).exclude(id__in=lista_box)
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
@@ -429,8 +436,8 @@ def listadoReservasSelf(request):
     print(id)
     reservas = Reserva.objects.filter(usuario=id)
     #TODO hacer el for para esta cosa
-    fecha_nacimiento = reservas.fecha_nacimiento
-    edad = (today-fecha_nacimiento)/365
+    #fecha_nacimiento = reservas.fecha_nacimiento
+    #edad = (today-fecha_nacimiento)/365
 
     if queryset:
         reservas = Reserva.objects.filter(
@@ -439,15 +446,14 @@ def listadoReservasSelf(request):
     paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
-    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas,'edad':edad})
+    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
 
 
 def listadoReservas(request):
     comuna = request.user.comuna
-    reservas = Reserva.objects.all()
-    #reservas = Reserva.objects.filter(sucursal=comuna)
+    #reservas = Reserva.objects.all()
+    reservas = Reserva.objects.filter(usuario__comuna=comuna)
     queryset = request.GET.get("search")
-
     if queryset:
         reservas = Reserva.objects.filter(
             Q(dia_reservado__icontains = queryset) |Q(usuario__icontains = queryset)

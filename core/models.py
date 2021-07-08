@@ -162,9 +162,10 @@ class Box(models.Model):
         ordering = ['estado']
 
     def __str__(self):
+        id = str(self.id)
         especialidad=str(self.especialidad)
-        tamaño=str(self.tamaño)
-        return especialidad + tamaño
+        #tamaño=str(self.tamaño)
+        return  id +' '+ especialidad
 
 
 class Atencion(models.Model):
