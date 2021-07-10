@@ -32,16 +32,16 @@
         <tbody>
             {% for reserva in reservas %}
                 <tr>
-                    <td>{{ reserva.usuario.especialidad }}</td>
+                    <td>{{ reserva.especialidad }}</td>
                     <td>{{ reserva.dia_reservado }}</td>
-                    <td>{{ reserva.usuario.comuna }}</td>
+                    <td>{{ reserva.sucursal }}</td>
                     <td>{{ reserva.usuario.nombre }} {{ reserva.usuario.apellido  }}</td>
                     <td>{{ reserva.usuario.rut  }}</td>
                     <td>{{ reserva.usuario.fecha_nacimiento }}</td>
                     <td>
                         <a href="{% url 'editar_reserva' reserva.id %}" class="btn btn-warning">Modificar</a>
                         <a href="{% url 'eliminar_reserva' reserva.id %}" class="btn btn-danger">Eliminar</a>
-                        <a href="{% url 'crear_atencion' reserva.id reserva.usuario.especialidad reserva.usuario.comuna %}" class="btn btn-success">Crear Atención</a>
+                        <a href="{% url 'crear_atencion' reserva.id reserva.especialidad reserva.sucursal %}" class="btn btn-success">Crear Atención</a>
                     </td>
                 </tr>
             {% endfor %}

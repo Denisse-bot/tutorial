@@ -33,11 +33,12 @@ from django.utils.timezone import datetime
 class VistaEnfermera(SuperUsuarioMixin,TemplateView):
     template_name = 'core/vista_enfermera.html'
   
+class VistaFuncionario(SuperUsuarioMixin,TemplateView):
+    template_name = 'core/vista_funcionario.html'
+
 class VistaUsuario(TemplateView):
     template_name = 'core/vista_usuario.html'
 
-# class VistaFuncionario(TemplateView):
-#     template_name = 'core/vista_funcionario.html'
 
 class Login(FormView):
     template_name = 'core/login.html'
@@ -336,6 +337,7 @@ def crearReserva(request):
     usuario = request.user
     logeado = Usuario.objects.get(email=usuario)
     sucursal = logeado.comuna
+    especialidad = logeado.especialidad
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
@@ -343,6 +345,8 @@ def crearReserva(request):
             print(reserva_form.errors.as_json(),'error')
             dia_reservado = request.POST['dia_reservado']
             request.POST['usuario']=usuario
+            request.POST['sucursal']=sucursal
+            request.POST['especialidad']=especialidad
             reserva_form = ReservaForm(request.POST)
             if reserva_form.is_valid():
             # forma de acceder y modificar el diccionario para el formulario 
@@ -379,6 +383,7 @@ def eliminarReserva(request,id):
 
 
 def crearAtencion(request,id,especialidad, sucursal):
+    #se debe agregar a la fecha_hora inicial, la hora final (que debiese definirse en un rango de +1hora de atencion + 1/2 aseo+ 1/2 extra)
     fecha_hora = Reserva.objects.get(id=id)
     filter_temp = Atencion.objects.filter(reserva__dia_reservado=fecha_hora.dia_reservado)
     lista_ocupados = filter_temp.values_list('especialista__id')

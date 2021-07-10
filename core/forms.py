@@ -159,7 +159,9 @@ class ReservaForm(forms.ModelForm):
         model = Reserva
         fields = [
             'dia_reservado',
-            'usuario'
+            'usuario',
+            'sucursal',
+            'especialidad'
         ]
         widgets = {
             'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y %H:%M'
@@ -171,6 +173,10 @@ class ReservaForm(forms.ModelForm):
 
             'usuario': forms.HiddenInput(
             ),
+            'sucursal': forms.HiddenInput(
+            ),
+            'especialidad': forms.HiddenInput(
+            )
         }
 
 class BoxesForm(forms.ModelForm):

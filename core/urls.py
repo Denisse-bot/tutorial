@@ -9,7 +9,7 @@ urlpatterns = [
     path('robotos', robotos.as_view(), name='robotos'),
     path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
-    #path('vista_funcionario/', VistaFuncionario.as_view(),name='vista_funcionario'),
+    path('vista_funcionario/',VistaFuncionario.as_view(),name='vista_funcionario'),
     path('vista_usuario/', VistaUsuario.as_view(),name='vista_usuario'),
     path('insumo/',insumo, name='insumo'),
 

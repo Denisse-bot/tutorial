@@ -33,9 +33,9 @@
         <tbody>
             {% for reserva in reservas %}
                 <tr>
-                    <td>{{ reserva.usuario.especialidad }}</td>
+                    <td>{{ reserva.especialidad }}</td>
                     <td>{{ reserva.dia_reservado }}</td>
-                    <td>{{ reserva.usuario.comuna }}</td>
+                    <td>{{ reserva.sucursal }}</td>
                     <td>{{ reserva.usuario.nombre }} {{ reserva.usuario.apellido  }}</td>
                     <td>{{ reserva.usuario.rut  }}</td>
                     <td>{{ reserva.usuario.fecha_nacimiento  }}</td>
