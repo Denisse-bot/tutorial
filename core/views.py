@@ -30,13 +30,14 @@ from django.utils.timezone import datetime
 # Create your views here.
 
 
-class VistaEnfermera(SuperUsuarioMixin,TemplateView):
+class VistaEnfermera(LoginRequiredMixin,SuperUsuarioMixin,TemplateView):
+
     template_name = 'core/vista_enfermera.html'
   
-class VistaFuncionario(SuperUsuarioMixin,TemplateView):
+class VistaFuncionario(LoginRequiredMixin,TemplateView):
     template_name = 'core/vista_funcionario.html'
 
-class VistaUsuario(TemplateView):
+class VistaUsuario(LoginRequiredMixin,TemplateView):
     template_name = 'core/vista_usuario.html'
 
 
@@ -453,6 +454,23 @@ def listadoReservasSelf(request):
     reservas = paginator.get_page(page)
     return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
 
+
+#TODO realizar consulta de atenciones self in funcionario
+# def listadoReservasSelf(request):
+    
+#     today = datetime.today()
+#     id = request.user.id
+#     queryset = request.GET.get("search")
+#     print(id)
+#     atenciones = Atencion.objects.filter(atenciones__dia_reservado=id)
+#     if queryset:
+#         reservas = Reserva.objects.filter(
+#             Q(dia_reservado__icontains = queryset)
+#         ).distinct()
+#     paginator=Paginator(reservas,5)
+#     page=request.GET.get('page')
+#     reservas = paginator.get_page(page)
+#     return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
 
 def listadoReservas(request):
     comuna = request.user.comuna

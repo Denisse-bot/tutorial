@@ -117,6 +117,12 @@ class Usuario(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.usuario_administrador
+    @property
+    def is_nurse(self):
+        especialidad = False
+        if self.especialidad.nombre == 'Enfermera':
+            especialidad = True
+        return especialidad
 
 # class Funcionario(Usuario):
 #     tipo_especialidad = (
