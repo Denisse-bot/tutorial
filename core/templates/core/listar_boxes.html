@@ -32,7 +32,7 @@
             {% for box in boxes %}
                 <tr>
                     <td>{{ box.id }}</td>
-                    {% if box.estado == 1 %}<td style="background-color: darkgreen;">Disponible</td>{% elif box.estado == 2 %} <td style="background-color: darkred;">En atención</td> {% elif box.estado == 3 %} <td style="background-color: darkorange;">En mantención</td> {% else %}<td style="background-color: darkgrey;">No disponible, deshabilitada</td>{% endif %}
+                    {% if box.estado == 1 %}<td style="background-color:darkgreen;opacity:0.8;color:white;font-weight:800;">Disponible</td>{% elif box.estado == 2 %} <td style="background-color:darkred;opacity:0.8;color:white;font-weight:800;">En atención</td> {% elif box.estado == 3 %} <td style="background-color:darkorange;opacity:0.8;color:white;font-weight:800;">En mantención</td> {% else %}<td style="background-color:darkgrey;opacity:0.8;color:white;font-weight:800;">No disponible, deshabilitada</td>{% endif %}
                     <td>{{ box.especialidad }}</td>
                     <td>{{ box.sucursal }}</td>
                     

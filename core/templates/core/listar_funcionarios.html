@@ -7,7 +7,6 @@
 {% block panel %}
 
 {% if usuarios %}
-<div style="display: flex;align-items: center;">
     <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
@@ -21,16 +20,6 @@
             </div>
         </form>
     </nav>
-    <div style="margin: 0 0 0 auto;">
-        <a href="{% url 'filtrar_etapa1' %}" class="btn btn-success">Primera Etapa</a>
-        <a href="{% url 'filtrar_etapa2' %}" class="btn btn-success">Segunda Etapa</a>
-        <a href="{% url 'filtrar_etapa3' %}" class="btn btn-success">Tercera Etapa</a>
-        <a href="{% url 'listar_pacientes' %}" class="btn btn-success">Todos</a>
-    </div>    
-</div>
-
-   
-
     <table style="margin-top: 60px;" class="table table-hover">
         
         <th>Nombre Usuario</th>
@@ -41,7 +30,6 @@
         <th>Dirección</th>
         <th>Especialidad</th>
         <th>Centro Atención</th>
-        <th>Etapa</th>
         <th>Acciones</th>
         <tbody>
             {% for usuario in usuarios %}
@@ -53,7 +41,6 @@
                     <td>{{ usuario.direccion }}</td>
                     <td>{{ usuario.especialidad }}</td>
                     <td>{{ usuario.comuna }}</td>
-                    <td>{% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</td>
                     <td>
                         <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning">Modificar</a>
                         <a href="{% url 'eliminar_usuario' usuario.id%}" class="btn btn-danger">Eliminar</a>

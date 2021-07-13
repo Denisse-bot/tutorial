@@ -268,21 +268,55 @@ def listadoFuncionarios(request):
         ).distinct()
     #Revisar que pasó con la query que desapareció, corregir!.
 
-    paginator=Paginator(usuarios,3)
+    paginator=Paginator(usuarios,5)
     page=request.GET.get('page')
     usuarios = paginator.get_page(page)
-    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+    return render(request,'core/listar_funcionarios.html',{'usuarios':usuarios})
 
 def listadoPacientes(request):
     comuna = request.user.comuna
     usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False)
+    print(usuarios)
+    fecha_nacimiento = usuarios
+    print(fecha_nacimiento)
     #Revisar que pasó con la query que desapareció, corregir!.
     queryset = request.GET.get("search")
     if queryset:
         usuarios = Usuario.objects.filter(
             Q(email__icontains = queryset) |Q(nombre__icontains = queryset)|Q(apellido__icontains = queryset)|Q(rut__icontains = queryset)|Q(comuna__icontains = queryset)
         ).distinct()
-    paginator=Paginator(usuarios,3)
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+
+def filtradoPacientes1(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).filter(etapa=1)
+    print(usuarios)
+    fecha_nacimiento = usuarios
+    print(fecha_nacimiento)
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+
+def filtradoPacientes2(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).filter(etapa=2)
+    print(usuarios)
+    fecha_nacimiento = usuarios
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+
+def filtradoPacientes3(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).filter(etapa=3)
+    print(usuarios)
+    fecha_nacimiento = usuarios
+    paginator=Paginator(usuarios,5)
     page=request.GET.get('page')
     usuarios = paginator.get_page(page)
     return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
@@ -311,7 +345,6 @@ def editar_self_usuario(request):
     id = request.user.id
     usuario = Usuario.objects.get(id=id)
     print(usuario)
-
     if request.method == 'GET':
         usuario_form = UsuarioForm(instance=usuario)
         print(usuario_form)
@@ -320,7 +353,7 @@ def editar_self_usuario(request):
         if usuario_form.is_valid():
             usuario_form.save()
             print(usuario_form)
-        return redirect('listar_pacientes')
+        return redirect('login')
 
     return render(request,'core/modificar_usuario.html',{'usuario_form':usuario_form})
 
@@ -435,7 +468,6 @@ def eliminarAtencion(request,id):
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
 def listadoReservasSelf(request):
-    
     today = datetime.today()
     id = request.user.id
     queryset = request.GET.get("search")
@@ -515,16 +547,25 @@ def listadoAtenciones(request):
             Q(nombre_especialista__icontains = queryset) |Q(apellido_especialista__icontains = queryset) |Q(box__exact = queryset)
         ).distinct()
 
-    paginator=Paginator(atenciones,2)
+    paginator=Paginator(atenciones,5)
     page=request.GET.get('page')
     atenciones = paginator.get_page(page)
     return render(request,'core/listar_atenciones.html',{'atenciones':atenciones})
 
-# class listadoAtenciones(ListView):
-#     model = Atencion
-#     template_name = 'core/listar_atenciones.html'
-#     context_object_name = 'atenciones' #es el nombre por el que se llamará el conjunto de objetos en el template(html)
-#     queryset = Atencion.objects.all()
+def listadoAtencionesSelf(request):
+    today = datetime.today()
+    id = request.user.id
+    queryset = request.GET.get("search")
+    print(id)
+    atenciones = Atencion.objects.filter(especialista=id)
+    if queryset:
+        atenciones = Atencion.objects.filter(
+            Q(dia_reservado__icontains = queryset)
+        ).distinct()
+    paginator=Paginator(atenciones,5)
+    page=request.GET.get('page')
+    atenciones = paginator.get_page(page)
+    return render(request,'core/listar_mis_atenciones.html',{'atenciones':atenciones})
 
 class actualizarAtencion(UpdateView):
     model = Atencion

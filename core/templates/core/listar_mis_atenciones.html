@@ -1,4 +1,4 @@
-{% extends 'core/vista_enfermera.html' %}
+{% extends 'core/vista_funcionario.html' %}
 {% load static %}
 
 <title>Listado de Atenciones</title>
@@ -20,33 +20,28 @@
             </div>
         </form>
     </nav>
-    <a href="{% url 'listar_reservas' %}" class="btn btn-success float-right">Crear Atención</a>
     <table style="margin-top: 16px;" class="table table-hover">
         
-        <th>N° Atención</th>
-        <th>Día reserva</th>
-        <th>Centro</th>
+        <th>Nro Atención</th>
         <th>Especialidad</th>
-        <th>Paciente</th>
-        <th>Especialista</th>
         <th>Box</th>
-        <th>Acciones</th>
+        <th>Paciente</th>
+        <th>Centro</th>
+        <th>Hora Atención</th>
+        <th>Opciones</th>
+
         <tbody>
             {% for atencion in atenciones %}
                 <tr>
-                    <td>{{ atencion.id}}</td>
-                    <td>{{ atencion.reserva.dia_reservado }}</td>
-                    <td>{% if atencion.reserva.sucursal == 1 %}Providencia{% elif atencion.reserva.sucursal == 2 %}San Bernardo{% elif atencion.reserva.sucursal == 3 %}La Serena{% else%}Temuco{% endif %}</td>
-                    <td>{% if atencion.reserva.especialidad == 1 %}Kinesiología{% elif atencion.reserva.especialidad == 2 %}Fonoaudiología{% else %}General{% endif %}</td>
-                    <td>{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}</td>
-                    <td>{{ atencion.especialista.nombre }} {{ atencion.especialista.apellido }}</td>
+                    <td>{{ atencion.id }}</td>
+                    <td>{{ atencion.reserva.especialidad }}</td>
                     <td>{{ atencion.box }}</td>
-
-
+                    <td>{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}</td>
+                    <td>{{ atencion.reserva.sucursal }}</td>
+                    <td>{{ atencion.reserva.dia_reservado }}</td>
                     <td>
-                        <a href="{% url 'send_mail_reserva' atencion.id %}"  class="btn btn-success">Enviar Correo</a>
-                        <a href="{% url 'editar_atencion' atencion.id %}" class="btn btn-warning">Modificar</a>
-                        <a href="{% url 'eliminar_atencion' atencion.id %}" class="btn btn-danger">Eliminar</a>
+                        <a href="#" class="btn btn-warning">Modificar</a>
+                        <a href="#" class="btn btn-danger">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -75,7 +70,7 @@
     </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="#" class="btn btn-success">Agregar</a>
+    <a href="{% url 'crear_reservas' %}" class="btn btn-success">Agregar</a>
 {% endif %}
 
 {% endblock panel %}
