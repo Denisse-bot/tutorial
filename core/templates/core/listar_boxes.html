@@ -7,7 +7,7 @@
 {% block panel %}
 
 {% if boxes %}
-    <nav class="navbar navbar-light float-left" style="width: 50%;">
+    <!-- <nav class="navbar navbar-light float-left" style="width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
@@ -19,7 +19,8 @@
                 </div>
             </div>
         </form>
-    </nav>
+    </nav> -->
+    <h3 style="margin-bottom:24px;text-align:-webkit-center;">Registro de boxes sucursal {{ user.comuna }}</h3>
     <a href="{% url 'crear_box' %}" class="btn btn-success float-right">  Crear Box  </a>
     <table style="margin-top: 16px;" class="table table-hover">
         

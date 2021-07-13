@@ -1,37 +1,25 @@
 {% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
-<title>Listado de Usuarios</title>
+<title>Listado de Pacientes</title>
  
 
 {% block panel %}
 
 {% if usuarios %}
-<div style="display: flex;align-items: center;">
-    <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
-        <form class="form-inline" style="display:flex;" method="GET">
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input class="form-control mr-sm-2" type="text" id="search" placeholder="Buscar Usuario..." name="search" aria-label="search" value="{{ request.GET.search }}">
-                    <span class="input-group-list">
-                        <i class="icon icon-search"></i>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Buscar</button>
-                    </span>
-                </div>
-            </div>
-        </form>
-    </nav>
-    <div style="margin: 0 0 0 auto;">
-        <a href="{% url 'filtrar_etapa1' %}" class="btn btn-success">Primera Etapa</a>
-        <a href="{% url 'filtrar_etapa2' %}" class="btn btn-success">Segunda Etapa</a>
-        <a href="{% url 'filtrar_etapa3' %}" class="btn btn-success">Tercera Etapa</a>
-        <a href="{% url 'listar_pacientes' %}" class="btn btn-success">Todos</a>
+<h3 style="margin-bottom: 24px;">Registro de Pacientes sucursal {{ user.comuna }}</h3>
+<div style="display: flex;align-items: left;">
+    <div>
+        <a href="{% url 'filtrar_etapa1' %}" class="btn btn-primary">Primera Etapa</a>
+        <a href="{% url 'filtrar_etapa2' %}" class="btn btn-primary">Segunda Etapa</a>
+        <a href="{% url 'filtrar_etapa3' %}" class="btn btn-primary">Tercera Etapa</a>
+        <a href="{% url 'listar_pacientes' %}" class="btn btn-primary">Todos</a>
     </div>    
 </div>
 
    
 
-    <table style="margin-top: 60px;" class="table table-hover">
+    <table style="margin-top: 46px;" class="table table-hover">
         
         <th>Nombre Usuario</th>
         <th>Rut</th>
@@ -83,8 +71,9 @@
         </div>
     </div>
 {% else %}
-    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="{% url 'crear_usuario' %}" class="btn btn-success">Agregar</a>
+    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>    
+    <button class="btn btn-warning float-center" onclick="history.back()">Volver</button>
+
 {% endif %}
 
 {% endblock panel %}

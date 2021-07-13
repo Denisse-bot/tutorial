@@ -7,19 +7,15 @@
 {% block panel %}
 
 {% if reservas %}
-    <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
-        <form class="form-inline" style="display:flex;" method="GET">
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input class="form-control mr-sm-2" type="text" id="search" placeholder="Buscar Reserva..." name="search" aria-label="search" value="{{ request.GET.search }}">
-                    <span class="input-group-list">
-                        <i class="icon icon-search"></i>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Buscar</button>
-                    </span>
-                </div>
-            </div>
-        </form>
-    </nav>
+    <h3 style="margin-bottom: 24px;">Registro de reservas sucursal {{ user.comuna }}</h3>
+    <div style="display: flex;align-items: left;">
+        <div>
+            <a href="{% url 'listar_reservas_today' %}" class="btn btn-primary">Hoy</a>
+            <a href="{% url 'listar_reservas_fono' %}" class="btn btn-primary">Fonoaudiologos</a>
+            <a href="{% url 'listar_reservas_kine' %}" class="btn btn-primary">Kinesiologos</a>
+            <a href="{% url 'listar_reservas' %}" class="btn btn-primary">Todas</a>
+        </div>    
+    </div>
     <table style="margin-top: 16px;" class="table table-hover">
         
         <th>Especialidad</th>
@@ -70,7 +66,7 @@
     </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="{% url 'crear_reservas' %}" class="btn btn-success">Agregar</a>
+    <button class="btn btn-warning float-center" onclick="history.back()">Volver</button>
 {% endif %}
 
 {% endblock panel %}
