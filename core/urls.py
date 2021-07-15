@@ -56,6 +56,7 @@ urlpatterns = [
     path('listar_atenciones_self/',listadoAtencionesSelf, name='listar_atenciones_self'),
     path('listar_atenciones_self_today/',listadoAtencionesSelfToday, name='listar_atenciones_self_today'),
     path('eliminar_atencion/<int:id>',eliminarAtencion, name='eliminar_atencion'),
+    path('iniciar_atencion/<int:id>', iniciarAtencion, name='iniciar_atencion'),
 
     path('crear_box/',crearBox, name='crear_box'),
     path('listar_boxes/',listadoBoxes, name='listar_boxes'),

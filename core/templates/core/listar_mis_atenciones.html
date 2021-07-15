@@ -7,19 +7,6 @@
 {% block panel %}
 
 {% if atenciones %}
-    <!-- <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
-        <form class="form-inline" style="display:flex;" method="GET">
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input class="form-control mr-sm-2" type="text" id="search" placeholder="Buscar Reserva..." name="search" aria-label="search" value="{{ request.GET.search }}">
-                    <span class="input-group-list">
-                        <i class="icon icon-search"></i>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Buscar</button>
-                    </span>
-                </div>
-            </div>
-        </form>
-    </nav> -->
     <h3 style="margin-bottom:24px;text-align:-webkit-center;">Registro de mis atenciones sucursal {{ user.comuna }}</h3>
 
     <table style="margin-top: 16px;" class="table table-hover">
@@ -44,6 +31,7 @@
                     <td>
                         <a href="#" class="btn btn-warning">Modificar</a>
                         <a href="#" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'iniciar_atencion' atencion.id %}" class="btn btn-primary">Iniciar Atencion</a>
                     </td>
                 </tr>
             {% endfor %}

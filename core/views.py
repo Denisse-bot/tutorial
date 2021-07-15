@@ -20,7 +20,7 @@ from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
-from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm, EspecialidadForm
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm, EspecialidadForm, ModifyUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -78,7 +78,6 @@ def crearEspecialidad(request):
             return redirect('listar_especialidad')
     else:
         especialidad_form = EspecialidadForm()
-        print('tupoto')
     return render(request,'core/crear_especialidad.html',{'especialidad_form':especialidad_form})
 
 def listadoEspecialidades(request):
@@ -334,18 +333,23 @@ def filtradoPacientes3(request):
 
 def editarUsuario(request,id):
     usuario = request.user.usuario_administrador
-    print(usuario)
     usuario_form = None
     error = None
     try:
         usuario = Usuario.objects.get(id = id)
+        print(usuario)
+        password = usuario.password
+        print(password)
         if request.method == 'GET':
-            usuario_form = UsuarioForm(instance=usuario)
+            usuario_form = ModifyUser(instance=usuario)            
         else:
-            usuario_form = UsuarioForm(request.POST, instance=usuario)
+            usuario_form = ModifyUser(request.POST, instance=usuario)
+            print(usuario_form.errors.as_json(),'error')
+            #print(request.POST)
             if usuario_form.is_valid():
+                print('debug')
                 usuario_form.save()
-            return redirect('listar_pacientes')
+                return redirect('listar_pacientes')
     except ObjectDoesNotExist as e:
         error = e
 
@@ -578,17 +582,27 @@ class actualizarAtencion(UpdateView):
     form_class = AtencionForm
     success_url = reverse_lazy('core:listar_atenciones')
 
-def insumo(request):
+def iniciarAtencion(request,id):
+    atencion = Atencion.objects.get(id = id)
+    usuario = atencion.reserva.usuario
+    print(usuario)
+    insumos = allInsumos().get('consultas')
+    print(insumos)
+    return render(request, 'core/iniciar_atencion.html', {'usuario':usuario,'insumos':insumos})
+
+def allInsumos():
     from django.db import connection
     with connection.cursor() as cursor:
-        #cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO") vista original
-        cursor.execute("SELECT ID,NOMBRE,ESPECIALIDAD,STOCK FROM INSUMO")
+        cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO")
         rawData = cursor.fetchall()
         result = []
         for r in rawData:
             result.append(list(r))
         contexto = {'consultas': result }
-    return render(request, 'core/insumo.html', contexto)
+    return contexto
+
+def insumo(request):
+    return render(request, 'core/insumo.html', allInsumos())
 
 
 # #revisar como hacer triggers y updates
