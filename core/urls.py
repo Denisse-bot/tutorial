@@ -29,6 +29,7 @@ urlpatterns = [
     path('editar_usuario/<int:id>',editarUsuario,name='editar_usuario'),
     path('editar_self_usuario',editar_self_usuario,name='editar_self_usuario'),    
     path('eliminar_usuario/<int:id>',eliminarUsuario, name = 'eliminar_usuario'),
+    path('eliminar_funcionario/<int:id>',eliminarFuncionario, name = 'eliminar_funcionario'),
 
     path('crear_sucursal/', crearSucursal, name='crear_sucursal'),
     path('listar_sucursales/', listadoSucursales, name='listar_sucursales'),
@@ -61,6 +62,8 @@ urlpatterns = [
 
     path('crear_box/',crearBox, name='crear_box'),
     path('listar_boxes/',listadoBoxes, name='listar_boxes'),
+    path('listar_boxes_kine/',listadoBoxesKine, name='listar_boxes_kine'),
+    path('listar_boxes_fono/',listadoBoxesFono, name='listar_boxes_fono'),
     path('editar_box/<int:id>',editarBox, name='editar_box'),
     path('eliminar_box/<int:id>',eliminarAtencion,name='eliminar_box')
 

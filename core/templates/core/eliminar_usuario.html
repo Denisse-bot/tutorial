@@ -12,14 +12,14 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Usuario</h1>
+  <h1 style="margin: 70px 0 10px 0px;">Eliminar Registro de Usuario</h1>
 
   <form method="POST">
     {% csrf_token %}
-    <h2>¿Estas seguro de eliminar el usuario {{usuario.nombre}} {{usuario.apellido}}?</h2>
+    <h2>¿Estas seguro de eliminar el Usuario: {{usuario.nombre}} {{usuario.apellido}}?</h2>
 
-    <button type="submit" class="btn btn-error float-right">Eliminar</button>
-    <a href="{% url 'listar_usuarios' %}">Cancelar</a>
+    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
+    <button class="btn btn-warning float-left" onclick="history.back()">Cancelar</button>
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->

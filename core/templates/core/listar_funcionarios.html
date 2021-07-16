@@ -39,7 +39,7 @@
                     <td>{{ usuario.comuna }}</td>
                     <td>
                         <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning">Modificar</a>
-                        <a href="{% url 'eliminar_usuario' usuario.id%}" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'eliminar_funcionario' usuario.id%}" class="btn btn-danger">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}

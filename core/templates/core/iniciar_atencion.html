@@ -27,6 +27,7 @@
         <div class="card-header">Datos del Paciente</div>
         <div class="card-body">
           <p class="card-title">Nombre: {{ usuario.nombre }}  {{ usuario.apellido }}</p>
+          <p class="card-text">Especialidad: {{ usuario.email }}</p>
           <p class="card-text">Especialidad: {{ usuario.especialidad }}</p>
           <p class="card-text">Fecha nacimiento: {{ usuario.fecha_nacimiento }}</p>
           <p class="card-text">Etapa: {% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</p>

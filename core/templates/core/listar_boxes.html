@@ -21,6 +21,9 @@
         </form>
     </nav> -->
     <h3 style="margin-bottom:24px;text-align:-webkit-center;">Registro de boxes sucursal {{ user.comuna }}</h3>
+    <a href="{% url 'listar_boxes_fono' %}" class="btn btn-primary float-left" style="margin-right:4px;">Fonoaudiología</a>
+    <a href="{% url 'listar_boxes_kine' %}" class="btn btn-primary float-left" style="margin-right: 4px;">Kinesiología</a>
+    <a href="{% url 'listar_boxes' %}" class="btn btn-primary float-left">Todos</a>
     <a href="{% url 'crear_box' %}" class="btn btn-success float-right">  Crear Box  </a>
     <table style="margin-top: 16px;" class="table table-hover">
         
@@ -67,7 +70,7 @@
     </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="{% url 'crear_box' %}" class="btn btn-success">Agregar</a>
+    <button class="btn btn-warning float-center" onclick="history.back()">Volver</button>
 {% endif %}
 
 {% endblock panel %}

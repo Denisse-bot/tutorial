@@ -12,14 +12,14 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Atencion</h1>
+  <h1 style="margin: 70px 0 0 0px;">Registro de Atencion</h1>
 
   <form method="POST">
     {% csrf_token %}
-    <h2>¿Estas seguro de eliminar el registro de atencion {{atencion.reserva.dia_reservado }} {{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}?</h2>
+    <h2>¿Estas seguro de eliminar el registro de atencion del día: {{atencion.reserva.dia_reservado }} , Paciente: {{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}?</h2>
 
-    <button type="submit" class="btn btn-error float-right">Eliminar</button>
-    <a href="{% url 'listar_reservas' %}">Cancelar</a>
+    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
+    <a href="{% url 'listar_atenciones' %}" class="btn btn-warning float-left">Cancelar</a>
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
