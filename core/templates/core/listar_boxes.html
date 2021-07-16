@@ -7,7 +7,7 @@
 {% block panel %}
 
 {% if boxes %}
-    <nav class="navbar navbar-light float-left" style="width: 50%;">
+    <!-- <nav class="navbar navbar-light float-left" style="width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
@@ -19,7 +19,8 @@
                 </div>
             </div>
         </form>
-    </nav>
+    </nav> -->
+    <h3 style="margin-bottom:24px;text-align:-webkit-center;">Registro de boxes sucursal {{ user.comuna }}</h3>
     <a href="{% url 'crear_box' %}" class="btn btn-success float-right">  Crear Box  </a>
     <table style="margin-top: 16px;" class="table table-hover">
         
@@ -28,12 +29,11 @@
         <th>Especialidad</th>
         <th>Centro Atención</th>
         <th>Opciones</th>
-
         <tbody style="vertical-align:middle">
             {% for box in boxes %}
                 <tr>
                     <td>{{ box.id }}</td>
-                    {% if box.estado == 1 %}<td style="background-color: darkgreen;">Disponible</td>{% elif box.estado == 2 %} <td style="background-color: darkred;">En atención</td> {% elif box.estado == 3 %} <td style="background-color: darkorange;">En mantención</td> {% else %}<td style="background-color: darkgrey;">No disponible, deshabilitada</td>{% endif %}
+                    {% if box.estado == 1 %}<td style="background-color:darkgreen;opacity:0.8;color:white;font-weight:800;">Disponible</td>{% elif box.estado == 2 %} <td style="background-color:darkred;opacity:0.8;color:white;font-weight:800;">En atención</td> {% elif box.estado == 3 %} <td style="background-color:darkorange;opacity:0.8;color:white;font-weight:800;">En mantención</td> {% else %}<td style="background-color:darkgrey;opacity:0.8;color:white;font-weight:800;">No disponible, deshabilitada</td>{% endif %}
                     <td>{{ box.especialidad }}</td>
                     <td>{{ box.sucursal }}</td>
                     

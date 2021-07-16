@@ -1,8 +1,8 @@
-{% extends 'core/vista_enfermera.html' %}
+{% extends 'core/vista_usuario.html' %}
 {% load static %}
 
 
-<title>Modificar Datos</title>
+<title>Modificar Mis Datos</title>
 
 
 {% block panel %}
@@ -13,8 +13,8 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 16px 0 0 0px;">Datos</h1>
-  <h2>Actualiza los datos de los pacientes en nuestra plataforma para garantizar su atención</h2>
+  <h1 style="margin: 16px 0 0 0px;">Mis Datos</h1>
+  <h2>Actualiza tus datos en nuestra plataforma para garantizar la atención</h2>
 
   <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
     {% csrf_token %}

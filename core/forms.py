@@ -137,6 +137,87 @@ class UsuarioForm(forms.ModelForm):
         return user
 
 
+class ModifyUser(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = [
+        'username',
+        'nombre',
+        'apellido',
+        'rut',
+        'fecha_nacimiento',
+        'email',
+        'direccion',
+        'nro_direccion',
+        'comuna',
+        'especialidad',
+        'etapa',
+        'usuario_administrador'
+        ]
+        widgets = {
+            'username': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su nombre de usuario',
+                }
+            ),
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su nombre',
+                }
+            ),
+            'apellido': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su apellido',
+                }
+            ),
+            'rut': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su Rut: 12.345.678-9',
+                }            
+            ),
+            'fecha_nacimiento':forms.DateInput(format='%d/%m/%Y'
+            ,attrs={
+                'class': 'form-class',
+                'placeholder': '01/12/1990'
+            }
+            ),
+            'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su email',
+                }
+            ),
+            'direccion': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su dirección',
+                }
+            ),
+            'nro_direccion': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder':'Ingrese su nro de direccion',
+                }
+            ),
+            'etapa': forms.Select(
+                attrs={
+                    'class': 'form-control'                    
+                }
+            ),
+            'usuario_administrador': forms.HiddenInput(
+            ),
+        }
+    def save(self,commit = True):
+        user = super().save(commit = False)
+        if commit:
+            user.save()
+        return user
+
+
 class EspecialidadForm(forms.ModelForm):
     class Meta:
         model = Especialidad
@@ -159,7 +240,9 @@ class ReservaForm(forms.ModelForm):
         model = Reserva
         fields = [
             'dia_reservado',
-            'usuario'
+            'usuario',
+            'sucursal',
+            'especialidad'
         ]
         widgets = {
             'dia_reservado':forms.DateTimeInput(format='%d/%m/%Y %H:%M'
@@ -171,6 +254,10 @@ class ReservaForm(forms.ModelForm):
 
             'usuario': forms.HiddenInput(
             ),
+            'sucursal': forms.HiddenInput(
+            ),
+            'especialidad': forms.HiddenInput(
+            )
         }
 
 class BoxesForm(forms.ModelForm):

@@ -7,19 +7,7 @@
 {% block panel %}
 
 {% if sucursales %}
-    <nav class="navbar navbar-light float-left" style="display: flow-root;width: 50%;">
-        <form class="form-inline" style="display:flex;" method="GET">
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input class="form-control mr-sm-2" type="text" id="search" placeholder="Buscar Sucursal..." name="search" aria-label="search" value="{{ request.GET.search }}">
-                    <span class="input-group-list">
-                        <i class="icon icon-search"></i>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Buscar</button>
-                    </span>
-                </div>
-            </div>
-        </form>
-    </nav>
+    <h3 style="margin-bottom:24px;text-align:-webkit-center;">Registro de Sucursales</h3>
     <a href="{% url 'crear_sucursal' %}" class="btn btn-success float-right">Crear Sucursal</a>
     <table style="margin-top: 16px;" class="table table-hover">
         
