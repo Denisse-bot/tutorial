@@ -191,8 +191,8 @@ class Atencion(models.Model):
     reserva = models.OneToOneField(Reserva, on_delete=CASCADE)
     especialista = models.ForeignKey(Usuario, on_delete=CASCADE)
     box = models.ForeignKey(Box, on_delete=CASCADE)
-    #extendida = models.BooleanField(default=False)
-    #comentarios = models.Charfield()
+    extendida = models.BooleanField(default=False)
+    comentarios = models.TextField(max_length=300)
     
     class Meta:
         verbose_name = 'Atencion'

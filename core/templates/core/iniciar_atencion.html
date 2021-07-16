@@ -119,7 +119,9 @@
         <input type="checkbox" class="custom-control-input" name="extendida" id="extendida">
         <label class="custom-control-label" for="extendida">Presiona para extender atención</label>
       </div>
-    <button type="submit" class="btn btn-success float-right">Guardar Atención</button>
+    
+    <a href="{% url 'notificacion_box' atencion.id %}" type="submit" class="btn btn-success float-right">Guardar Atención</a>
+    <!-- <button type="submit" class="btn btn-success float-right">Guardar Atención</button> -->
     <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a>
 
 </div>
