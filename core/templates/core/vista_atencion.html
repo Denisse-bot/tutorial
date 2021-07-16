@@ -1,0 +1,92 @@
+{% extends 'core/vista_funcionario.html' %}
+{% load static %}
+
+
+<title style="margin-bottom: 24px;">Atención</title>
+
+
+{% block panel %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<body>
+
+<div class="container">
+  <h1 style="margin: 8px 0 0 0px;">Registro de Atención</h1>
+  <form action="" class="needs-validation" method="GET"> 
+      {% csrf_token %}
+        {% if atencion %}
+      <div class="form-group">
+        <label for="especialista">Nombre del especialista que realizó la atención:</label>
+        <select value=option class="form-control" id="especialista" disabled name="especialista" >
+          <option value='{{ atencion.especialista.nombre }} {{ atencion.especialista.apellido }}' placeholder="selecione el especialista">{{ atencion.especialista.nombre }} {{ atencion.especialista.apellido }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="box">Fecha y Hora de la atencion:</label>
+        <select value=option class="form-control" id="box" disabled name="box" >
+          <option value='{{ atencion.reserva.dia_reservado }}' placeholder="selecione su centro mas cercano">{{ atencion.reserva.dia_reservado }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="box">Nombre del Paciente:</label>
+        <select value=option class="form-control" id="box" disabled name="box" >
+          <option value='{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}' placeholder="selecione su centro mas cercano">{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="box">Especialidad:</label>
+        <select value=option class="form-control" id="box" disabled name="box" >
+          <option value='{{ atencion.reserva.especialidad }}' placeholder="selecione su centro mas cercano">{{ atencion.reserva.especialidad }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="box">Box:</label>
+        <select value=option class="form-control" id="box" disabled name="box" >
+          <option value='{{ atencion.box }}' placeholder="selecione su centro mas cercano">{{ atencion.box }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="box">Se Extendió la terapia?:</label>
+        <select value=option class="form-control" id="box" disabled name="box" >
+          <option value='{{ atencion.extendida }}' placeholder="selecione su centro mas cercano">{% if atencion.extendida == False %} No {% elif atencion.extendida == True %} Si {% endif %}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="box">Observaciones de la atención:</label>
+        <select value=option class="form-control" id="box" disabled name="box" >
+          <option value='{{ atencion.comentarios }}' placeholder="selecione su centro mas cercano">{{ atencion.comentarios }}</option>
+        </select>
+      </div>
+      <a href="{% url 'listar_atenciones_self' %}" class="btn btn-warning">Volver</a>
+      {% endif%}
+
+  </form>
+</div>
+<!-- <script src="{% static 'js/base.js' %}"></script> -->
+
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
+
+{% endblock panel %}
