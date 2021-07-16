@@ -7,7 +7,7 @@
 {% block panel %}
 
 {% if atenciones %}
-    <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
+    <!-- <nav class="navbar navbar-light" style="display: flow-root;width: 50%;">
         <form class="form-inline" style="display:flex;" method="GET">
             <div id="custom-search-input">
                 <div class="input-group col-md-12">
@@ -19,7 +19,10 @@
                 </div>
             </div>
         </form>
-    </nav>
+    </nav> -->
+    <h3>Registro de atenciones sucursal {{ user.comuna }}</h3>
+    <a href="{% url 'listar_atenciones' %}" class="btn btn-primary float-left">Listar Todas</a>
+    <a href="{% url 'listar_atenciones_today' %}" class="btn btn-primary float-left" style="margin-left: 8px;">Listar Hoy</a>
     <a href="{% url 'listar_reservas' %}" class="btn btn-success float-right">Crear Atención</a>
     <table style="margin-top: 16px;" class="table table-hover">
         
@@ -44,9 +47,9 @@
 
 
                     <td>
-                        <a href="{% url 'send_mail_reserva' atencion.id%}"  class="btn btn-success">Enviar Correo</a>
-                        <a href="{% url 'editar_atencion' atencion.id%}" class="btn btn-warning">Modificar</a>
-                        <a href="{% url 'eliminar_atencion' atencion.id%}" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'send_mail_reserva' atencion.id %}"  class="btn btn-success">Enviar Correo</a>
+                        <a href="{% url 'editar_atencion' atencion.id %}" class="btn btn-warning">Modificar</a>
+                        <a href="{% url 'eliminar_atencion' atencion.id %}" class="btn btn-danger">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -75,7 +78,7 @@
     </div>
 {% else %}
     <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
-    <a href="#" class="btn btn-success">Agregar</a>
+    <button class="btn btn-warning float-center" onclick="history.back()">Volver</button>
 {% endif %}
 
 {% endblock panel %}
