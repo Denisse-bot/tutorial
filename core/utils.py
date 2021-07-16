@@ -54,8 +54,6 @@ def send_mail_notificacion(atencion, id):
     centro = atenciones.reserva.sucursal
     nombre= 'Personal Edudown'
     email = EMAIL_HOST_USER_TO
-    print(email)
-
     
     subject, from_mail, to = 'Confirmación Atención Médica Realizada','denisse.lyon@gmail.com',email
     text_context = '%s Hemos confirmado la atencion en el box ' % box
@@ -66,7 +64,6 @@ def send_mail_notificacion(atencion, id):
         'box': box,
         'centro': centro
     })
-    print(msg_html)
     try:
         msg = EmailMultiAlternatives(subject, text_context, from_mail, [to])
         msg.attach_alternative(msg_html, "text/html")
