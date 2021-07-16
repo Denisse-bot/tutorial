@@ -13,7 +13,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
 
-<div class="container">
+<div >
   <h2 style="text-align: center">Inicia la atención medica</h2>
 
 <!-- {% if usuario %}
@@ -21,20 +21,21 @@
     {{ usuario.nombre }}
 </div>
 {% endif %} -->
-<div style="display: flex;">
-    <div class="card bg-light mb-3" style="max-width: 18rem;margin:0;">
+<div style="grid-template-columns: auto repeat(3, auto);display: grid;grid-template-rows: 50px auto 200px;">
+    <div class="card bg-light mb-3" style="max-width: 500px;margin:0;display: inline-table;height: auto;">
         {% if usuario %}
         <div class="card-header">Datos del Paciente</div>
         <div class="card-body">
-          <h5 class="card-title">Nombre:{{ usuario.nombre }}  {{ usuario.apellido }}</h5>
-          <p class="card-text">Especialidad:{{ usuario.especialidad }}</p>
-          <p class="card-text">Fecha nacimiento:{{ usuario.fecha_nacimiento }}</p>
-          <p class="card-text">Etapa:{{ usuario.etapa }}</p>
+          <p class="card-title">Nombre: {{ usuario.nombre }}  {{ usuario.apellido }}</p>
+          <p class="card-text">Especialidad: {{ usuario.especialidad }}</p>
+          <p class="card-text">Fecha nacimiento: {{ usuario.fecha_nacimiento }}</p>
+          <p class="card-text">Etapa: {% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</p>
+
               
         </div>
         {% endif %}
     </div>
-    <div>
+    <div style="grid-column-start: 2">
         {% if insumos %}
         <table style="margin-top:16px;margin-left: 16px;margin-right: 16px;" class="table table-hover">
             <thead>
@@ -85,15 +86,16 @@
                 </div>
             </div>
         </div> -->
-        {% endif %}
     </div>
-    
-    <div style="align-items: flex-end; margin-left: 24px;">
-        <div class="card table-bordered mb-3" style="max-width: 18rem;">
+ 
+<form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
+  {% csrf_token %} 
+    <div style="margin-left: 24px;display:block;margin: 0 0 0 auto;">
+        <div class="card table-bordered mb-3" style="max-width: 24rem; min-width: 330px;min-height: 300px;">
             <div class="card-header bg-transparent border-success">Observaciones de la Atención:</div>
             <div class="card-body text-success">
                 <div>
-                    <input type="text">Ingrese aquí sus comentarios
+                    <input type="text" name="comentarios" id="comentarios">
                 </div>
                 
             </div>
@@ -107,17 +109,29 @@
         <h2>Tiempo restante de la atención</h2>
       </div>
       <div class="row justify-content-center border rounded-pill" id="countdown">
-  
       </div>
       <div class="row justify-content-center mt-2">
         <p>
             Recuerda si la sesión se alarga, presionar extender atención.
         </p>
       </div>
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" name="extendida" id="extendida">
+        <label class="custom-control-label" for="extendida">Presiona para extender atención</label>
+      </div>
+    
+    <a href="{% url 'notificacion_box' atencion.id %}" type="submit" class="btn btn-success float-right">Guardar Atención</a>
+    <!-- <button type="submit" class="btn btn-success float-right">Guardar Atención</button> -->
+    <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a>
+
 </div>
 
-<form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
-    {% csrf_token %}
+
+
+</form>
+{% endif %}
+<!-- <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
+    {% csrf_token %} -->
           <!-- <div class="row">
             <div class="col-md-12">
                 <label class="col-4 control-label"> {{ usuario_form.username.label }}               
@@ -174,19 +188,19 @@
               <span class="glyphicon glyphicon-search"></span> Submit
           </button> -->
 
-    {% if error %}
+    <!-- {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
         {{ usuario_form.as_p }}
-    {% endif%}
+    {% endif%} -->
     
-    <button type="submit" class="btn btn-success float-right">Extender Atención</button>
+    <!-- <button type="submit" class="btn btn-success float-right">Guardar Atención</button> -->
 
     <!-- <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a> -->
 
-
+<!-- 
 </form>
-</div>
+</div> -->
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
 <script src="{% static 'js/temporizador.js' %}"></script>
 

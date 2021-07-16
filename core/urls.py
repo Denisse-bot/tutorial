@@ -1,13 +1,14 @@
 from os import name
 from django.urls import path
 from .views import * 
-from .utils import send_mail_reserva
+from .utils import send_mail_reserva, send_mail_notificacion
 
 
 urlpatterns = [
     path('', home.as_view(), name = 'home'),
     path('robotos', robotos.as_view(), name='robotos'),
     path('send_mail_reserva/<int:id>', send_mail_reserva, name= 'send_mail_reserva'),
+    path('notificacion_box/<int:id>',send_mail_notificacion, name='notificacion_box'),
     path('vista_enfermera/', VistaEnfermera.as_view(),name='vista_enfermera'),
     path('vista_funcionario/',VistaFuncionario.as_view(),name='vista_funcionario'),
     path('vista_usuario/', VistaUsuario.as_view(),name='vista_usuario'),
