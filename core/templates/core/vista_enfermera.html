@@ -46,7 +46,7 @@
     {% block panel %}
     <h5 class="card-title">Bienvenid@ {{ user.get_username }} a la gestión del sistema de agendamiento de box atención</h5>
     <p class="card-text">en este panel puedes encontrar las opciones disponibles.</p>
-    <a href="#" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Atención</a>
+    <a href="{% url 'listar_reservas'%}" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Atención</a>
     {% endblock panel %}
   </div>
 </div>

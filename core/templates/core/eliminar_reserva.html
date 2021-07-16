@@ -18,8 +18,8 @@
     {% csrf_token %}
     <h2>¿Estas seguro de eliminar la reserva {{reserva.dia_reservado}} {{reserva.usuario.apellido}}?</h2>
 
-    <button type="submit" class="btn btn-error float-right">Eliminar</button>
-    <a href="{% url 'listar_reservas' %}">Cancelar</a>
+    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
+    <a href="{% url 'listar_reservas' %}" class="btn btn-warning float-left">Cancelar</a>
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->
