@@ -549,6 +549,14 @@ def listadoAtencionesSelfToday(request):
     atenciones = paginator.get_page(page)
     return render(request,'core/listar_mis_atenciones_today.html',{'atenciones':atenciones})
 
+def visualizarAtencion(request,id):
+    atencion = Atencion.objects.get(id = id)
+    if request.method == 'GET':
+        atencion_form = AtencionForm(instance=atencion)
+    
+    return render(request,'core/vista_atencion.html',{'atencion_form':atencion_form, 'atencion':atencion})
+
+
 class actualizarAtencion(UpdateView):
     model = Atencion
     template_name = 'core/crear_atencion.html'
