@@ -23,13 +23,13 @@
 
     <div class="form-group">
       <label for="nombre">Nombre de Sucursal:</label>
-      <input type="text" class="form-control" id="nombre" placeholder="Nombre de sucursal" name="nombre" required>
+      <input type="text" class="form-control" id="nombre" minlength="3" maxlength="20"  placeholder="Nombre de sucursal" name="nombre" pattern="[a-z]{1,15}" required>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un nombre de sucursal válido.</div>
     </div>
     <div class="form-group">
       <label for="direccion">Direccion:</label>
-      <input type="text" class="form-control" id="direccion" placeholder="Ingrese la dirección del centro" name="direccion" required>
+      <input type="text" class="form-control" id="direccion" minlength="3" maxlength="50" placeholder="Ingrese la dirección del centro" name="direccion" required>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa una dirección válida.</div>
     </div>

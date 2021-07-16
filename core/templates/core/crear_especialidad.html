@@ -21,7 +21,7 @@
     {% else %}
       <div class="form-group">
         <label for="nombre">Nombre Especialidad:</label>
-        <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre de la especialidad" name="nombre" required>{{ especialidad }}
+        <input type="text" class="form-control" id="nombre" minlength="3" maxlength="20" placeholder="Ingrese el nombre de la especialidad" name="nombre" pattern="[a-z]{1,15}" required>{{ especialidad }}
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un dia de reserva válido.</div>
       </div>
