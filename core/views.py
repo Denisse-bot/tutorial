@@ -20,7 +20,7 @@ from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
-from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm, EspecialidadForm, ModifyUser
+from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm, EspecialidadForm, ModifyUser, iniciarAtencionForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -130,11 +130,6 @@ def crearSucursal(request):
 def listadoSucursales(request):
     queryset = request.GET.get("search")
     sucursales = Sucursal.objects.all()
-    if queryset:
-        sucursales = Sucursal.objects.filter(
-            Q(nombre__icontains = queryset[0]) |Q(direccion__icontains = queryset)
-        ).distinct()
-
     paginator=Paginator(sucursales,3)
     page=request.GET.get('page')
     sucursales = paginator.get_page(page)
@@ -222,13 +217,10 @@ def crearUsuario(request):
             sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
             especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
             usuario_form = UsuarioForm(request.POST)
-            print('este es el usuario')
             print(usuario_form.errors.as_json(),'error')
             if usuario_form.is_valid():
-                print('formulario valido')
                 usuario_form.cleaned_data['comuna']=sucursal
                 usuario_form.cleaned_data['especialidad']=especialidad
-                print(usuario_form)
                 usuario_form.save()
                 return redirect('login')
     else:
@@ -246,9 +238,7 @@ def crearFuncionario(request):
                 print(request.POST)
                 sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
                 especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
-                print(especialidad)
                 usuario_form = UsuarioForm(request.POST)
-                print(usuario_form)
                 if usuario_form.is_valid():
                     usuario_form.cleaned_data['comuna']=sucursal
                     usuario_form.cleaned_data['especialidad']=especialidad
@@ -450,16 +440,10 @@ def crearAtencion(request,id,especialidad, sucursal):
     fecha_hora = Reserva.objects.get(id=id)
     filter_temp = Atencion.objects.filter(reserva__dia_reservado=fecha_hora.dia_reservado)
     lista_ocupados = filter_temp.values_list('especialista__id')
-    print(lista_ocupados)
     lista_box = filter_temp.values_list('box__id')
-
-    print(fecha_hora.dia_reservado)
     especialidad = Especialidad.objects.filter(nombre=especialidad)
-    print(especialidad)
     sucursal = Sucursal.objects.get(nombre=sucursal)
     especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True)).exclude(id__in=lista_ocupados)
-    print(especialistas)
-    print(sucursal)
     reservas = Reserva.objects.filter(id=id)
     boxes = Box.objects.filter(Q(especialidad__in=especialidad)&Q(estado__in='1')&Q(sucursal__nombre=sucursal)).exclude(id__in=lista_box)
     if request.method == 'POST':
@@ -584,11 +568,61 @@ class actualizarAtencion(UpdateView):
 
 def iniciarAtencion(request,id):
     atencion = Atencion.objects.get(id = id)
-    usuario = atencion.reserva.usuario
-    print(usuario)
+    atencion_form = None
+    error = None
     insumos = allInsumos().get('consultas')
     print(insumos)
-    return render(request, 'core/iniciar_atencion.html', {'usuario':usuario,'insumos':insumos})
+    try:
+        atencion_form = iniciarAtencionForm(request.POST, instance=atencion)
+        usuario = atencion.reserva.usuario
+        print(usuario)
+        if request.method == 'POST':
+            if not request.POST._mutable:
+                request.POST._mutable = True
+                print(request.POST)
+                if request.POST['extendida'] == 'on':
+                    request.POST['extendida']=True
+                    extendida=True
+
+                else:
+                    request.POST['extendida']=False
+                    extendida=False
+                print(request.POST['extendida'])
+                if atencion_form.is_valid():
+                    atencion_form.cleaned_data['especialista']=extendida
+                    print(atencion_form)
+                    atencion_form.save()
+                    return redirect('listar_atenciones_self_today')
+        else:
+            atencion_form = iniciarAtencionForm()
+    except ObjectDoesNotExist as e:
+        error = e
+    return render(request, 'core/iniciar_atencion.html', {'usuario':usuario,'insumos':insumos,'atencion':atencion})
+
+# def editarUsuario(request,id):
+#     usuario = request.user.usuario_administrador
+#     usuario_form = None
+#     error = None
+#     try:
+#         usuario = Usuario.objects.get(id = id)
+#         print(usuario)
+#         password = usuario.password
+#         print(password)
+#         if request.method == 'GET':
+#             usuario_form = ModifyUser(instance=usuario)            
+#         else:
+#             usuario_form = ModifyUser(request.POST, instance=usuario)
+#             print(usuario_form.errors.as_json(),'error')
+#             #print(request.POST)
+#             if usuario_form.is_valid():
+#                 print('debug')
+#                 usuario_form.save()
+#                 return redirect('listar_pacientes')
+#     except ObjectDoesNotExist as e:
+#         error = e
+
+#     return render(request, 'core/modificar_usuario.html',{'usuario_form':usuario_form,'error':error})
+
 
 def allInsumos():
     from django.db import connection

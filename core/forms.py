@@ -319,3 +319,30 @@ class AtencionForm(forms.ModelForm):
                 }
             )
         }
+
+class iniciarAtencionForm(forms.ModelForm):
+    class Meta:
+        model = Atencion
+        fields = [
+            'extendida',
+            'comentarios'
+        ]
+        widgets = {
+            'extendida': forms.RadioSelect(),
+            'comentarios': forms.Textarea(
+            )
+        }
+
+# class iniciarAtencionForm(forms.ModelForm):
+    
+#     class Meta: 
+#         model = Atencion
+#         fields = [
+#             'extendida',
+#             'comentarios'
+#         ]
+#         widgets = {
+#             'extendida': forms.BooleanField(),
+#             'comentarios': forms.Textarea(
+#             )
+#         }
