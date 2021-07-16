@@ -1,0 +1,68 @@
+{% extends 'core/vista_funcionario.html' %}
+{% load static %}
+
+<title>Listado de Atenciones</title>
+ 
+
+{% block panel %}
+
+{% if atenciones %}
+    <h3 style="margin-bottom:24px;text-align:-webkit-center;">Registro de mis atenciones sucursal {{ user.comuna }}</h3>
+
+    <table style="margin-top: 16px;" class="table table-hover">
+        
+        <th>Nro Atención</th>
+        <th>Especialidad</th>
+        <th>Box</th>
+        <th>Paciente</th>
+        <th>Centro</th>
+        <th>Hora Atención</th>
+        <th>Opciones</th>
+
+        <tbody>
+            {% for atencion in atenciones %}
+                <tr>
+                    <td>{{ atencion.id }}</td>
+                    <td>{{ atencion.reserva.especialidad }}</td>
+                    <td>{{ atencion.box }}</td>
+                    <td>{{ atencion.reserva.usuario.nombre }} {{ atencion.reserva.usuario.apellido }}</td>
+                    <td>{{ atencion.reserva.sucursal }}</td>
+                    <td>{{ atencion.reserva.dia_reservado }}</td>
+                    <td>
+                        <!-- <a href="#" class="btn btn-warning">Modificar</a>
+                        <a href="#" class="btn btn-danger">Eliminar</a> -->
+                        <a href="{% url 'iniciar_atencion' atencion.id %}" class="btn btn-primary">Iniciar Atencion</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-left">
+                {% if atenciones.has_previous %}
+                    <div class="clearfix">
+                        <a href="?page={{ atenciones.previous_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-left">Anterior</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-right">
+                {% if atenciones.has_next %}
+                    <div class="clearfix">
+                        <a href="?page={{ atenciones.next_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-right">Siguiente</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% else %}
+<div style="margin: 0 auto;">
+    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
+    <button class="btn btn-warning float-center" onclick="history.back()">Volver</button>
+</div>
+{% endif %}
+
+{% endblock panel %}

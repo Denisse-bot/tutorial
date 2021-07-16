@@ -1,8 +1,8 @@
-{% extends 'core/vista_usuario.html' %}
+{% extends 'core/vista_funcionario.html' %}
 {% load static %}
 
 
-<title style="margin-bottom: 24px;">Registro Atenciones</title>
+<title>Modificar Mis Datos</title>
 
 
 {% block panel %}
@@ -13,18 +13,27 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Modifica la Atención</h1>
-  <h2>Puedes modificar la atención</h2>
-  <form action="" class="needs-validation" method="POST" novalidate>
+  <h1 style="margin: 16px 0 0 0px;">Mis Datos</h1>
+  {% if user.usuario_administrador == True %}
+  <h2>Actualiza tus datos en nuestra plataforma</h2>
+  {% else %}
+  <h2>Actualiza tus datos en nuestra plataforma para garantizar tu atención</h2>
+  {% endif %}
+
+
+  <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
     {% csrf_token %}
     {% if error %}
         <h4>{{ error }}</h4>
     {% else %}
-        {{ atencion_form.as_p }}
+        {{ usuario_form.as_p }}
     {% endif%}
 
+    <button class="btn btn-warning float-left" onclick="history.back()">Volver</button>
     <button type="submit" class="btn btn-success float-right">Registrar</button>
-    <a href="{% url 'listar_atenciones'%}" class="btn btn-warning float-left">Volver</a>
+    <!-- <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a> -->
+
+
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->

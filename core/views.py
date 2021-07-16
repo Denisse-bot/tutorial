@@ -1,4 +1,6 @@
+from logging import lastResort
 import django
+from datetime import date
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
 from django.core.files.base import ContentFile
@@ -19,25 +21,27 @@ from django.views.generic import TemplateView, ListView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from .forms import ReservaForm, UsuarioForm
 
-from .forms import BoxesForm, FormularioLogin, ReservaForm, UsuarioForm, SucursalesForm, EspecialidadForm
+from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from .mixins import SuperUsuarioMixin
-from django.utils.timezone import datetime 
+from django.utils.timezone import datetime
 
 # Create your views here.
 
 
-class VistaEnfermera(SuperUsuarioMixin,TemplateView):
+class VistaEnfermera(LoginRequiredMixin,SuperUsuarioMixin,TemplateView):
+
     template_name = 'core/vista_enfermera.html'
   
-class VistaUsuario(TemplateView):
+class VistaFuncionario(LoginRequiredMixin,TemplateView):
+    template_name = 'core/vista_funcionario.html'
+
+class VistaUsuario(LoginRequiredMixin,TemplateView):
     template_name = 'core/vista_usuario.html'
 
-# class VistaFuncionario(TemplateView):
-#     template_name = 'core/vista_funcionario.html'
 
 class Login(FormView):
     template_name = 'core/login.html'
@@ -69,38 +73,27 @@ class robotos(TemplateView):
 def crearEspecialidad(request):
     if request.method == 'POST':
         especialidad_form = EspecialidadForm(request.POST)
-        print(especialidad_form)
         if especialidad_form.is_valid():
             especialidad_form.save()
             return redirect('listar_especialidad')
     else:
         especialidad_form = EspecialidadForm()
-        print('tupoto')
     return render(request,'core/crear_especialidad.html',{'especialidad_form':especialidad_form})
 
 def listadoEspecialidades(request):
-    queryset = request.GET.get("search")
     especialidades = Especialidad.objects.all()
-    if queryset:
-        especialidades = Especialidad.objects.filter(
-            Q(nombre__icontains = queryset[0]) |Q(direccion__icontains = queryset)
-        ).distinct()
-
-    paginator=Paginator(especialidades,3)
+    paginator=Paginator(especialidades,5)
     page=request.GET.get('page')
     especialidades = paginator.get_page(page)
     return render(request,'core/listar_especialidad.html',{'especialidades':especialidades})
 
 def editarEspecialidad(request, id):
     especialidad = Especialidad.objects.get(id=id)
-    print(especialidad)
     if request.method =='GET':
         especialidad_form = EspecialidadForm(instance=especialidad)
-        print(especialidad_form)
     else:
         especialidad_form = EspecialidadForm(request.POST, instance=especialidad)
         if especialidad_form.is_valid():
-            print(especialidad_form)
             especialidad_form.save()
         return redirect('listar_especialidad')
     return render(request, 'core/modificar_especialidad.html', {'especialidad_form': especialidad_form})
@@ -116,23 +109,16 @@ def eliminarEspecialidad(request,id):
 def crearSucursal(request):
     if request.method == 'POST':
         sucursal_form = SucursalesForm(request.POST)
-        print(sucursal_form)
         if sucursal_form.is_valid():
             sucursal_form.save()
             return redirect('listar_sucursales')
     else:
         sucursal_form = SucursalesForm()
-        print('tupoto')
     return render(request,'core/crear_sucursal.html',{'sucursal_form':sucursal_form})
 
 def listadoSucursales(request):
     queryset = request.GET.get("search")
     sucursales = Sucursal.objects.all()
-    if queryset:
-        sucursales = Sucursal.objects.filter(
-            Q(nombre__icontains = queryset[0]) |Q(direccion__icontains = queryset)
-        ).distinct()
-
     paginator=Paginator(sucursales,3)
     page=request.GET.get('page')
     sucursales = paginator.get_page(page)
@@ -140,14 +126,11 @@ def listadoSucursales(request):
 
 def editarSucursal(request, id):
     sucursal = Sucursal.objects.get(id=id)
-    print(sucursal)
     if request.method =='GET':
         sucursales_form = SucursalesForm(instance=sucursal)
-        print(sucursales_form)
     else:
         sucursales_form = SucursalesForm(request.POST, instance=sucursal)
         if sucursales_form.is_valid():
-            print(sucursales_form)
             sucursales_form.save()
         return redirect('listar_sucursales')
     return render(request, 'core/modificar_sucursal.html', {'sucursales_form': sucursales_form})
@@ -178,13 +161,23 @@ def crearBox(request):
 
 def listadoBoxes(request):
     sucursal = request.user.comuna
-    queryset = request.GET.get("search")
     boxes = Box.objects.filter(sucursal=sucursal)
-    if queryset:
-        boxes = Box.objects.filter(
-            Q(estado__icontains = queryset) |Q(especialidad__icontains = queryset)
-        ).distinct()
+    paginator=Paginator(boxes,5)
+    page=request.GET.get('page')
+    boxes = paginator.get_page(page)
+    return render(request,'core/listar_boxes.html',{'boxes':boxes})
 
+def listadoBoxesKine(request):
+    sucursal = request.user.comuna
+    boxes = Box.objects.filter(sucursal=sucursal).filter(especialidad__nombre='Kinesiología')
+    paginator=Paginator(boxes,5)
+    page=request.GET.get('page')
+    boxes = paginator.get_page(page)
+    return render(request,'core/listar_boxes.html',{'boxes':boxes})
+
+def listadoBoxesFono(request):
+    sucursal = request.user.comuna
+    boxes = Box.objects.filter(sucursal=sucursal).filter(especialidad__nombre='Fonoaudiología')
     paginator=Paginator(boxes,5)
     page=request.GET.get('page')
     boxes = paginator.get_page(page)
@@ -220,13 +213,10 @@ def crearUsuario(request):
             sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
             especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
             usuario_form = UsuarioForm(request.POST)
-            print('este es el usuario')
             print(usuario_form.errors.as_json(),'error')
             if usuario_form.is_valid():
-                print('formulario valido')
                 usuario_form.cleaned_data['comuna']=sucursal
                 usuario_form.cleaned_data['especialidad']=especialidad
-                print(usuario_form)
                 usuario_form.save()
                 return redirect('login')
     else:
@@ -241,12 +231,9 @@ def crearFuncionario(request):
                 request.POST._mutable = True
                 # forma de acceder y modificar el diccionario para el formulario 
                 request.POST['usuario_administrador'] = True
-                print(request.POST)
                 sucursal = Sucursal.objects.filter(id=request.POST['comuna'])
                 especialidad = Especialidad.objects.filter(id=request.POST['especialidad'])
-                print(especialidad)
                 usuario_form = UsuarioForm(request.POST)
-                print(usuario_form)
                 if usuario_form.is_valid():
                     usuario_form.cleaned_data['comuna']=sucursal
                     usuario_form.cleaned_data['especialidad']=especialidad
@@ -257,48 +244,88 @@ def crearFuncionario(request):
     return render(request,'core/crear_funcionario.html',{'usuario_form':usuario_form, 'sucursales':sucursales,'especialidades':especialidades})
 
 def listadoFuncionarios(request):
+    id = request.user.id
     comuna = request.user.comuna
-    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=True)
-    queryset = request.GET.get("search")
-    if queryset:
-        usuarios = Usuario.objects.filter(
-            Q(email__icontains = queryset) |Q(nombre__icontains = queryset)|Q(apellido__icontains = queryset)|Q(rut__icontains = queryset)|Q(comuna__icontains = queryset)
-        ).distinct()
-    #Revisar que pasó con la query que desapareció, corregir!.
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=True).exclude(id=id).order_by('id')
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_funcionarios.html',{'usuarios':usuarios})
 
-    paginator=Paginator(usuarios,3)
+#filtrado de especialidad a los funcionarios
+def filtrar_especialidad1(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=True).filter(especialidad__nombre='Enfermera').order_by('id')
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_funcionarios.html',{'usuarios':usuarios})
+
+def filtrar_especialidad2(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=True).filter(especialidad__nombre='Kinesiología').order_by('id')
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_funcionarios.html',{'usuarios':usuarios})
+
+def filtrar_especialidad3(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=True).filter(especialidad__nombre='Fonoaudiología').order_by('id')
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_funcionarios.html',{'usuarios':usuarios})
+
+def listadoPacientes(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).order_by('id')
+    paginator=Paginator(usuarios,5)
     page=request.GET.get('page')
     usuarios = paginator.get_page(page)
     return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
 
-def listadoPacientes(request):
+def filtradoPacientes1(request):
     comuna = request.user.comuna
-    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False)
-    #Revisar que pasó con la query que desapareció, corregir!.
-    queryset = request.GET.get("search")
-    if queryset:
-        usuarios = Usuario.objects.filter(
-            Q(email__icontains = queryset) |Q(nombre__icontains = queryset)|Q(apellido__icontains = queryset)|Q(rut__icontains = queryset)|Q(comuna__icontains = queryset)
-        ).distinct()
-    paginator=Paginator(usuarios,3)
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).filter(etapa=1).order_by('id')
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+
+def filtradoPacientes2(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).filter(etapa=2).order_by('id')
+    fecha_nacimiento = usuarios
+    paginator=Paginator(usuarios,5)
+    page=request.GET.get('page')
+    usuarios = paginator.get_page(page)
+    return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
+
+def filtradoPacientes3(request):
+    comuna = request.user.comuna
+    usuarios = Usuario.objects.filter(comuna=comuna).filter(usuario_administrador=False).filter(etapa=3).order_by('id')
+    fecha_nacimiento = usuarios
+    paginator=Paginator(usuarios,5)
     page=request.GET.get('page')
     usuarios = paginator.get_page(page)
     return render(request,'core/listar_usuarios.html',{'usuarios':usuarios})
 
 def editarUsuario(request,id):
     usuario = request.user.usuario_administrador
-    print(usuario)
     usuario_form = None
     error = None
     try:
         usuario = Usuario.objects.get(id = id)
         if request.method == 'GET':
-            usuario_form = UsuarioForm(instance=usuario)
+            usuario_form = ModifyUser(instance=usuario)            
         else:
-            usuario_form = UsuarioForm(request.POST, instance=usuario)
+            usuario_form = ModifyUser(request.POST, instance=usuario)
+            print(usuario_form.errors.as_json(),'error')
             if usuario_form.is_valid():
+                print('debug')
                 usuario_form.save()
-            return redirect('listar_pacientes')
+                return redirect('listar_pacientes')
     except ObjectDoesNotExist as e:
         error = e
 
@@ -308,19 +335,28 @@ def editar_self_usuario(request):
     id = None
     id = request.user.id
     usuario = Usuario.objects.get(id=id)
-    print(usuario)
-
     if request.method == 'GET':
-        usuario_form = UsuarioForm(instance=usuario)
-        print(usuario_form)
+        usuario_form = ModifyUserSelf(instance=usuario)
     else:
-        usuario_form = UsuarioForm(request.POST, instance=usuario)
+        usuario_form = ModifyUserSelf(request.POST, instance=usuario)
         if usuario_form.is_valid():
             usuario_form.save()
-            print(usuario_form)
-        return redirect('listar_pacientes')
+        return redirect('login')
 
-    return render(request,'core/modificar_usuario.html',{'usuario_form':usuario_form})
+    return render(request,'core/modificar_usuario_self.html',{'usuario_form':usuario_form})
+
+def editar_self_funcionario(request):
+    id = None
+    id = request.user.id
+    usuario = Usuario.objects.get(id=id)
+    if request.method == 'GET':
+        usuario_form = ModifyFuncionario(instance=usuario)
+    else:
+        usuario_form = ModifyFuncionario(request.POST, instance=usuario)
+        if usuario_form.is_valid():
+            usuario_form.save()
+        return redirect('login')
+    return render(request,'core/modificar_funcionario.html',{'usuario_form':usuario_form})
 
 def eliminarUsuario(request,id):
     usuario = Usuario.objects.get(id = id)
@@ -329,13 +365,24 @@ def eliminarUsuario(request,id):
         #usuario.usuario_activo = False
         usuario.save()
         usuario.delete() # de esta forma se elimina fisicamente el registro
-        return redirect('listar_usuarios')
+        return redirect('listar_pacientes')
+    return render(request, 'core/eliminar_usuario.html',{'usuario':usuario})
+
+def eliminarFuncionario(request,id):
+    usuario = Usuario.objects.get(id = id)
+    if request.method == 'POST':
+        #deshabilitamos el usuario
+        #usuario.usuario_activo = False
+        usuario.save()
+        usuario.delete() # de esta forma se elimina fisicamente el registro
+        return redirect('listar_funcionarios')
     return render(request, 'core/eliminar_usuario.html',{'usuario':usuario})
 
 def crearReserva(request):
     usuario = request.user
     logeado = Usuario.objects.get(email=usuario)
     sucursal = logeado.comuna
+    especialidad = logeado.especialidad
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
@@ -343,6 +390,8 @@ def crearReserva(request):
             print(reserva_form.errors.as_json(),'error')
             dia_reservado = request.POST['dia_reservado']
             request.POST['usuario']=usuario
+            request.POST['sucursal']=sucursal
+            request.POST['especialidad']=especialidad
             reserva_form = ReservaForm(request.POST)
             if reserva_form.is_valid():
             # forma de acceder y modificar el diccionario para el formulario 
@@ -370,23 +419,23 @@ def editarReserva(request,id):
 def eliminarReserva(request,id):
     reserva = Reserva.objects.get(id = id)
     if request.method == 'POST':
-        #deshabilitamos el usuario
-        #usuario.usuario_activo = False
         reserva.save()
         reserva.delete() # de esta forma se elimina fisicamente el registro
         return redirect('listar_reservas')
     return render(request, 'core/eliminar_reserva.html',{'reserva':reserva})
 
 
-
 def crearAtencion(request,id,especialidad, sucursal):
+    #se debe agregar a la fecha_hora inicial, la hora final (que debiese definirse en un rango de +1hora de atencion + 1/2 aseo+ 1/2 extra)
+    fecha_hora = Reserva.objects.get(id=id)
+    filter_temp = Atencion.objects.filter(reserva__dia_reservado=fecha_hora.dia_reservado)
+    lista_ocupados = filter_temp.values_list('especialista__id')
+    lista_box = filter_temp.values_list('box__id')
     especialidad = Especialidad.objects.filter(nombre=especialidad)
-    print(especialidad)
     sucursal = Sucursal.objects.get(nombre=sucursal)
-    especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True))
-    print(especialistas)
+    especialistas = Usuario.objects.filter(Q(especialidad__in = especialidad)& Q(usuario_administrador = True)).exclude(id__in=lista_ocupados)
     reservas = Reserva.objects.filter(id=id)
-    boxes = Box.objects.filter(Q(especialidad__in=especialidad))
+    boxes = Box.objects.filter(Q(especialidad__in=especialidad)&Q(estado__in='1')&Q(sucursal__nombre=sucursal)).exclude(id__in=lista_box)
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
@@ -422,80 +471,91 @@ def eliminarAtencion(request,id):
     return render(request, 'core/eliminar_atencion.html',{'atencion':atencion})
 
 def listadoReservasSelf(request):
-    
-    today = datetime.today()
+    today = date.today()
     id = request.user.id
     queryset = request.GET.get("search")
-    print(id)
-    reservas = Reserva.objects.filter(usuario=id)
-    #TODO hacer el for para esta cosa
-    fecha_nacimiento = reservas.fecha_nacimiento
-    edad = (today-fecha_nacimiento)/365
-
-    if queryset:
-        reservas = Reserva.objects.filter(
-            Q(dia_reservado__icontains = queryset)
-        ).distinct()
+    reservas = Reserva.objects.filter(usuario=id).order_by('-dia_reservado')
     paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
-    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas,'edad':edad})
-
+    return render(request,'core/listar_mis_reservas.html',{'reservas':reservas})
 
 def listadoReservas(request):
     comuna = request.user.comuna
-    reservas = Reserva.objects.all()
-    #reservas = Reserva.objects.filter(sucursal=comuna)
-    queryset = request.GET.get("search")
-
-    if queryset:
-        reservas = Reserva.objects.filter(
-            Q(dia_reservado__icontains = queryset) |Q(usuario__icontains = queryset)
-        ).distinct()
+    reservas = Reserva.objects.filter(usuario__comuna=comuna).order_by('id')
     paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
     return render(request,'core/listar_reservas.html',{'reservas':reservas})
 
-# class listadoReservas(ListView):
-#     model = Reserva
-#     template_name = 'core/listar_reservas.html'
-#     context_object_name = 'reservas'
-#     queryset = Reserva.objects.all()
+def listadoReservasToday(request):
+    today = date.today()
+    comuna = request.user.comuna
+    reservas = Reserva.objects.filter(usuario__comuna=comuna).filter(dia_reservado__year=today.year, dia_reservado__month=today.month, dia_reservado__day=today.day).order_by('id')
+    paginator=Paginator(reservas,5)
+    page=request.GET.get('page')
+    reservas = paginator.get_page(page)
+    return render(request,'core/listar_reservas.html',{'reservas':reservas})
 
+def listadoReservasKine(request):
+    today = date.today()
+    comuna = request.user.comuna
+    reservas = Reserva.objects.filter(usuario__comuna=comuna).filter(especialidad='Kinesiología').order_by('id')
+    paginator=Paginator(reservas,5)
+    page=request.GET.get('page')
+    reservas = paginator.get_page(page)
+    return render(request,'core/listar_reservas.html',{'reservas':reservas})
 
-# class listadoUsuarios(ListView):
-#     model = Usuario
-#     template_name = 'core/listar_usuarios.html'
-#     context_object_name = 'usuarios'
-#     queryset = Usuario.objects.all()
+def listadoReservasFono(request):
+    today = date.today()
+    comuna = request.user.comuna
+    reservas = Reserva.objects.filter(usuario__comuna=comuna).filter(especialidad='Fonoaudiología').order_by('id')
+    paginator=Paginator(reservas,5)
+    page=request.GET.get('page')
+    reservas = paginator.get_page(page)
+    return render(request,'core/listar_reservas.html',{'reservas':reservas})
 
-
-
-# class listadoBoxes(ListView):
-#     model = Box
-#     template_name = 'core/listar_boxes.html'
-#     context_object_name = 'boxes'
-#     queryset = Box.objects.all()
 
 def listadoAtenciones(request):
-    queryset = request.GET.get("search")
-    atenciones = Atencion.objects.all()
-    if queryset:
-        atenciones = Atencion.objects.filter(
-            Q(nombre_especialista__icontains = queryset) |Q(apellido_especialista__icontains = queryset) |Q(box__exact = queryset)
-        ).distinct()
-
-    paginator=Paginator(atenciones,2)
+    atenciones = Atencion.objects.all().order_by('-reserva__dia_reservado')
+    paginator=Paginator(atenciones,5)
     page=request.GET.get('page')
     atenciones = paginator.get_page(page)
     return render(request,'core/listar_atenciones.html',{'atenciones':atenciones})
 
-# class listadoAtenciones(ListView):
-#     model = Atencion
-#     template_name = 'core/listar_atenciones.html'
-#     context_object_name = 'atenciones' #es el nombre por el que se llamará el conjunto de objetos en el template(html)
-#     queryset = Atencion.objects.all()
+def listadoAtencionesToday(request):
+    today = date.today()
+    atenciones = Atencion.objects.filter(reserva__dia_reservado__year=today.year, reserva__dia_reservado__month=today.month, reserva__dia_reservado__day=today.day).order_by('-reserva__dia_reservado')
+    paginator=Paginator(atenciones,5)
+    page=request.GET.get('page')
+    atenciones = paginator.get_page(page)
+    return render(request,'core/listar_atenciones.html',{'atenciones':atenciones})
+
+
+def listadoAtencionesSelf(request):
+    id = request.user.id
+    atenciones = Atencion.objects.filter(especialista=id).order_by('-reserva__dia_reservado')
+    paginator=Paginator(atenciones,5)
+    page=request.GET.get('page')
+    atenciones = paginator.get_page(page)
+    return render(request,'core/listar_mis_atenciones.html',{'atenciones':atenciones})
+
+def listadoAtencionesSelfToday(request):
+    today = date.today()
+    id = request.user.id
+    atenciones = Atencion.objects.filter(especialista=id).filter(reserva__dia_reservado__year=today.year, reserva__dia_reservado__month=today.month, reserva__dia_reservado__day=today.day).order_by('-reserva__dia_reservado')
+    paginator=Paginator(atenciones,5)
+    page=request.GET.get('page')
+    atenciones = paginator.get_page(page)
+    return render(request,'core/listar_mis_atenciones_today.html',{'atenciones':atenciones})
+
+def visualizarAtencion(request,id):
+    atencion = Atencion.objects.get(id = id)
+    if request.method == 'GET':
+        atencion_form = AtencionForm(instance=atencion)
+    
+    return render(request,'core/vista_atencion.html',{'atencion_form':atencion_form, 'atencion':atencion})
+
 
 class actualizarAtencion(UpdateView):
     model = Atencion
@@ -503,22 +563,49 @@ class actualizarAtencion(UpdateView):
     form_class = AtencionForm
     success_url = reverse_lazy('core:listar_atenciones')
 
-def insumo(request):
+def iniciarAtencion(request,id):
+    atencion = Atencion.objects.get(id = id)
+    atencion_form = None
+    error = None
+    insumos = allInsumos().get('consultas')
+    print(insumos)
+    try:
+        atencion_form = iniciarAtencionForm(request.POST, instance=atencion)
+        usuario = atencion.reserva.usuario
+        print(usuario)
+        if request.method == 'POST':
+            if not request.POST._mutable:
+                request.POST._mutable = True
+                print(request.POST)
+                if request.POST['extendida'] == 'on':
+                    request.POST['extendida']=True
+                    extendida=True
+
+                else:
+                    request.POST['extendida']=False
+                    extendida=False
+                print(request.POST['extendida'])
+                if atencion_form.is_valid():
+                    atencion_form.cleaned_data['especialista']=extendida
+                    print(atencion_form)
+                    atencion_form.save()
+                    return redirect('listar_atenciones_self_today')
+        else:
+            atencion_form = iniciarAtencionForm()
+    except ObjectDoesNotExist as e:
+        error = e
+    return render(request, 'core/iniciar_atencion.html', {'usuario':usuario,'insumos':insumos,'atencion':atencion})
+
+def allInsumos():
     from django.db import connection
     with connection.cursor() as cursor:
-        #cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO") vista original
-        cursor.execute("SELECT ID,NOMBRE,ESPECIALIDAD,STOCK FROM INSUMO")
+        cursor.execute("SELECT ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO")
         rawData = cursor.fetchall()
         result = []
         for r in rawData:
             result.append(list(r))
         contexto = {'consultas': result }
-    return render(request, 'core/insumo.html', contexto)
+    return contexto
 
-
-# #revisar como hacer triggers y updates
-# def actualizarStock(request, id, cant):
-#     from django.db import connection
-#     with connection.cursor() as cursor:
-#         #cursor.execute("UPDATE ID_INSUMO,NOMBRE_INSUMO,ESPECIALIDAD,STOCK FROM INSUMO") vista original
-#         cursor.execute("UPDATE")
+def insumo(request):
+    return render(request, 'core/insumo.html', allInsumos())

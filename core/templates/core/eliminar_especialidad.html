@@ -12,14 +12,14 @@
 <body>
 
 <div class="container">
-  <h1 style="margin: 70px 0 0 0px;">Especialidad</h1>
+  <h1 style="margin: 70px 0 10px 0px;">Eliminar Especialidad</h1>
 
   <form method="POST">
     {% csrf_token %}
-    <h2>¿Estas seguro de eliminar la especialidad {{especialidad.}}?</h2>
+    <h2>¿Estas seguro de eliminar la especialidad {{especialidad.nombre }}?</h2>
 
-    <button type="submit" class="btn btn-error float-right">Eliminar</button>
-    <a href="{% url 'listar_especialidad' %}">Cancelar</a>
+    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
+    <a href="{% url 'listar_especialidad' %}" class="btn btn-warning float-left">Cancelar</a>
   </form>
 </div>
 <!-- <script src="{% static 'js/base.js' %}"></script> -->

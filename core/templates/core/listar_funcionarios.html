@@ -1,27 +1,24 @@
 {% extends 'core/vista_enfermera.html' %}
 {% load static %}
 
-<title>Listado de Pacientes</title>
+<title>Listado de listar_funcionarios</title>
  
 
 {% block panel %}
 
 {% if usuarios %}
-<h3 style="margin-bottom: 24px;">Registro de Pacientes sucursal {{ user.comuna }}</h3>
+<h3 style="margin-bottom: 24px;">Registro de Funcionarios sucursal {{ user.comuna }}</h3>
 <div style="display: flex;align-items: left;">
     <div>
-        <a href="{% url 'filtrar_etapa1' %}" class="btn btn-primary">Primera Etapa</a>
-        <a href="{% url 'filtrar_etapa2' %}" class="btn btn-primary">Segunda Etapa</a>
-        <a href="{% url 'filtrar_etapa3' %}" class="btn btn-primary">Tercera Etapa</a>
-        <a href="{% url 'listar_pacientes' %}" class="btn btn-primary">Todos</a>
+        <a href="{% url 'filtrar_especialidad1' %}" class="btn btn-primary">Enfermeras</a>
+        <a href="{% url 'filtrar_especialidad2' %}" class="btn btn-primary">Fonoaudiologos</a>
+        <a href="{% url 'filtrar_especialidad3' %}" class="btn btn-primary">Kinesiologos</a>
+        <a href="{% url 'listar_funcionarios' %}" class="btn btn-primary">Todos</a>
     </div>    
 </div>
-
-   
-
-    <table style="margin-top: 46px;" class="table table-hover">
+    <table style="margin-top: 60px;" class="table table-hover">
         
-        <th>Nombre Usuario</th>
+        <th>Nombre Funcionario</th>
         <th>Rut</th>
         <th>Fecha Nacimiento</th>
         <!-- <th>Motivo Atencion</th> -->
@@ -29,7 +26,6 @@
         <th>Dirección</th>
         <th>Especialidad</th>
         <th>Centro Atención</th>
-        <th>Etapa</th>
         <th>Acciones</th>
         <tbody>
             {% for usuario in usuarios %}
@@ -41,10 +37,9 @@
                     <td>{{ usuario.direccion }}</td>
                     <td>{{ usuario.especialidad }}</td>
                     <td>{{ usuario.comuna }}</td>
-                    <td>{% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</td>
                     <td>
                         <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-warning">Modificar</a>
-                        <a href="{% url 'eliminar_usuario' usuario.id%}" class="btn btn-danger">Eliminar</a>
+                        <a href="{% url 'eliminar_funcionario' usuario.id%}" class="btn btn-danger">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -71,9 +66,8 @@
         </div>
     </div>
 {% else %}
-    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>    
+    <h1 style="margin-top: 70px;">No existen elementos a listar</h1>
     <button class="btn btn-warning float-center" onclick="history.back()">Volver</button>
-
 {% endif %}
 
 {% endblock panel %}

@@ -26,25 +26,25 @@
 
     <div class="form-group">
       <label for="username">Nombre de Usuario:</label>
-      <input type="text" class="form-control" id="username" placeholder="Nombre de usuario" name="username" required>
+      <input type="text" class="form-control" id="username" minlength="3" maxlength="20" placeholder="Nombre de usuario" name="username" pattern="[a-z]{1,15}" required>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un nombre de usuario válido.</div>
     </div>
     <div class="form-group">
       <label for="nombre">Nombre Funcionario:</label>
-      <input type="text" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required>
+      <input type="text" class="form-control" id="nombre" minlength="3" maxlength="20" placeholder="Nombre" name="nombre" pattern="[a-z]{1,15}" required>
       <div class="valid-feedback">Ok.</div>
       <div class="invalid-feedback">Ingresa un nombre válido.</div>
     </div>
     <div class="form-group" >
         <label for="apellido">Apellido Funcionario:</label>
-        <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" name="apellido" required>
+        <input type="text" class="form-control" id="apellido" minlength="3" maxlength="20" placeholder="Ingrese su apellido" name="apellido" pattern="[a-z]{1,15}" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un apellido válido.</div>
     </div>
     <div class="form-group">
         <label for="rut">Rut Funcionario:</label>
-        <input type="text" class="form-control" id="rut" placeholder="ingrese su rut" name="rut" required>
+        <input type="text" class="form-control" id="rut" placeholder="ingrese su rut" name="rut" pattern="\d{3,8}-[\d|kK]{1}" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un rut válido.</div>
     </div>
@@ -56,13 +56,13 @@
     </div>
     <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" placeholder="usuario@mail.com" name="email" required>
+        <input type="email" class="form-control" id="email" placeholder="usuario@mail.com" name="email" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa un email válido.</div>
     </div>
     <div class="form-group">
         <label for="direccion">Dirección:</label>
-        <input type="text" class="form-control" id="direccion" placeholder=" calle sin nombre" name="direccion" required>
+        <input type="text" class="form-control" id="direccion" minlength="3" maxlength="50" placeholder=" calle sin nombre" name="direccion" required>
         <div class="valid-feedback">Ok.</div>
         <div class="invalid-feedback">Ingresa una dirección válida.</div>
     </div>

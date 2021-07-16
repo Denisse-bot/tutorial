@@ -1,0 +1,231 @@
+{% extends 'core/vista_funcionario.html' %}
+{% load static %}
+
+
+<title>Iniciar Atención</title>
+
+
+{% block panel %}
+  <link rel="stylesheet" href="{% static 'css/temporizador.css' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<body>
+
+<div >
+  <h2 style="text-align: center">Inicia la atención medica</h2>
+
+<!-- {% if usuario %}
+<div>
+    {{ usuario.nombre }}
+</div>
+{% endif %} -->
+<div style="grid-template-columns: auto repeat(3, auto);display: grid;grid-template-rows: 50px auto 200px;">
+    <div class="card bg-light mb-3" style="max-width: 500px;margin:0;display: inline-table;height: auto;">
+        {% if usuario %}
+        <div class="card-header">Datos del Paciente</div>
+        <div class="card-body">
+          <p class="card-title">Nombre: {{ usuario.nombre }}  {{ usuario.apellido }}</p>
+          <p class="card-text">Especialidad: {{ usuario.email }}</p>
+          <p class="card-text">Especialidad: {{ usuario.especialidad }}</p>
+          <p class="card-text">Fecha nacimiento: {{ usuario.fecha_nacimiento }}</p>
+          <p class="card-text">Etapa: {% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</p>
+
+              
+        </div>
+        {% endif %}
+    </div>
+    <div style="grid-column-start: 2">
+        {% if insumos %}
+        <table style="margin-top:16px;margin-left: 16px;margin-right: 16px;" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Especialidad</th>
+                    <th>Solicitar</th>
+                </tr>  
+             </thead> 
+            <tbody style="vertical-align:middle">
+                {% for insumo in insumos %}
+                    <tr>
+                        {% for i in insumo %}
+                        {% if forloop.revcounter == 1 %}
+                        <!-- Acá va a mostrar la columna vacia -->
+                        {% else %}
+                        <td>
+                       {{i}}
+                        </td>   
+                        {% endif %}
+                        {% endfor %}
+                        
+                        <td>
+                            <a href="#" class="btn btn-warning">Agregar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- <div class="row pagination">
+            <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-left">
+                    {% if insumos.has_previous %}
+                        <div class="clearfix">
+                            <a href="?page={{ insumos.previous_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-left">Anterior</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
+                <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-right">
+                    {% if insumos.has_next %}
+                        <div class="clearfix">
+                            <a href="?page={{ insumos.next_page_number }}{% if request.GET.search %}&q={{ request.GET.search }}{% endif %}" class="btn btn-primary float-right">Siguiente</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div> -->
+    </div>
+ 
+<form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
+  {% csrf_token %} 
+    <div style="margin-left: 24px;display:block;margin: 0 0 0 auto;">
+        <div class="card table-bordered mb-3" style="max-width: 24rem; min-width: 330px;min-height: 300px;">
+            <div class="card-header bg-transparent border-success">Observaciones de la Atención:</div>
+            <div class="card-body text-success">
+                <div>
+                    <input type="text" name="comentarios" id="comentarios"><div></div>
+                </div>
+                
+            </div>
+            <div class="card-footer bg-transparent border-success">Recuerda siempre cuidar tu lenguaje y ortografía</div>
+          </div>
+    </div>
+</div>
+
+<div >
+    <div class="row justify-content-center mt-5 mb-2">
+        <h2>Tiempo restante de la atención</h2>
+      </div>
+      <div class="row justify-content-center border rounded-pill" id="countdown">
+      </div>
+      <div class="row justify-content-center mt-2">
+        <p>
+            Recuerda si la sesión se alarga, presionar extender atención.
+        </p>
+      </div>
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" name="extendida" id="extendida">
+        <label class="custom-control-label" for="extendida">Presiona para extender atención</label>
+      </div>
+    
+    <a href="{% url 'notificacion_box' atencion.id %}" type="submit" class="btn btn-success float-right">Guardar Atención</a>
+    <!-- <button type="submit" class="btn btn-success float-right">Guardar Atención</button> -->
+    <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a>
+
+</div>
+
+
+
+</form>
+{% endif %}
+<!-- <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
+    {% csrf_token %} -->
+          <!-- <div class="row">
+            <div class="col-md-12">
+                <label class="col-4 control-label"> {{ usuario_form.username.label }}               
+                </label>
+                {{ usuario_form.username }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.nombre.label }}               
+              </label>
+              {{ usuario_form.nombre }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.apellido.label }}               
+              </label>
+              {{ usuario_form.apellido }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.rut.label }}               
+              </label>
+              {{ usuario_form.rut }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.fecha_nacimiento.label }}               
+              </label>
+              {{ usuario_form.fecha_nacimiento }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.email.label }}               
+              </label>
+              {{ usuario_form.email }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.direccion.label }}               
+              </label>
+              {{ usuario_form.direccion }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.nro_direccion.label }}               
+              </label>
+              {{ usuario_form.nro_direccion }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.password1.label }}               
+              </label>
+              {{ usuario_form.password1 }}
+            </div>
+            <div class="col-md-12">
+              <label class="col-4 control-label"> {{ usuario_form.password2.label }}               
+              </label>
+              {{ usuario_form.password2 }}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-search"></span> Submit
+          </button> -->
+
+    <!-- {% if error %}
+        <h4>{{ error }}</h4>
+    {% else %}
+        {{ usuario_form.as_p }}
+    {% endif%} -->
+    
+    <!-- <button type="submit" class="btn btn-success float-right">Guardar Atención</button> -->
+
+    <!-- <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a> -->
+
+<!-- 
+</form>
+</div> -->
+<!-- <script src="{% static 'js/base.js' %}"></script> -->
+<script src="{% static 'js/temporizador.js' %}"></script>
+
+
+<script>
+// Disable form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Get the forms we want to add validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
+
+{% endblock panel %}

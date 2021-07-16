@@ -34,7 +34,7 @@ class Sucursal(models.Model):
         return self.nombre
 
 class UsuarioManager(BaseUserManager):
-    def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,usuario_administrador,comuna,especialidad,password=None):
+    def create_user(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,usuario_administrador,comuna,especialidad,etapa,password=None):
         if not email:
             raise ValueError('El usuario debe ingresar un correo electrónico')
 
@@ -49,13 +49,14 @@ class UsuarioManager(BaseUserManager):
             nro_direccion = nro_direccion,
             comuna = comuna,
             especialidad = especialidad,
+            etapa = etapa,
             usuario_administrador = usuario_administrador,
         )
         usuario.set_password(password)
         usuario.save()
         return usuario
 
-    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,especialidad,password):
+    def create_superuser(self,username,email,nombre,apellido,rut,fecha_nacimiento,direccion,nro_direccion,comuna,especialidad,etapa,password):
         usuario = self.create_user(
             username = username,
             email = email,
@@ -67,6 +68,7 @@ class UsuarioManager(BaseUserManager):
             nro_direccion = nro_direccion,
             comuna = comuna,
             especialidad=especialidad,
+            etapa = etapa,
             password = password,
             usuario_administrador = True
         )
@@ -75,6 +77,12 @@ class UsuarioManager(BaseUserManager):
 
 class Usuario(AbstractBaseUser):
 
+    etapa_list=(
+        (0, 'Sin etapa'),
+        (1, 'Primera'),
+        (2, 'Segunda'),
+        (3, 'Tercera')
+    )
     username=models.CharField('Nombre de usuario', max_length=100, unique=True)
     email=models.EmailField('Correo Electronico',max_length=50, unique=True, blank=True, null=True)
     nombre=models.CharField('Nombre',max_length=50)
@@ -86,9 +94,11 @@ class Usuario(AbstractBaseUser):
     comuna=models.ForeignKey(Sucursal, on_delete=CASCADE)
     especialidad=models.ForeignKey(Especialidad,on_delete=CASCADE)
     usuario_activo = models.BooleanField(default=True)
+    etapa = models.IntegerField('Etapa',choices=etapa_list,default=0,null=True, blank=True)
     usuario_administrador = models.BooleanField(default=False)
     fecha_creacion = models.DateField('Fecha de creación', auto_now=True,auto_now_add=False)
     objects = UsuarioManager()
+
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','nombre','apellido','rut','fecha_nacimiento','direccion','nro_direccion','comuna','especialidad','usuario_administrador']
@@ -107,6 +117,12 @@ class Usuario(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.usuario_administrador
+    @property
+    def is_nurse(self):
+        especialidad = False
+        if self.especialidad.nombre == 'Enfermera':
+            especialidad = True
+        return especialidad
 
 # class Funcionario(Usuario):
 #     tipo_especialidad = (
@@ -125,6 +141,8 @@ class Reserva(models.Model):
     id = models.AutoField(primary_key= True)
     dia_reservado=models.DateTimeField()
     usuario=models.ForeignKey('core.Usuario', on_delete=CASCADE)
+    sucursal = models.CharField('sucursal', max_length=50)
+    especialidad = models.CharField('especialidad', max_length=20)
 
     class Meta:
         verbose_name = 'Reserva'
@@ -162,9 +180,10 @@ class Box(models.Model):
         ordering = ['estado']
 
     def __str__(self):
+        id = str(self.id)
         especialidad=str(self.especialidad)
-        tamaño=str(self.tamaño)
-        return especialidad + tamaño
+        #tamaño=str(self.tamaño)
+        return  id +' '+ especialidad
 
 
 class Atencion(models.Model):
@@ -172,6 +191,8 @@ class Atencion(models.Model):
     reserva = models.OneToOneField(Reserva, on_delete=CASCADE)
     especialista = models.ForeignKey(Usuario, on_delete=CASCADE)
     box = models.ForeignKey(Box, on_delete=CASCADE)
+    extendida = models.BooleanField(default=False)
+    comentarios = models.TextField(max_length=300)
     
     class Meta:
         verbose_name = 'Atencion'

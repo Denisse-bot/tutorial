@@ -12,22 +12,22 @@
     {% block nav %}
     <ul class="nav nav-pills card-header-pills">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'editar_self_usuario'%}">Mis otracosa</a>
+        <a class="nav-link" href="{% url 'editar_self_funcionario'%}">Mis Datos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'crear_reservas'%}">Crear otracosa</a>
+        <a class="nav-link" href="{% url 'listar_atenciones_self_today'%}">Mis Atenciones Hoy</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'listar_reservas_self' %}">Mis Reservas</a>
+        <a class="nav-link" href="{% url 'listar_atenciones_self' %}">Historico atenciones</a>
       </li>
     </ul>
     {% endblock nav%}
   </div>
   <div class="card-body">
     {% block panel %}
-    <h5 class="card-title">Bienvenido {{ usuario }} al Sistema de Agendamiento de Box atención</h5>
+    <h5 class="card-title">Bienvenido {{ usuario }} al Sistema de Atenciones</h5>
     <p class="card-text">en este panel puedes encontrar las opciones disponibles.</p>
-    <a href="{% url 'crear_reservas'%}" style="margin-top: 40px;" class="btn btn-primary">Vamos a Crear Una Reserva</a>
+    <a href="{% url 'listar_atenciones_self'%}" style="margin-top: 40px;" class="btn btn-primary">Vamos a Mis Atenciones</a>
     {% endblock panel %}
   </div>
 </div>
