@@ -483,7 +483,7 @@ def listadoReservasSelf(request):
 
 def listadoReservas(request):
     comuna = request.user.comuna
-    reservas = Reserva.objects.filter(usuario__comuna=comuna).order_by('id')
+    reservas = Reserva.objects.filter(usuario__comuna=comuna).order_by('-dia_reservado')
     paginator=Paginator(reservas,5)
     page=request.GET.get('page')
     reservas = paginator.get_page(page)
@@ -545,6 +545,8 @@ def listadoAtencionesSelfToday(request):
     today = date.today()
     id = request.user.id
     atenciones = Atencion.objects.filter(especialista=id).filter(reserva__dia_reservado__year=today.year, reserva__dia_reservado__month=today.month, reserva__dia_reservado__day=today.day).order_by('-reserva__dia_reservado')
+    
+    print(atenciones)
     paginator=Paginator(atenciones,5)
     page=request.GET.get('page')
     atenciones = paginator.get_page(page)
@@ -565,15 +567,22 @@ class actualizarAtencion(UpdateView):
     success_url = reverse_lazy('core:listar_atenciones')
 
 def iniciarAtencion(request,id):
+    especialidad = request.user.especialidad
     atencion = Atencion.objects.get(id = id)
     atencion_form = None
     error = None
     insumos = allInsumos().get('consultas')
+
+    all_fields = allInsumos().get('especialidad')    
     print(insumos)
+    print(especialidad)
+    print(all_fields)
+    #Q(especialidad__in = especialidad)& Q(usuario_administrador = True))
+    paginator=Paginator(insumos,3)
+    page=request.GET.get('page')
     try:
         atencion_form = iniciarAtencionForm(request.POST, instance=atencion)
         usuario = atencion.reserva.usuario
-        print(usuario)
         if request.method == 'POST':
             if not request.POST._mutable:
                 request.POST._mutable = True
@@ -581,13 +590,12 @@ def iniciarAtencion(request,id):
                 if request.POST['extendida'] == 'on':
                     request.POST['extendida']=True
                     extendida=True
-
                 else:
                     request.POST['extendida']=False
                     extendida=False
                 print(request.POST['extendida'])
                 if atencion_form.is_valid():
-                    atencion_form.cleaned_data['especialista']=extendida
+                    atencion_form.cleaned_data['extendida']=extendida
                     print(atencion_form)
                     atencion_form.save()
                     return redirect('listar_atenciones_self_today')
