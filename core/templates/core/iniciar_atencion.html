@@ -13,7 +13,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <body>
 
-<div >
+
   <h2 style="text-align: center">Inicia la atención medica</h2>
 
 <!-- {% if usuario %}
@@ -21,7 +21,7 @@
     {{ usuario.nombre }}
 </div>
 {% endif %} -->
-<div style="grid-template-columns: auto repeat(3, auto);display: grid;grid-template-rows: 50px auto 200px;">
+<div style="grid-template-columns: auto repeat(3, auto);display: grid;grid-template-rows: 50px auto 400px;">
     <div class="card bg-light mb-3" style="max-width: 500px;margin:0;display: inline-table;height: auto;">
         {% if usuario %}
         <div class="card-header">Datos del Paciente</div>
@@ -30,9 +30,7 @@
           <p class="card-text">Especialidad: {{ usuario.email }}</p>
           <p class="card-text">Especialidad: {{ usuario.especialidad }}</p>
           <p class="card-text">Fecha nacimiento: {{ usuario.fecha_nacimiento }}</p>
-          <p class="card-text">Etapa: {% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</p>
-
-              
+          <p class="card-text">Etapa: {% if usuario.etapa == 0 %}Sin Etapa{% elif usuario.etapa == 1 %}Primera{% elif usuario.etapa == 2 %}Segunda{% else %}Tercera{% endif %}</p>   
         </div>
         {% endif %}
     </div>
@@ -67,7 +65,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <!-- <div class="row pagination">
+        <div class="row pagination">
             <div class="col-md-12 col-lg-12 cl-sm-12 cl-xs-12">
                 <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 float-left">
                     {% if insumos.has_previous %}
@@ -86,49 +84,36 @@
                     {% endif %}
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
  
 <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
   {% csrf_token %} 
     <div style="margin-left: 24px;display:block;margin: 0 0 0 auto;">
-        <div class="card table-bordered mb-3" style="max-width: 24rem; min-width: 330px;min-height: 300px;">
-            <div class="card-header bg-transparent border-success">Observaciones de la Atención:</div>
-            <div class="card-body text-success">
-                <div>
-                    <input type="text" name="comentarios" id="comentarios"><div></div>
-                </div>
-                
-            </div>
-            <div class="card-footer bg-transparent border-success">Recuerda siempre cuidar tu lenguaje y ortografía</div>
-          </div>
+      <div class="card table-bordered mb-3" style="max-width: 24rem; min-width: 330px;min-height: 300px;">
+          <div class="card-header bg-transparent border-success form-group">Observaciones de la Atención:</div>
+          <div class="card-body text-success"><input type="text" name="comentarios" id="comentarios"><p></p></div>
+          <div class="card-footer bg-transparent border-success">Recuerda siempre cuidar tu lenguaje y ortografía</div>
+      </div>
     </div>
-</div>
-
-<div >
-    <div class="row justify-content-center mt-5 mb-2">
+    <div >
+      <div class="row justify-content-center mt-5 mb-2">
         <h2>Tiempo restante de la atención</h2>
       </div>
-      <div class="row justify-content-center border rounded-pill" id="countdown">
-      </div>
+      <div class="row justify-content-center border rounded-pill" id="countdown"></div>
       <div class="row justify-content-center mt-2">
         <p>
             Recuerda si la sesión se alarga, presionar extender atención.
         </p>
       </div>
-      <div class="custom-control custom-switch">
+      <div class="custom-control custom-switch form-group">
         <input type="checkbox" class="custom-control-input" name="extendida" id="extendida">
         <label class="custom-control-label" for="extendida">Presiona para extender atención</label>
-      </div>
-    
-    <a href="{% url 'notificacion_box' atencion.id %}" type="submit" class="btn btn-success float-right">Guardar Atención</a>
-    <!-- <button type="submit" class="btn btn-success float-right">Guardar Atención</button> -->
-    <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a>
-
-</div>
-
-
-
+      </div>  
+      <a href="{% url 'notificacion_box' atencion.id %}" type="submit" class="btn btn-success float-right">Guardar Atención</a>
+      <!-- <button type="submit" class="btn btn-success float-right" form="iniciarAtencionForm" >Guardar Atención</button> -->
+      <a href="{% url 'vista_usuario' %}" class="btn btn-warning">Volver</a>
+    </div>
 </form>
 {% endif %}
 <!-- <form action="" class="needs-validation" method="POST" novalidate style="text-align:justify!important;">
