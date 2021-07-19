@@ -23,7 +23,7 @@ def send_mail_reserva(atencion, id):
     centro = atenciones.reserva.sucursal
 
 
-    subject, from_mail, to = 'Confirmación Reserva Atención Médica','denisse.lyon@gmail.com',email
+    subject, from_mail, to = 'Confirmación Reserva Atención Médica','soporteabae@gmail.com',email
     text_context = '%s Hemos confirmado tu reserva de atención médica.' % nombre
     msg_html = render_to_string('core/correo.html', {
         'nombre': nombre,
@@ -55,7 +55,7 @@ def send_mail_notificacion(atencion, id):
     nombre= 'Personal Edudown'
     email = EMAIL_HOST_USER_TO
     
-    subject, from_mail, to = 'Confirmación Atención Médica Realizada','denisse.lyon@gmail.com',email
+    subject, from_mail, to = 'Confirmación Atención Médica Realizada','soporteabae@gmail.com',email
     text_context = '%s Hemos confirmado la atencion en el box ' % box
     msg_html = render_to_string('core/notificacion_box.html', {
         'nombre': nombre,
@@ -71,19 +71,3 @@ def send_mail_notificacion(atencion, id):
         return redirect('listar_atenciones_self')
     except Exception as ex:
         Logger.error(ex)
-  
-    # subject = 'Confirmación de reserva'
-    # template = get_template('core/correo.html')
-    # content = template.render({'atencion': atencion})
-    # message = EmailMultiAlternatives(
-    #     subject,
-    #     'Reserva de atención confirmada',
-    #     correo_administrador,
-    #     ['denisse.lyon@gmail.com']
-    # )
-    # message.attach_alternative(content, 'text/html')
-    # message.send()
-    # return HttpResponseRedirect('listar_atenciones')
-
-
-##ToDo revisar variable de entorno de correo

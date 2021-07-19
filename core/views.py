@@ -204,7 +204,8 @@ def eliminarBox(request,id):
 
 def crearUsuario(request):
     sucursales = Sucursal.objects.all()
-    especialidades = Especialidad.objects.all()
+    especialidades = Especialidad.objects.exclude(nombre='Enfermera')
+    print(especialidades)
     if request.method == 'POST':
         if not request.POST._mutable:
             request.POST._mutable = True
